@@ -11,15 +11,23 @@ class ScanScreen extends StatefulWidget {
 
 class _ScanScreenState extends State<ScanScreen> {
   final categoryController = Get.put(CategoryController());
-
-  // Mock data for the dropdown
-  List<String> mockData = ['Option 1', 'Option 2', 'Option 3'];
   String selectedOption = 'Option 1';
+  List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    // This is a future operation, so you might want to handle it asynchronously.
+    categoryController.fetchCategoryNames().then((mockData) {
+      print(mockData);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var list = categoryController.fetchCategoryNames();
-    print(list);
+    String dropdownValue = list.first;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Scan"),
@@ -32,13 +40,13 @@ class _ScanScreenState extends State<ScanScreen> {
             SizedBox(height: 20),
             // DropdownButton widget
             DropdownButton<String>(
-              value: selectedOption,
+              value: dropdownValue,
               onChanged: (String? newValue) {
                 setState(() {
-                  selectedOption = newValue!;
+                  dropdownValue = newValue!;
                 });
               },
-              items: mockData.map<DropdownMenuItem<String>>((String value) {
+              items: list.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -51,3 +59,5 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 }
+
+
