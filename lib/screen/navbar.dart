@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:qr_scan/screen/addCategory.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -11,9 +13,9 @@ class MyDrawer extends StatelessWidget {
             height: 102,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                                color: Colors.blue,
+                color: Colors.blue,
               ),
-                            child: Text(
+              child: Text(
                 'Menu',
                 style: TextStyle(
                   color: Colors.white,
@@ -25,8 +27,9 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             title: Text('Add Category'),
             onTap: () {
+              Get.to(() => addCategory());
               // Add your navigation logic or other actions here
-              Navigator.pop(context); // Close the drawer
+              // Navigator.pop(context); // Close the drawer
             },
           ),
           // ListTile(
