@@ -3,8 +3,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_scan/models/catgegory.dart';
 
-class CartController extends GetxController {
+class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
+
+  @override
+  void onInit() {
+    
+    fetchCategory();
+    super.onInit();
+  }
+
   Future<void> fetchCategory() async {
     try {
       final documentDirectory = await getApplicationDocumentsDirectory();
@@ -18,7 +26,7 @@ class CartController extends GetxController {
         if (value != null) {
           allData.add(ItemCategory(
             value['id'],
-            value['category'],
+            value['categoryName'],
             value['dateAdded'],
           ));
         }
@@ -26,7 +34,7 @@ class CartController extends GetxController {
 
       // Sort the list by the "order" property
       // allData.sort((a, b) => a.order.compareTo(b.order));
-
+      print("init");
       allCategory.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
