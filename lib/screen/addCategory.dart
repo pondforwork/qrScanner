@@ -46,10 +46,10 @@ class _AddCategoryState extends State<AddCategory> {
                     // Your logic to handle the form data goes here
                     String categoryNameFromField = _textField1Controller.text;
 
-                    // print('Text Field 1: $categoryNameFromField');
-                    // categoryController.addCategory(categoryNameFromField);
-                    // Get.back();
-                    // print(categoryController.getCategoryNames());
+                    print('Text Field 1: $categoryNameFromField');
+                    categoryController.addCategory(categoryNameFromField);
+                    Get.back();
+                  
                   }
                 },
                 child: const Text('Submit'),

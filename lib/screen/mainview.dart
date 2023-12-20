@@ -17,7 +17,7 @@ class MainView extends StatelessWidget {
       ),
       drawer: MyDrawer(), // Add the drawer here
       body: FutureBuilder(
-        future: categoryController.fetchCategory(),
+        future: categoryController.fetchCategoryNames(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -27,23 +27,18 @@ class MainView extends StatelessWidget {
             return Center(
               child: Text("Error: ${snapshot.error}"),
             );
-          } else if (categoryController.allCategory.isEmpty) {
+          } else if (categoryController.globalList.isEmpty) {
             return const Center(
               child: Text("No Data"),
             );
           } else {
-            // Extract category names from allCategory and store them in a List<String>
-            List<String> categoryNamesList = categoryController.allCategory
-                .map((category) => category.categoryName)
-                .toList();
-
-            // Now you can use categoryNamesList as needed, for example, print it
-            print(categoryNamesList);
+            // Now you can use categoryController.globalList as needed
+            print(categoryController.globalList);
 
             return ListView.builder(
-              itemCount: categoryNamesList.length,
+              itemCount: categoryController.globalList.length,
               itemBuilder: (context, index) {
-                final categoryName = categoryNamesList[index];
+                final categoryName = categoryController.globalList[index];
                 return ListTile(
                   title: Text(categoryName),
                 );

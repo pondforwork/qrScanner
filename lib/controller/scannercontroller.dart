@@ -1,33 +1,23 @@
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
+import 'package:qr_scan/controller/categorycontroller.dart';
 
-import 'categorycontroller.dart';
+class ScanScreenController extends GetxController {
+  final categoryController = Get.find<CategoryController>();
+  final dropdownValue = 'One'.obs; // Initial value
+  final dropdownItems = <String>[].obs; // Empty list initially
 
-class ScanController extends GetxController {
   @override
   void onInit() {
-    // TODO: implement onInit
-   
     super.onInit();
+    fetchCategoryNames();
   }
 
-  final categoryController = Get.put(CategoryController());
-  RxString barcodeResult = "No data yet".obs;
-  RxString dropdownValue = 'One'.obs;
-  late List<String> list;
-  Future<void> scanBarcode() async {
-    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-      "#ff6666", // Color for the scan button
-      "Cancel", // Text for the cancel button
-      true, // Show flash icon
-      ScanMode.DEFAULT, // Specify the type of scan
-    );
-
-    barcodeResult.value = barcodeScanResult;
+  void fetchCategoryNames() async {
+    final mockData = await categoryController.fetchCategoryNames();
+    dropdownItems.value = mockData;
   }
 
-  // Future<List<String>> getName() async {
-  //   list = await categoryController.getCategoryNames();
-  //   return list;
-  // }
+  void updateDropdownValue(String? newValue) {
+    dropdownValue.value = newValue!;
+  }
 }

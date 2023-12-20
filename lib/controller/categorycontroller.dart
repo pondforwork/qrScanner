@@ -6,10 +6,17 @@ import 'package:uuid/uuid.dart';
 
 class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
-
+  RxList<String> globalList = <String>[].obs;
+  RxString selectedOption = 'Option 1'.obs; // Default value
+  RxList<String> dropdownItems = ['Option 1'].obs; // Default values
+  RxString selectedCategory = 'One'.obs;
   @override
   void onInit() {
     fetchCategory();
+    fetchCategoryNames().then((names) {
+      globalList.assignAll(names);
+    });
+
     super.onInit();
   }
 
@@ -57,7 +64,7 @@ class CategoryController extends GetxController {
       await data.put(id, {
         'id': id,
         'categoryName': newCategory.categoryName,
-        'order':newCategory.order
+        'order': newCategory.order
       });
       print("Insert Category");
       // Fetch the updated list of categories
@@ -89,5 +96,7 @@ class CategoryController extends GetxController {
     }
   }
 
-  
+   void updateSelectedCategory(String newValue) {
+    selectedCategory.value = newValue;
+  }
 }
