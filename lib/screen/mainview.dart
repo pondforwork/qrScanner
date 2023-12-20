@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
+import 'package:qr_scan/screen/navbar.dart';
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
@@ -13,6 +14,7 @@ class MainView extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Qr Scan"),
       ),
+      drawer: MyDrawer(), // Add the drawer here
       body: Center(
         child: Obx(() {
           if (categoryController.allCategory.isEmpty) {
