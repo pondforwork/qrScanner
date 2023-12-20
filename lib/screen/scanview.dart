@@ -1,36 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
 
-import '../controller/scannercontroller.dart';
+class ScanScreen extends StatefulWidget {
+  @override
+  _ScanScreenState createState() => _ScanScreenState();
+}
 
-// class ScanController extends GetxController {
-//   RxString barcodeResult = "No data yet".obs;
-//   RxString dropdownValue = 'One'.obs;
-//   final categoryController = Get.put(CategoryController());
-//   // categoryController.allCategory();
-//   List<String> list = ['One', 'Two', 'Three', 'Four'];
-//   Future<void> scanBarcode() async {
-//     String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-//       "#ff6666", // Color for the scan button
-//       "Cancel", // Text for the cancel button
-//       true, // Show flash icon
-//       ScanMode.DEFAULT, // Specify the type of scan
-//     );
+class _ScanScreenState extends State<ScanScreen> {
+  final categoryController = CategoryController();
 
-//     barcodeResult.value = barcodeScanResult;
-//   }
-// }
+  @override
+  void initState() {
+    super.initState();
+  }
 
-class ScanScreen extends StatelessWidget {
-  final ScanController _controller = Get.put(ScanController());
-  final categoryController = Get.put(CategoryController());
+  String barcodeResult = "No data yet";
 
   @override
   Widget build(BuildContext context) {
-      List<String> name =   categoryController.getCategoryNames();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Scan Screen'),
@@ -39,42 +27,60 @@ class ScanScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Obx(() => Text(
-                  'Scan Result: ${_controller.barcodeResult}',
-                  style: TextStyle(fontSize: 20),
-                )),
+            Text(
+              'Scan Result:',
+              style: TextStyle(fontSize: 20),
+            ),
             SizedBox(height: 10),
-            DropdownButton<String>(
-              value: _controller.dropdownValue.value,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                _controller.dropdownValue.value = value!;
-              },
-              items: _controller.list
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            Text(
+              barcodeResult,
+              style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                _controller.scanBarcode();
+                scanBarcode();
               },
               child: Text('Scan Barcode'),
+            ),
+            SizedBox(height: 20),
+            FutureBuilder<List<String>>(
+              future: categoryController.fetchCategoryNames(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Text('No category names available.');
+                } else {
+                  List<String> categoryNames = snapshot.data!;
+                  return Column(
+                    children: [
+                      Text('Category Names:'),
+                      SizedBox(height: 10),
+                      // Display category names as a comma-separated string
+                      Text(categoryNames.join(', ')),
+                    ],
+                  );
+                }
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> scanBarcode() async {
+    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
+      "#ff6666", // Color for the scan button
+      "Cancel", // Text for the cancel button
+      true, // Show flash icon
+      ScanMode.BARCODE, // Specify the type of scan
+    );
+    setState(() {
+      barcodeResult = barcodeScanResult;
+    });
   }
 }

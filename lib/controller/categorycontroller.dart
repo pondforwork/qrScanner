@@ -67,7 +67,27 @@ class CategoryController extends GetxController {
     }
   }
 
-  List<String> getCategoryNames() {
-    return allCategory.map((category) => category.categoryName).toList();
+  Future<List<String>> fetchCategoryNames() async {
+    try {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter(documentDirectory.path);
+      await Hive.openBox('category');
+      var data = Hive.box('category');
+      List<dynamic> values = data.values.toList();
+      List<String> categoryNames = [];
+
+      for (dynamic value in values) {
+        if (value != null) {
+          categoryNames.add(value['categoryName']);
+        }
+      }
+
+      return categoryNames;
+    } catch (error) {
+      print("Error while fetching category names: $error");
+      return [];
+    }
   }
+
+  
 }

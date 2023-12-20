@@ -1,11 +1,20 @@
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 
+import 'categorycontroller.dart';
+
 class ScanController extends GetxController {
+  @override
+  void onInit() {
+    // TODO: implement onInit
+   
+    super.onInit();
+  }
+
+  final categoryController = Get.put(CategoryController());
   RxString barcodeResult = "No data yet".obs;
   RxString dropdownValue = 'One'.obs;
-  List<String> list = ['One', 'Two', 'Three', 'Four'];
-
+  late List<String> list;
   Future<void> scanBarcode() async {
     String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
       "#ff6666", // Color for the scan button
@@ -16,4 +25,9 @@ class ScanController extends GetxController {
 
     barcodeResult.value = barcodeScanResult;
   }
+
+  // Future<List<String>> getName() async {
+  //   list = await categoryController.getCategoryNames();
+  //   return list;
+  // }
 }
