@@ -1,86 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
 
 class ScanScreen extends StatefulWidget {
+  const ScanScreen({Key? key}) : super(key: key);
+
   @override
   _ScanScreenState createState() => _ScanScreenState();
 }
 
 class _ScanScreenState extends State<ScanScreen> {
-  final categoryController = CategoryController();
+  final categoryController = Get.put(CategoryController());
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  String barcodeResult = "No data yet";
+  // Mock data for the dropdown
+  List<String> mockData = ['Option 1', 'Option 2', 'Option 3'];
+  String selectedOption = 'Option 1';
 
   @override
   Widget build(BuildContext context) {
+    var list = categoryController.fetchCategoryNames();
+    print(list);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Screen'),
+        title: Text("Scan"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Scan Result:',
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 10),
-            Text(
-              barcodeResult,
-              style: TextStyle(fontSize: 16),
-            ),
+            Text("Scanner"),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                scanBarcode();
+            // DropdownButton widget
+            DropdownButton<String>(
+              value: selectedOption,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedOption = newValue!;
+                });
               },
-              child: Text('Scan Barcode'),
-            ),
-            SizedBox(height: 20),
-            FutureBuilder<List<String>>(
-              future: categoryController.fetchCategoryNames(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Text('No category names available.');
-                } else {
-                  List<String> categoryNames = snapshot.data!;
-                  return Column(
-                    children: [
-                      Text('Category Names:'),
-                      SizedBox(height: 10),
-                      // Display category names as a comma-separated string
-                      Text(categoryNames.join(', ')),
-                    ],
-                  );
-                }
-              },
+              items: mockData.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> scanBarcode() async {
-    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-      "#ff6666", // Color for the scan button
-      "Cancel", // Text for the cancel button
-      true, // Show flash icon
-      ScanMode.BARCODE, // Specify the type of scan
-    );
-    setState(() {
-      barcodeResult = barcodeScanResult;
-    });
   }
 }
