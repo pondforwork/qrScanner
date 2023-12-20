@@ -22,7 +22,9 @@ class DropdownPage extends StatelessWidget {
                 () => DropdownButton(
                   value: dropdownController.selectedItem.value.isNotEmpty
                       ? dropdownController.selectedItem.value
-                      : null,
+                      : dropdownController.dropdownItems.isNotEmpty
+                          ? dropdownController.dropdownItems[0]
+                          : null, // Set the default index (first item in the list)
                   items: dropdownController.dropdownItems
                       .map(
                         (String item) => DropdownMenuItem<String>(
