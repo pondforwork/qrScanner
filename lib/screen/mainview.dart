@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class MainView extends StatelessWidget {
+  const MainView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: itemBuilder);
+    return Scaffold(appBar: AppBar(title: Text("Qr Scan"),),
+      body: Center(child: Text("Center"),),);
   }
 }
