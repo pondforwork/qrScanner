@@ -2,10 +2,11 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_scan/models/catgegory.dart';
+import 'package:uuid/uuid.dart';
 
 class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
-  
+
   @override
   void onInit() {
     fetchCategory();
@@ -26,6 +27,7 @@ class CategoryController extends GetxController {
           allData.add(ItemCategory(
             value['id'],
             value['categoryName'],
+            value['order'],
           ));
         }
       }
@@ -46,14 +48,16 @@ class CategoryController extends GetxController {
       await Hive.openBox('category');
       var data = Hive.box('category');
       // Generate a unique ID for the new category
-      int id = DateTime.now().millisecondsSinceEpoch;
+      String id = const Uuid().v4();
+      DateTime order = DateTime.now();
       // Create a new ItemCategory instance
-      var newCategory = ItemCategory(id, categoryName);
+      var newCategory = ItemCategory(id, categoryName, order);
       print(id);
       // Save the new category to the Hive box
       await data.put(id, {
         'id': id,
         'categoryName': newCategory.categoryName,
+        'order':newCategory.order
       });
       print("Insert Category");
       // Fetch the updated list of categories

@@ -48,7 +48,7 @@ class _AddCategoryState extends State<AddCategory> {
 
                     print('Text Field 1: $categoryNameFromField');
                     categoryController.addCategory(categoryNameFromField);
-                    // Get.back();
+                    Get.back();
                   }
                 },
                 child: const Text('Submit'),
