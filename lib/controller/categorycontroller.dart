@@ -66,4 +66,8 @@ class CategoryController extends GetxController {
       print("Error while adding category: $error");
     }
   }
+
+  List<String> getCategoryNames() {
+    return allCategory.map((category) => category.categoryName).toList();
+  }
 }
