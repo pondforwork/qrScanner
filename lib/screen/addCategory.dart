@@ -1,34 +1,35 @@
-// ignore: file_names
-// ignore_for_file: camel_case_types
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:qr_scan/controller/categorycontroller.dart';
 
-class addCategory extends StatefulWidget {
-  const addCategory({super.key});
+class AddCategory extends StatefulWidget {
+  const AddCategory({Key? key}) : super(key: key);
 
   @override
-  _addCategoryState createState() => _addCategoryState();
+  _AddCategoryState createState() => _AddCategoryState();
 }
 
-class _addCategoryState extends State<addCategory> {
+class _AddCategoryState extends State<AddCategory> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _textField1Controller = TextEditingController();
-  // final TextEditingController _textField2Controller = TextEditingController();
+  final categoryController = Get.put(CategoryController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Form Screen'),
+        title: const Text('Form Screen'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _formKey, // Assign the GlobalKey to the Form
           child: Column(
             children: [
               TextFormField(
                 controller: _textField1Controller,
-                decoration: InputDecoration(
-                  labelText: 'Text Field 1',
+                decoration: const InputDecoration(
+                  labelText: 'Insert Category',
                 ),
                 validator: (value) {
                   if (value == null || value.length < 3) {
@@ -37,33 +38,20 @@ class _addCategoryState extends State<addCategory> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
-              TextFormField(
-               
-                decoration: InputDecoration(
-                  labelText: 'Text Field 2',
-                ),
-                validator: (value) {
-                  if (value == null || value.length < 3) {
-                    return 'Please enter at least 3 characters';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   // Validate the form and process the data
-                  if (Form.of(context).validate()) {
+                  if (_formKey.currentState!.validate()) {
                     // Your logic to handle the form data goes here
-                    String textField1Value = _textField1Controller.text;
-                    // String textField2Value = _textField2Controller.text;
+                    String categoryNameFromField = _textField1Controller.text;
 
-                    print('Text Field 1: $textField1Value');
-                   
+                    print('Text Field 1: $categoryNameFromField');
+                    categoryController.addCategory(categoryNameFromField);
+                    // Get.back();
                   }
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

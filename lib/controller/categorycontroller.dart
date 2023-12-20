@@ -5,10 +5,9 @@ import 'package:qr_scan/models/catgegory.dart';
 
 class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
-
+  
   @override
   void onInit() {
-    
     fetchCategory();
     super.onInit();
   }
@@ -27,7 +26,6 @@ class CategoryController extends GetxController {
           allData.add(ItemCategory(
             value['id'],
             value['categoryName'],
-            value['dateAdded'],
           ));
         }
       }
@@ -38,6 +36,30 @@ class CategoryController extends GetxController {
       allCategory.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
+    }
+  }
+
+  Future<void> addCategory(String categoryName) async {
+    try {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter(documentDirectory.path);
+      await Hive.openBox('category');
+      var data = Hive.box('category');
+      // Generate a unique ID for the new category
+      int id = DateTime.now().millisecondsSinceEpoch;
+      // Create a new ItemCategory instance
+      var newCategory = ItemCategory(id, categoryName);
+      print(id);
+      // Save the new category to the Hive box
+      await data.put(id, {
+        'id': id,
+        'categoryName': newCategory.categoryName,
+      });
+      print("Insert Category");
+      // Fetch the updated list of categories
+      await fetchCategory();
+    } catch (error) {
+      print("Error while adding category: $error");
     }
   }
 }

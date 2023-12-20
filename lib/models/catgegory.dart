@@ -1,6 +1,6 @@
 class ItemCategory {
-  late String id;
+  late int id;
   late String categoryName;
-  late DateTime dateAdded;
-  ItemCategory(this.id, this.categoryName, this.dateAdded);
+
+  ItemCategory(this.id, this.categoryName);
 }

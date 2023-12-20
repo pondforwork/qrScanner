@@ -27,7 +27,7 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             title: Text('Add Category'),
             onTap: () {
-              Get.to(() => addCategory());
+              Get.to(() => AddCategory());
               // Add your navigation logic or other actions here
               // Navigator.pop(context); // Close the drawer
             },
