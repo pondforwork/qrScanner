@@ -7,9 +7,7 @@ import 'package:uuid/uuid.dart';
 class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
   RxList<String> globalList = <String>[].obs;
-  RxString selectedOption = 'Option 1'.obs; // Default value
-  RxList<String> dropdownItems = ['Option 1'].obs; // Default values
-  RxString selectedCategory = 'One'.obs;
+  
   @override
   void onInit() {
     fetchCategory();
@@ -96,7 +94,5 @@ class CategoryController extends GetxController {
     }
   }
 
-   void updateSelectedCategory(String newValue) {
-    selectedCategory.value = newValue;
-  }
+  
 }

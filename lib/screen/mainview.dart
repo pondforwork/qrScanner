@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
+import 'package:qr_scan/controller/dropdowncontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
 import 'package:qr_scan/screen/scanview.dart';
 
@@ -10,6 +11,8 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryController = Get.put(CategoryController());
+    DropdownController dropdownController = Get.put(DropdownController());
+// Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +53,8 @@ class MainView extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => ScanScreen());
+          dropdownController.fetchDropdownItems();
+          Get.to(() => DropdownPage());
           print("Scan");
         },
         child: Icon(Icons.qr_code),
