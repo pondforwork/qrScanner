@@ -12,21 +12,27 @@ class ScanScreen extends StatefulWidget {
 class _ScanScreenState extends State<ScanScreen> {
   final categoryController = Get.put(CategoryController());
   String selectedOption = 'Option 1';
-  List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+  List<String> dropdownItems = <String>[
+    'One',
+    'Two',
+    'Three',
+    'Four'
+  ]; // Default values
 
   @override
   void initState() {
     super.initState();
-    // TODO: implement initState
     // This is a future operation, so you might want to handle it asynchronously.
     categoryController.fetchCategoryNames().then((mockData) {
-      print(mockData);
+      setState(() {
+        dropdownItems = mockData;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    String dropdownValue = list.first;
+    String dropdownValue = dropdownItems.first;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +52,8 @@ class _ScanScreenState extends State<ScanScreen> {
                   dropdownValue = newValue!;
                 });
               },
-              items: list.map<DropdownMenuItem<String>>((String value) {
+              items:
+                  dropdownItems.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -59,5 +66,3 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 }
-
-
