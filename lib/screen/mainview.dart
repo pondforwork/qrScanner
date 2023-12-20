@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
+import 'package:qr_scan/screen/scanview.dart';
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
@@ -40,6 +41,7 @@ class MainView extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+           Get.to(() => ScanScreen());
             print("Scan");
           },
           child: Icon(Icons.qr_code),
