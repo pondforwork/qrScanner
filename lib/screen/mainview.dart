@@ -10,7 +10,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final categoryController = Get.put(CategoryController());
+    final categoryController = Get.put(CategoryController());
     DropdownController dropdownController = Get.put(DropdownController());
 
     // Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
@@ -29,16 +29,20 @@ class MainView extends StatelessWidget {
                   itemCount:
                       controller.allCategory.length, // Use your item count here
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 80,
-                      child: Card(
-                          child: Center(
-                        child: Text(
-                          controller.allCategory[index].categoryName,
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      )),
-                    );
+                    if (controller.allCategory.length == 0) {
+                      return Center(child: Text("No Data"),);
+                    } else {
+                      return Container(
+                        height: 80,
+                        child: Card(
+                            child: Center(
+                          child: Text(
+                            controller.allCategory[index].categoryName,
+                            style: TextStyle(fontSize: 25),
+                          ),
+                        )),
+                      );
+                    }
                   },
                 );
               },
