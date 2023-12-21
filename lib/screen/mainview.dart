@@ -10,45 +10,41 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categoryController = Get.put(CategoryController());
+    // final categoryController = Get.put(CategoryController());
     DropdownController dropdownController = Get.put(DropdownController());
-// Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
+
+    // Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Qr Scan"),
       ),
       drawer: MyDrawer(), // Add the drawer here
-      body: FutureBuilder(
-        future: categoryController.fetchCategoryNames(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text("Error: ${snapshot.error}"),
-            );
-          } else if (categoryController.globalList.isEmpty) {
-            return const Center(
-              child: Text("No Data"),
-            );
-          } else {
-            // Now you can use categoryController.globalList as needed
-            print(categoryController.globalList);
-            
-            return ListView.builder(
-              itemCount: categoryController.globalList.length,
-              itemBuilder: (context, index) {
-                final categoryName = categoryController.globalList[index];
-                return ListTile(
-                  title: Text(categoryName),
+      body: Column(
+        children: [
+          Expanded(
+            child: GetX<CategoryController>(
+              builder: (controller) {
+                return ListView.builder(
+                  itemCount:
+                      controller.allCategory.length, // Use your item count here
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 80,
+                      child: Card(
+                          child: Center(
+                        child: Text(
+                          controller.allCategory[index].categoryName,
+                          style: TextStyle(fontSize: 25),
+                        ),
+                      )),
+                    );
+                  },
                 );
               },
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
 
       floatingActionButton: FloatingActionButton(
