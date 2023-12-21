@@ -2,7 +2,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 
 class ScannerController extends GetxController {
-  RxString barcodeResult = "No data yet".obs;
+  RxString barcodeResult = "No data yet. Please Scan QR or Barcode".obs;
   RxString dropdownValue = 'One'.obs;
   List<String> list = ['One', 'Two', 'Three', 'Four'];
 

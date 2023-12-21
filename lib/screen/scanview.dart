@@ -30,11 +30,12 @@ class DropdownPage extends StatelessWidget {
                   padding: EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Text("Scan Result"),
+                      Text("Scan Result",style: TextStyle(fontSize: 25),),
                       SizedBox(
                         height: 20,
                       ),
-                      Text(scannercontroller.barcodeResult.value),
+                      Obx(() => Text(scannercontroller.barcodeResult.value)),
+                      //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(
                         controller: textEditingController,
@@ -98,7 +99,8 @@ class DropdownPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          scannercontroller.scanBarcode();
+          // scannercontroller.barcodeResult.value="Tdasadsf";
+          // scannercontroller.scanBarcode();
         },
         child: Icon(Icons.qr_code_2_outlined),
       ),

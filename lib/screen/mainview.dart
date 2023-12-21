@@ -37,7 +37,7 @@ class MainView extends StatelessWidget {
           } else {
             // Now you can use categoryController.globalList as needed
             print(categoryController.globalList);
-
+            
             return ListView.builder(
               itemCount: categoryController.globalList.length,
               itemBuilder: (context, index) {
