@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/screen/addCategory.dart';
+import 'package:qr_scan/screen/productview.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -28,6 +29,14 @@ class MyDrawer extends StatelessWidget {
             title: Text('Add Category'),
             onTap: () {
               Get.to(() => AddCategory());
+              // Add your navigation logic or other actions here
+              // Navigator.pop(context); // Close the drawer
+            },
+          ),
+          ListTile(
+            title: Text('Product Result'),
+            onTap: () {
+              Get.to(() => ProductView());
               // Add your navigation logic or other actions here
               // Navigator.pop(context); // Close the drawer
             },

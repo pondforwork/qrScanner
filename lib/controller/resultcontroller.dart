@@ -2,97 +2,81 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_scan/models/catgegory.dart';
+import 'package:qr_scan/models/result.dart';
 import 'package:uuid/uuid.dart';
 
-class ResultController extends GetxController {
-  var allCategory = <ItemCategory>[].obs;
+class ProductController extends GetxController {
+  var allProduct = <Product>[].obs;
   RxList<String> globalList = <String>[].obs;
-  
+
   @override
   void onInit() {
-    fetchCategory();
-    fetchCategoryNames().then((names) {
-      globalList.assignAll(names);
-    });
-
     super.onInit();
+    fetchProduct();
   }
 
-  Future<void> fetchCategory() async {
+  Future<void> fetchProduct() async {
     try {
       final documentDirectory = await getApplicationDocumentsDirectory();
       await Hive.initFlutter(documentDirectory.path);
-      await Hive.openBox('category');
-      var data = Hive.box('category');
+      await Hive.openBox('product');
+      var data = Hive.box('product');
       List<dynamic> values = data.values.toList();
-      List<ItemCategory> allData = [];
+      List<Product> allData = [];
 
       for (dynamic value in values) {
         if (value != null) {
-          allData.add(ItemCategory(
+          allData.add(Product(
             value['id'],
+            value['resultScan'],
+            value['name'],
             value['categoryName'],
-            value['order'],
+            value['dateAdded'],
           ));
         }
       }
 
+      // 'id': newProduct.id,
+      //   'resultScan': newProduct.resultscan,
+      //   'name': name,
+      //   'categoryName': categoryName,
+      //   'dateAdded': newProduct.dateAdded
+
       // Sort the list by the "order" property
       // allData.sort((a, b) => a.order.compareTo(b.order));
-      print("init");
-      allCategory.assignAll(allData);
+      print("initProduct");
+      allProduct.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
     }
   }
 
-  Future<void> addCategory(String categoryName) async {
+  Future<void> addProduct(
+      String resultScan, String name, String categoryName) async {
     try {
       final documentDirectory = await getApplicationDocumentsDirectory();
       await Hive.initFlutter(documentDirectory.path);
-      await Hive.openBox('category');
-      var data = Hive.box('category');
+      await Hive.openBox('product');
+      var data = Hive.box('product');
       // Generate a unique ID for the new category
       String id = const Uuid().v4();
       DateTime order = DateTime.now();
       // Create a new ItemCategory instance
-      var newCategory = ItemCategory(id, categoryName, order);
+      var newProduct = Product(id, resultScan, name, categoryName, order);
       print(id);
       // Save the new category to the Hive box
       await data.put(id, {
-        'id': id,
-        'categoryName': newCategory.categoryName,
-        'order': newCategory.order
+        'id': newProduct.id,
+        'resultScan': newProduct.resultscan,
+        'name': name,
+        'categoryName': categoryName,
+        'dateAdded': newProduct.dateAdded
       });
-      print("Insert Category");
-      // Fetch the updated list of categories
-      await fetchCategory();
+      print("Insert Product");
+      await fetchProduct();
+      // await fetchCategory();
     } catch (error) {
       print("Error while adding category: $error");
     }
   }
-
-  Future<List<String>> fetchCategoryNames() async {
-    try {
-      final documentDirectory = await getApplicationDocumentsDirectory();
-      await Hive.initFlutter(documentDirectory.path);
-      await Hive.openBox('category');
-      var data = Hive.box('category');
-      List<dynamic> values = data.values.toList();
-      List<String> categoryNames = [];
-
-      for (dynamic value in values) {
-        if (value != null) {
-          categoryNames.add(value['categoryName']);
-        }
-      }
-
-      return categoryNames;
-    } catch (error) {
-      print("Error while fetching category names: $error");
-      return [];
-    }
-  }
-
-  
 }
