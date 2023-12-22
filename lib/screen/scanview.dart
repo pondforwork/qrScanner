@@ -8,6 +8,7 @@ class DropdownPage extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +34,8 @@ class DropdownPage extends StatelessWidget {
                       Text("Scan Result",style: TextStyle(fontSize: 25),),
                       SizedBox(
                         height: 20,
-                      ),
-                      Obx(() => Text(scannercontroller.barcodeResult.value)),
+                      )
+                      ,Obx(() => Text(scannercontroller.barcodeResult.value)),
                       //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
+import 'package:qr_scan/controller/dropdowncontroller.dart';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class _AddCategoryState extends State<AddCategory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _textField1Controller = TextEditingController();
   final categoryController = Get.put(CategoryController());
+  DropdownController dropdownController = Get.put(DropdownController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +50,11 @@ class _AddCategoryState extends State<AddCategory> {
 
                     print('Text Field 1: $categoryNameFromField');
                     categoryController.addCategory(categoryNameFromField);
+
+                    categoryController.fetchCategory();
+                    dropdownController.fetchDropdownItems();
+
                     Get.back();
-                  
                   }
                 },
                 child: const Text('Submit'),
