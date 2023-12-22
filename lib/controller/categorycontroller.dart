@@ -67,6 +67,7 @@ class CategoryController extends GetxController {
       print("Insert Category");
       // Fetch the updated list of categories
       await fetchCategory();
+      await fetchDropdown();
     } catch (error) {
       print("Error while adding category: $error");
     }
@@ -92,6 +93,14 @@ class CategoryController extends GetxController {
       print("Error while fetching category names: $error");
       return [];
     }
+  }
+
+  Future<void> fetchDropdown() async {
+    fetchCategory();
+    print("FetchFromController");
+    fetchCategoryNames().then((names) {
+      globalList.assignAll(names);
+    });
   }
 
   
