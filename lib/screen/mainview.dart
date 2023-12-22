@@ -10,6 +10,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //call category to load dropdown first
     final categoryController = Get.put(CategoryController());
     DropdownController dropdownController = Get.put(DropdownController());
 

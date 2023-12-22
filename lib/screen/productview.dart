@@ -12,7 +12,7 @@ class ProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryController = Get.put(CategoryController());
-    DropdownController dropdownController = Get.put(DropdownController());
+    // DropdownController dropdownController = Get.put(DropdownController());
     final productcontroller = Get.put(ProductController());
 
     // Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
@@ -21,7 +21,7 @@ class ProductView extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Product Result"),
       ),
-      drawer: MyDrawer(), // Add the drawer here
+      
       body: Column(
         children: [
           Expanded(

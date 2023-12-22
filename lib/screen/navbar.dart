@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/screen/addCategory.dart';
+import 'package:qr_scan/screen/mainview.dart';
 import 'package:qr_scan/screen/productview.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -25,6 +26,14 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
           ),
+          // ListTile(
+          //   title: Text('Home'),
+          //   onTap: () {
+          //     Get.off(()=>MainView());
+          //     // Add your navigation logic or other actions here
+          //     // Navigator.pop(context); // Close the drawer
+          //   },
+          // ),
           ListTile(
             title: Text('Add Category'),
             onTap: () {
@@ -54,3 +63,4 @@ class MyDrawer extends StatelessWidget {
     );
   }
 }
+
