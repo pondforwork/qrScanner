@@ -13,6 +13,7 @@ class ProductController extends GetxController {
   void onInit() {
     super.onInit();
     fetchProduct();
+    // fetchProductByCategory('Books');
   }
 
   Future<void> fetchProduct() async {
@@ -35,17 +36,39 @@ class ProductController extends GetxController {
           ));
         }
       }
-
-      // 'id': newProduct.id,
-      //   'resultScan': newProduct.resultscan,
-      //   'name': name,
-      //   'categoryName': categoryName,
-      //   'dateAdded': newProduct.dateAdded
-
-      // Sort the list by the "order" property
-      // allData.sort((a, b) => a.order.compareTo(b.order));
       print("initProduct");
       allProduct.assignAll(allData);
+    } catch (error) {
+      print("Error while accessing data: $error");
+    }
+  }
+
+  Future<void> fetchProductByCategory(String categoryName) async {
+    try {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter(documentDirectory.path);
+      await Hive.openBox('product');
+      var data = Hive.box('product');
+      List<dynamic> values = data.values.toList();
+      List<Product> filteredData = [];
+
+      for (dynamic value in values) {
+        if (value != null && value['categoryName'] == categoryName) {
+          filteredData.add(Product(
+            value['id'],
+            value['resultScan'],
+            value['name'],
+            value['categoryName'],
+            value['dateAdded'],
+          ));
+        }
+      }
+      // Sort the list if needed
+      // filteredData.sort((a, b) => a.order.compareTo(b.order));
+      print("Filtered Products for category '$categoryName': $filteredData");
+
+      // Assign the filtered data to your GetX observable
+      allProduct.assignAll(filteredData);
     } catch (error) {
       print("Error while accessing data: $error");
     }

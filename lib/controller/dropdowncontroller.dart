@@ -18,17 +18,16 @@ class DropdownController extends GetxController {
 
       // Wait for the category names to be fetched
       await categoryController.fetchCategoryNames();
-  
+
       // Get the category names from the CategoryController
       List<String> categoryNames = categoryController.globalList;
 
       // Assign the category names to the dropdownItems list
       dropdownItems.assignAll(categoryNames);
-      print(categoryNames);
-      print("FetchDropdown");
 
-      print("Globallist");
-      print(categoryController.globalList);
+      if (dropdownItems.isNotEmpty) {
+        selectedItem.value = dropdownItems[0];
+      }
     } catch (error) {
       print("Error while fetching dropdown items: $error");
     }

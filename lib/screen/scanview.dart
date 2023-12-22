@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/dropdowncontroller.dart';
+import 'package:qr_scan/controller/resultcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class DropdownPage extends StatelessWidget {
   final DropdownController dropdownController = Get.find();
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
-
-  
+  final ProductController productController = Get.put(ProductController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +31,14 @@ class DropdownPage extends StatelessWidget {
                   padding: EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Text("Scan Result",style: TextStyle(fontSize: 25),),
-                      SizedBox(
+                      const Text(
+                        "Scan Result",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                      const SizedBox(
                         height: 20,
-                      )
-                      ,Obx(() => Text(scannercontroller.barcodeResult.value)),
+                      ),
+                      Obx(() => Text(scannercontroller.barcodeResult.value)),
                       //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(
@@ -76,8 +79,9 @@ class DropdownPage extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           String name = textEditingController.text;
-                          print(name);
-                          print(dropdownController.selectedItem.value);
+                          String category = dropdownController.selectedItem.value;
+
+                          productController.addProduct(scannercontroller.barcodeResult.value, name, category);
                         },
                         child: const Text('Save'),
                       ),
