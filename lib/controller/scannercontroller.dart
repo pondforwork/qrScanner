@@ -13,10 +13,9 @@ class ScannerController extends GetxController {
       true, // Show flash icon
       ScanMode.DEFAULT, // Specify the type of scan
     );
-    if (barcodeResult == -1) {
-      return;
-    } else {
-      barcodeResult.value = barcodeScanResult;
+    barcodeResult.value = barcodeScanResult;
+    if(barcodeResult.value =="-1"){
+      barcodeResult.value = "No data yet. Please Scan QR or Barcode";
     }
   }
 }
