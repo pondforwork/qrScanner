@@ -69,8 +69,8 @@ class DropdownPage extends StatelessWidget {
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 50,
+                      const SizedBox(
+                        height: 30,
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -100,7 +100,7 @@ class DropdownPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // scannercontroller.barcodeResult.value="Tdasadsf";
-          // scannercontroller.scanBarcode();
+          scannercontroller.scanBarcode();
         },
         child: Icon(Icons.qr_code_2_outlined),
       ),

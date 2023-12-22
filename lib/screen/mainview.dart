@@ -33,15 +33,18 @@ class MainView extends StatelessWidget {
                     if (controller.allCategory.length == 0) {
                       return Center(child: Text("No Data"),);
                     } else {
-                      return Container(
-                        height: 80,
-                        child: Card(
-                            child: Center(
-                          child: Text(
-                            controller.allCategory[index].categoryName,
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        )),
+                      return GestureDetector(
+                        onTap: () => print("Tap on ,${controller.allCategory[index].categoryName}"),
+                        child: Container(
+                          height: 80,
+                          child: Card(
+                              child: Center(
+                            child: Text(
+                              controller.allCategory[index].categoryName,
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          )),
+                        ),
                       );
                     }
                   },
