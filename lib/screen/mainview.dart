@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
 import 'package:qr_scan/controller/dropdowncontroller.dart';
+import 'package:qr_scan/controller/resultcontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
+import 'package:qr_scan/screen/productview.dart';
 import 'package:qr_scan/screen/scanview.dart';
 
 class MainView extends StatelessWidget {
@@ -13,7 +15,7 @@ class MainView extends StatelessWidget {
     //call category to load dropdown first
     final categoryController = Get.put(CategoryController());
     DropdownController dropdownController = Get.put(DropdownController());
-
+    final ProductController productcontroller = Get.put(ProductController());
     // Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
 
     return Scaffold(
@@ -22,7 +24,7 @@ class MainView extends StatelessWidget {
       ),
       drawer: MyDrawer(), // Add the drawer here
       body: Column(
-        children: [
+        children: [ 
           Expanded(
             child: GetX<CategoryController>(
               builder: (controller) {
@@ -34,7 +36,11 @@ class MainView extends StatelessWidget {
                       return Center(child: Text("No Data"),);
                     } else {
                       return GestureDetector(
-                        onTap: () => print("Tap on ,${controller.allCategory[index].categoryName}"),
+                        //onTap: () => print("Tap on ,${controller.allCategory[index].categoryName} "),
+                        onTap: () async {
+                          await productcontroller.fetchProductByCategory(controller.allCategory[index].categoryName);
+                          Get.to(() => ProductView());
+                        },
                         child: Container(
                           height: 80,
                           child: Card(

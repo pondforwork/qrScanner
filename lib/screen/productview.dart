@@ -21,7 +21,6 @@ class ProductView extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Product Result"),
       ),
-      
       body: Column(
         children: [
           Expanded(
@@ -39,7 +38,7 @@ class ProductView extends StatelessWidget {
                         child: Card(
                             child: Center(
                           child: Text(
-                            controller.allProduct[index].categoryName,
+                            controller.allProduct[index].name,
                             style: TextStyle(fontSize: 25),
                           ),
                         )),
