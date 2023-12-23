@@ -79,9 +79,14 @@ class DropdownPage extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           String name = textEditingController.text;
-                          String category = dropdownController.selectedItem.value;
-
-                          productController.addProduct(scannercontroller.barcodeResult.value, name, category);
+                          String category =
+                              dropdownController.selectedItem.value;
+                          productController.addProduct(
+                              scannercontroller.barcodeResult.value,
+                              name,
+                              category);
+                          clearForm() ;
+                          Get.back();
                         },
                         child: const Text('Save'),
                       ),
@@ -110,5 +115,11 @@ class DropdownPage extends StatelessWidget {
         child: Icon(Icons.qr_code_2_outlined),
       ),
     );
+  }
+
+  void clearForm() {
+    scannercontroller.barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+    textEditingController.text = ''; // Clear the text field
+    dropdownController.selectedItem.value = dropdownController.dropdownItems[0]; // Reset the selected item in the dropdown
   }
 }
