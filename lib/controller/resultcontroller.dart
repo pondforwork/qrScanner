@@ -110,18 +110,23 @@ class ProductController extends GetxController {
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('AlertDialog Title'),
+        title: const Text('Delete This Category?'),
         content: const SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              Text('This is a demo alert dialog.'),
-              Text('Would you like to approve of this message?'),
+              Text('This Category and all Product in this Category will be delete.'),
+          
             ],
           ),
         ),
         actions: <Widget>[
           TextButton(
-            child: const Text('Approve'),
+            child: const Text('Delete',style: TextStyle(color: Colors.red),),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),TextButton(
+            child: const Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop();
             },

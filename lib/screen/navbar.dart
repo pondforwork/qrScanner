@@ -43,7 +43,7 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Product Result'),
+            title: Text('All Product'),
             onTap: () {
               Get.to(() => ProductView());
               // Add your navigation logic or other actions here
