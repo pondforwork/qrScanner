@@ -6,18 +6,18 @@ import 'package:qr_scan/controller/resultcontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
 import 'package:qr_scan/screen/productview.dart';
 import 'package:qr_scan/screen/scanview.dart';
-
 class MainView extends StatelessWidget {
   const MainView({Key? key});
 
   @override
   Widget build(BuildContext context) {
     //call category to load dropdown first
+    // ignore: unused_local_variable
     final categoryController = Get.put(CategoryController());
     DropdownController dropdownController = Get.put(DropdownController());
     final ProductController productcontroller = Get.put(ProductController());
     // Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
-    SnackBar snackBar = SnackBar(
+    SnackBar snackBar = const SnackBar(
       content: Text('No Prodruct Category. Please Add One On left Menu'),
     );
     return Scaffold(
@@ -35,7 +35,7 @@ class MainView extends StatelessWidget {
                       controller.allCategory.length, // Use your item count here
                   itemBuilder: (BuildContext context, int index) {
                     if (controller.allCategory.length == 0) {
-                      return Center(
+                      return const Center(
                         child: Text("No Data"),
                       );
                     } else {
@@ -45,6 +45,9 @@ class MainView extends StatelessWidget {
                           await productcontroller.fetchProductByCategory(
                               controller.allCategory[index].categoryName);
                           Get.to(() => ProductView());
+                        },
+                        onLongPress: (){
+                          productcontroller.showMyDialog(context);
                         },
                         child: Container(
                           height: 80,
@@ -69,11 +72,12 @@ class MainView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //dropdownController.fetchDropdownItems();
-          if (dropdownController.dropdownItems.length == 0) {
             Get.to(() => DropdownPage());
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
+          // if (dropdownController.dropdownItems.length == 0) {
+          
+          // } else {
+          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          // }
         },
         child: Icon(Icons.qr_code),
       ),
