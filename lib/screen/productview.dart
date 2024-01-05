@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
 import 'package:qr_scan/controller/dropdowncontroller.dart';
-import 'package:qr_scan/controller/resultcontroller.dart';
+import 'package:qr_scan/controller/productcontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
 import 'package:qr_scan/screen/scanview.dart';
 

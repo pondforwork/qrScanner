@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/dropdowncontroller.dart';
-import 'package:qr_scan/controller/resultcontroller.dart';
+import 'package:qr_scan/controller/productcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class DropdownPage extends StatelessWidget {

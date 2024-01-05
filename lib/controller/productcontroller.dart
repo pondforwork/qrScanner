@@ -104,39 +104,68 @@ class ProductController extends GetxController {
     }
   }
 
+  Future<void> deleteProductsByCategoryName(String categoryName) async {
+    try {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter(documentDirectory.path);
+      await Hive.openBox('product');
+      var data = Hive.box('product');
+
+      // Find and delete all products with the specified category name
+      List<dynamic> keysToDelete = [];
+      data.keys.forEach((key) {
+        var product = data.get(key);
+        if (product['categoryName'] == categoryName) {
+          keysToDelete.add(key);
+        }
+      });
+
+      keysToDelete.forEach((key) {
+        data.delete(key);
+      });
+
+      print("Deleted products by category name: $categoryName");
+      await fetchProduct(); // Consider removing this line if unnecessary
+    } catch (error) {
+      print("Error while deleting products by category name: $error");
+    }
+  }
+
   Future<void> showMyDialog(context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Delete This Category?'),
-        content: const SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('This Category and all Product in this Category will be delete.'),
-          
-            ],
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete This Category?'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'This Category and all Product in this Category will be delete.'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Delete',style: TextStyle(color: Colors.red),),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                deleteProductsByCategoryName('Tai Food');
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
-
-  
-}
-
