@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
+import 'package:qr_scan/controller/dropdowncontroller.dart';
 import 'package:qr_scan/models/catgegory.dart';
 import 'package:qr_scan/models/result.dart';
 import 'package:uuid/uuid.dart';
 
 class ProductController extends GetxController {
   final categoryController = Get.put(CategoryController());
+  final dropdownController = Get.put(DropdownController());
+
   var allProduct = <Product>[].obs;
   RxList<String> globalList = <String>[].obs;
 
@@ -100,6 +103,7 @@ class ProductController extends GetxController {
       });
       print("Insert Product");
       await fetchProduct();
+      print("Call Fetxh");
       // await fetchCategory();
     } catch (error) {
       print("Error while adding category: $error");
@@ -133,7 +137,7 @@ class ProductController extends GetxController {
     }
   }
 
-  Future<void> showMyDialog(context,String categoryname) async {
+  Future<void> showMyDialog(context, String categoryname) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -157,6 +161,8 @@ class ProductController extends GetxController {
               onPressed: () async {
                 await deleteProductsByCategoryName(categoryname);
                 await categoryController.deleteCategoryByName(categoryname);
+                await categoryController.fetchDropdown();
+                await dropdownController.fetchDropdownItems();
                 Get.back();
                 // Navigator.of(context).pop();
               },

@@ -27,7 +27,7 @@ class DropdownPage extends StatelessWidget {
                     255, 255, 249, 171), // Set the background color of the Card
                 child: Container(
                   width: 500,
-                  height: 300,
+                  height: 370,
                   padding: EdgeInsets.all(16.0),
                   child: Column(
                     children: [
@@ -45,6 +45,13 @@ class DropdownPage extends StatelessWidget {
                         controller: textEditingController,
                         decoration:
                             const InputDecoration(labelText: 'Enter Name'),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text("Category"),
+                      SizedBox(
+                        height: 10,
                       ),
 
                       Obx(
@@ -85,7 +92,7 @@ class DropdownPage extends StatelessWidget {
                               scannercontroller.barcodeResult.value,
                               name,
                               category);
-                          clearForm() ;
+                          clearForm();
                           Get.back();
                         },
                         child: const Text('Save'),
@@ -118,8 +125,10 @@ class DropdownPage extends StatelessWidget {
   }
 
   void clearForm() {
-    scannercontroller.barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+    scannercontroller.barcodeResult.value =
+        "No data yet. Please Scan QR or Barcode";
     textEditingController.text = ''; // Clear the text field
-    dropdownController.selectedItem.value = dropdownController.dropdownItems[0]; // Reset the selected item in the dropdown
+    dropdownController.selectedItem.value = dropdownController
+        .dropdownItems[0]; // Reset the selected item in the dropdown
   }
 }
