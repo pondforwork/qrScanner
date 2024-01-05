@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:qr_scan/controller/categorycontroller.dart';
 import 'package:qr_scan/models/catgegory.dart';
 import 'package:qr_scan/models/result.dart';
 import 'package:uuid/uuid.dart';
 
 class ProductController extends GetxController {
+  final categoryController = Get.put(CategoryController());
   var allProduct = <Product>[].obs;
   RxList<String> globalList = <String>[].obs;
 
@@ -131,7 +133,7 @@ class ProductController extends GetxController {
     }
   }
 
-  Future<void> showMyDialog(context) async {
+  Future<void> showMyDialog(context,String categoryname) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -152,9 +154,11 @@ class ProductController extends GetxController {
                 'Delete',
                 style: TextStyle(color: Colors.red),
               ),
-              onPressed: () {
-                deleteProductsByCategoryName('Tai Food');
-                Navigator.of(context).pop();
+              onPressed: () async {
+                await deleteProductsByCategoryName(categoryname);
+                await categoryController.deleteCategoryByName(categoryname);
+                Get.back();
+                // Navigator.of(context).pop();
               },
             ),
             TextButton(

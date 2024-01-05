@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
   RxList<String> globalList = <String>[].obs;
-  
+
   @override
   void onInit() {
     fetchCategory();
@@ -73,6 +73,35 @@ class CategoryController extends GetxController {
     }
   }
 
+  Future<void> deleteCategoryByName(String categoryName) async {
+    try {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter(documentDirectory.path);
+      await Hive.openBox('category');
+      var data = Hive.box('category');
+
+      // Find and delete the category with the specified name
+      List<dynamic> keysToDelete = [];
+      data.keys.forEach((key) {
+        var category = data.get(key);
+        if (category['categoryName'] == categoryName) {
+          keysToDelete.add(key);
+        }
+      });
+
+      keysToDelete.forEach((key) {
+        data.delete(key);
+      });
+
+      print("Deleted category by name: $categoryName");
+      // Fetch the updated list of categories
+      await fetchCategory();
+      await fetchDropdown();
+    } catch (error) {
+      print("Error while deleting category by name: $error");
+    }
+  }
+
   Future<List<String>> fetchCategoryNames() async {
     try {
       final documentDirectory = await getApplicationDocumentsDirectory();
@@ -102,6 +131,4 @@ class CategoryController extends GetxController {
       globalList.assignAll(names);
     });
   }
-
-  
 }
