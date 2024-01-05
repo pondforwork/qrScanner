@@ -13,7 +13,7 @@ class ProductView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Product Result"),
+        title: const Text("Product View"),
       ),
       body: GetX<ProductController>(
         builder: (controller) {
@@ -21,7 +21,7 @@ class ProductView extends StatelessWidget {
             // Display a message when there are no products
 
             return const Center(
-              child: Text("No Data"),
+              child: Text("No Product",style: TextStyle(fontSize: 20),),
             );
           } else {
             // Display the list of products when there are items

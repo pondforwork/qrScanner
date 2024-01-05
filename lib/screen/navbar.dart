@@ -8,59 +8,63 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
-          const SizedBox(
-            height: 102,
-            child: DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                const SizedBox(
+                  height: 110,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Menu',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                ListTile(
+                  title: Text('Add Category'),
+                  onTap: () {
+                    Get.to(() => AddCategory());
+                  },
+                ),
+                ListTile(
+                  title: Text('All Product'),
+                  onTap: () {
+                    Get.to(() => ProductView());
+                  },
+                ),
+              ],
             ),
           ),
-          // ListTile(
-          //   title: Text('Home'),
-          //   onTap: () {
-          //     Get.off(()=>MainView());
-          //     // Add your navigation logic or other actions here
-          //     // Navigator.pop(context); // Close the drawer
-          //   },
-          // ),
-          ListTile(
-            title: Text('Add Category'),
-            onTap: () {
-              Get.to(() => AddCategory());
-              // Add your navigation logic or other actions here
-              // Navigator.pop(context); // Close the drawer
-            },
+          // Container with social media links at the bottom
+          Container(
+            child: const Column(
+              children: [
+                Divider(),
+                ListTile(
+                  title: Text('Dev : Pharadon Sirijhan'),
+                ),
+                SizedBox(height: 30,)
+              ],
+            ),
+            
           ),
-          ListTile(
-            title: Text('All Product'),
-            onTap: () {
-              Get.to(() => ProductView());
-              // Add your navigation logic or other actions here
-              // Navigator.pop(context); // Close the drawer
-            },
-          ),
-          // ListTile(
-          //   title: Text('Item 2'),
-          //   onTap: () {
-          //     // Add your navigation logic or other actions here
-          //     Navigator.pop(context); // Close the drawer
-          //   },
-          // ),
-          // Add more ListTiles for additional items
         ],
       ),
     );
   }
 }
-
