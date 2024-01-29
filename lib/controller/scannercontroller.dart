@@ -14,7 +14,7 @@ class ScannerController extends GetxController {
       ScanMode.DEFAULT, // Specify the type of scan
     );
     barcodeResult.value = barcodeScanResult;
-    if(barcodeResult.value =="-1"){
+    if (barcodeResult.value == "-1") {
       barcodeResult.value = "No data yet. Please Scan QR or Barcode";
     }
   }

@@ -51,18 +51,18 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           // Container with social media links at the bottom
-          Container(
-            child: const Column(
-              children: [
-                Divider(),
-                ListTile(
-                  title: Text('Dev : Pharadon Sirijhan'),
-                ),
-                SizedBox(height: 30,)
-              ],
-            ),
+          // Container(
+          //   child: const Column(
+          //     children: [
+          //       Divider(),
+          //       ListTile(
+          //         title: Text(''),
+          //       ),
+          //       SizedBox(height: 30,)
+          //     ],
+          //   ),
             
-          ),
+          // ),
         ],
       ),
     );

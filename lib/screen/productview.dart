@@ -34,12 +34,19 @@ class ProductView extends StatelessWidget {
                       return Container(
                         height: 80,
                         child: Card(
-                          child: Center(
+                          child: Row(children: [Center(
                             child: Text(
-                              controller.allProduct[index].name,
+                              controller.allProduct[index].name + " ID  ",
                               style: TextStyle(fontSize: 25),
                             ),
                           ),
+                          Center(
+                            child: Text(
+                              controller.allProduct[index].resultscan,
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          ),
+                          ],)
                         ),
                       );
                     },
