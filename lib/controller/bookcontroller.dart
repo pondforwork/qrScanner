@@ -6,41 +6,43 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BookController extends GetxController {
-  var _database;
+  late var _database;
+
   @override
   Future<void> onInit() async {
+    await openDatabaseConnection(); // Call the method to open the database
+    super.onInit();
+  }
+
+  Future<void> openDatabaseConnection() async {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "books.db");
+
+    // Delete the database (optional, depending on your use case)
     await deleteDatabase(path);
+
     // Make sure the parent directory exists
     try {
       await Directory(dirname(path)).create(recursive: true);
     } catch (_) {}
 
-    ByteData data = await rootBundle.load(url.join("assets", "books1.db"));
+    ByteData data = await rootBundle.load(join("assets", "books1.db"));
 
     List<int> bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    await new File(path).writeAsBytes(bytes, flush: true);
+    await File(path).writeAsBytes(bytes, flush: true);
 
-    // open the database
-    var db = await openDatabase(path, readOnly: true);
-    _database = db;
-    //db.rawQuery("SELECT * FROM books WHERE BARCODE = '32498004996862' ");
-
-    // List<Map<String, dynamic>> result = await db
-    //     .rawQuery("SELECT * FROM books WHERE COLLECTIONID = '32498004996862' ");
-    // result.forEach((row) {
-    //   print(row);
-    // });
-    super.onInit();
+    // Open the database
+    _database = await openDatabase(path, readOnly: true);
   }
 
-  Future<void> findFromBarcode(int barcode) async {
-        List<Map<String, dynamic>> result = _database.rawQuery("SELECT * FROM books WHERE BARCODE = '${barcode}' ");
-            result.forEach((row) {
-      print(row);});
+  Future<void> findFromBarcode(String barcode) async {
+    // Ensure the database is open before querying
+    await openDatabaseConnection();
+    List<Map<String, dynamic>> result =
+        await _database.rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
+    result.forEach((row) {
+      print(row);
+    });
   }
-
-
 }

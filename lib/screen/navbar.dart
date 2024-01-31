@@ -36,18 +36,18 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
-                ListTile(
-                  title: Text('Add Category'),
-                  onTap: () {
-                    Get.to(() => AddCategory());
-                  },
-                ),
-                ListTile(
-                  title: Text('All Product'),
-                  onTap: () {
-                    Get.to(() => ProductView());
-                  },
-                ),
+                // ListTile(
+                //   title: Text('Add Category'),
+                //   onTap: () {
+                //     Get.to(() => AddCategory());
+                //   },
+                // ),
+                // ListTile(
+                //   title: Text('All Product'),
+                //   onTap: () {
+                //     Get.to(() => ProductView());
+                //   },
+                // ),
                 ListTile(
                   title: Text('Search DB'),
                   onTap: () {
