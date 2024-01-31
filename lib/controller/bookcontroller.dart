@@ -3,7 +3,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class BookController extends GetxController {
-  var db = await openDatabase('my_db.db');
-
+  @override
+  void onInit() async {
+    super.onInit();
+  }
 }
-

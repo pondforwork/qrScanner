@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
 import 'package:qr_scan/controller/productcontroller.dart';
 
@@ -10,6 +11,7 @@ class SearchBookView extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(CategoryController());
     Get.put(ProductController());
+    Get.put(BookController());
 
     return Scaffold(
       appBar: AppBar(
