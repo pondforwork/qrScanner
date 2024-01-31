@@ -9,6 +9,7 @@ class SearchBookView extends StatelessWidget {
   SearchBookView({Key? key}) : super(key: key);
   var _Barcodecontroller = TextEditingController();
   final ScannerController scannercontroller = Get.put(ScannerController());
+  final BookController bookController = Get.put(BookController());
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +19,10 @@ class SearchBookView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search Book"),
+        title: Text("Search Book"),
       ),
       body: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             SizedBox(
@@ -31,24 +32,27 @@ class SearchBookView extends StatelessWidget {
               child: TextField(
                 controller: _Barcodecontroller,
                 onSubmitted: (String value) async {
-                  BookController().findFromBarcode(_Barcodecontroller.text);
+                  bookController.findFromBarcode(_Barcodecontroller.text);
                 },
               ),
             ),
             Expanded(
-              child: Text("Result"),
+              child: Obx(() {
+                // Obx widget listens to changes in the observable
+                return Text(bookController.resultSearch.value);
+              }),
             ),
-            Expanded(
-              child: Text(ScannerController().barcodeResult()),
-            ),
+            // Expanded(
+            //   child: Text(ScannerController().barcodeResult()),
+            // ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        scannercontroller.scanBarcode();
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   scannercontroller.scanBarcode();
 
-        // ScannerController().barcodeResult();
-      }),
+      //   // ScannerController().barcodeResult();
+      // }),
     );
   }
 }

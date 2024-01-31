@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class BookController extends GetxController {
   late var _database;
+  RxString resultSearch = 'No RESULT'.obs;
 
   @override
   Future<void> onInit() async {
@@ -39,10 +40,22 @@ class BookController extends GetxController {
   Future<void> findFromBarcode(String barcode) async {
     // Ensure the database is open before querying
     await openDatabaseConnection();
-    List<Map<String, dynamic>> result =
-        await _database.rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
+    List<Map<String, dynamic>> result = await _database
+        .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
     result.forEach((row) {
       print(row);
     });
+
+    if (result.isNotEmpty) {
+      // Get the first result
+      Map<String, dynamic> firstResult = result.first;
+      // Access the value of a specific column (replace 'columnName' with the actual column name)
+      String firstValue = firstResult['TITLE'];
+      // Store the result in the 'result' variable
+      // result.value = firstValue;
+      resultSearch.value = firstValue;
+      print("FirstValue");
+      print(resultSearch.value+"Test");
+    }
   }
 }
