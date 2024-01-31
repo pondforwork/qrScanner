@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:qr_scan/screen/addCategory.dart';
 import 'package:qr_scan/screen/mainview.dart';
 import 'package:qr_scan/screen/productview.dart';
+import 'package:qr_scan/screen/searchbookview.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -45,6 +46,12 @@ class MyDrawer extends StatelessWidget {
                   title: Text('All Product'),
                   onTap: () {
                     Get.to(() => ProductView());
+                  },
+                ),
+                ListTile(
+                  title: Text('Search DB'),
+                  onTap: () {
+                    Get.to(() => SearchBookView());
                   },
                 ),
               ],
