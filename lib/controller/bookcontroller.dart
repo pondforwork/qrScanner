@@ -24,6 +24,8 @@ class BookController extends GetxController{
 
     // open the database
     var db = await openDatabase(path, readOnly: true);
+    db.rawQuery("SELECT * FROM books WHERE BARCODE = '32498004996862' ");
+
     super.onInit();
   }
 
