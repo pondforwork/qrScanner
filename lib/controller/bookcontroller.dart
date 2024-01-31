@@ -1,30 +1,32 @@
+import 'dart:typed_data';
 import 'dart:io';
-
 import 'package:flutter/services.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
-class BookController {
-  late Database _database;
+class BookController extends GetxController{
+  
+  @override
+  Future<void> onInit() async {
+    var databasesPath = await getDatabasesPath();
+    var path = join(databasesPath, "books.db");
+    await deleteDatabase(path);
+    // Make sure the parent directory exists
+    try {
+      await Directory(dirname(path)).create(recursive: true);
+    } catch (_) {}
 
-  Future<void> initializeDatabase() async {
-    // Step 1: Copy the database from assets to local storage
-    ByteData data = await rootBundle.load("assets/mydatabase.db");
-    List<int> bytes = data.buffer.asUint8List();
-    String path = join(await getDatabasesPath(), "mydatabase.db");
-    await File(path).writeAsBytes(bytes, flush: true);
+    ByteData data = await rootBundle.load(url.join("assets", "books1.db"));
 
-    // Step 2: Open the database
-    _database = await openDatabase(path);
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    await new File(path).writeAsBytes(bytes, flush: true);
 
-    print("Database opened");
-
-    // Step 3: Perform database operations
-    List<Map<String, dynamic>> result = await _database.rawQuery("SELECT * FROM your_table_name");
-    print("Query result: $result");
-
-    // Close the database when done
-    await _database.close();
-    print("Database closed");
+    // open the database
+    var db = await openDatabase(path, readOnly: true);
+    super.onInit();
   }
+
+  
+  
 }
