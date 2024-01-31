@@ -1,31 +1,29 @@
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:sqflite/sqflite.dart';
+import 'dart:io';
 
-class BookController extends GetxController {
+import 'package:flutter/services.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+class BookController {
   late Database _database;
 
-  @override
-  void onInit() async {
-    try {
-      _database = await openDatabase('book.db',version: 3); // Replace with your database name
-      print("Database opened");
+  Future<void> initializeDatabase() async {
+    // Step 1: Copy the database from assets to local storage
+    ByteData data = await rootBundle.load("assets/mydatabase.db");
+    List<int> bytes = data.buffer.asUint8List();
+    String path = join(await getDatabasesPath(), "mydatabase.db");
+    await File(path).writeAsBytes(bytes, flush: true);
 
-      // ... Perform database operations
+    // Step 2: Open the database
+    _database = await openDatabase(path);
 
-    } catch (error) {
-      print("Error opening database: $error");
-    }
-    _database.rawQuery("SELECT * FROM books");
-    super.onInit();
-  }
+    print("Database opened");
 
-  // Example raw query method
-  Future<List<Map<String, dynamic>>> customQuery(String sql) async {
-    return await _database.rawQuery(sql);
-  }
+    // Step 3: Perform database operations
+    List<Map<String, dynamic>> result = await _database.rawQuery("SELECT * FROM your_table_name");
+    print("Query result: $result");
 
-  // Example method to close the database
-  Future<void> closeDatabase() async {
+    // Close the database when done
     await _database.close();
     print("Database closed");
   }
