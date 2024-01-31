@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BookController extends GetxController {
+  var _database;
   @override
   Future<void> onInit() async {
     var databasesPath = await getDatabasesPath();
@@ -24,15 +25,22 @@ class BookController extends GetxController {
 
     // open the database
     var db = await openDatabase(path, readOnly: true);
-    db.rawQuery("SELECT * FROM books WHERE BARCODE = '32498004996862' ");
+    _database = db;
+    //db.rawQuery("SELECT * FROM books WHERE BARCODE = '32498004996862' ");
 
-    List<Map<String, dynamic>> result = await db
-        .rawQuery("SELECT * FROM books WHERE COLLECTIONID = '32498004996862' ");
-
-    // print the result to the console
-    result.forEach((row) {
-      print(row);
-    });
+    // List<Map<String, dynamic>> result = await db
+    //     .rawQuery("SELECT * FROM books WHERE COLLECTIONID = '32498004996862' ");
+    // result.forEach((row) {
+    //   print(row);
+    // });
     super.onInit();
   }
+
+  Future<void> findFromBarcode(int barcode) async {
+        List<Map<String, dynamic>> result = _database.rawQuery("SELECT * FROM books WHERE BARCODE = '${barcode}' ");
+            result.forEach((row) {
+      print(row);});
+  }
+
+
 }
