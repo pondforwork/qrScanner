@@ -7,38 +7,31 @@ import 'package:sqflite/sqflite.dart';
 
 class BookController extends GetxController {
   late var _database;
-  RxString resultSearch = 'No RESULT'.obs;
+  RxString resultSearch = 'No Result'.obs;
 
   @override
   Future<void> onInit() async {
-    await openDatabaseConnection(); // Call the method to open the database
+    await openDatabaseConnection(); 
     super.onInit();
   }
 
   Future<void> openDatabaseConnection() async {
+    //New Database
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "books.db");
-
-    // Delete the database (optional, depending on your use case)
     await deleteDatabase(path);
-
-    // Make sure the parent directory exists
     try {
       await Directory(dirname(path)).create(recursive: true);
     } catch (_) {}
-
     ByteData data = await rootBundle.load(join("assets", "books1.db"));
-
     List<int> bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await File(path).writeAsBytes(bytes, flush: true);
-
     // Open the database
     _database = await openDatabase(path, readOnly: true);
   }
 
   Future<void> findFromBarcode(String barcode) async {
-    // Ensure the database is open before querying
     await openDatabaseConnection();
     List<Map<String, dynamic>> result = await _database
         .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
