@@ -7,7 +7,7 @@ import 'package:qr_scan/controller/scannercontroller.dart';
 
 class SearchBookView extends StatelessWidget {
   SearchBookView({Key? key}) : super(key: key);
-  var _Barcodecontroller = TextEditingController();
+  final _barcodefieldcontroller = TextEditingController();
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
 
@@ -19,26 +19,25 @@ class SearchBookView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search Book"),
+        title: const Text("Search Book"),
       ),
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Expanded(
               child: TextField(
-                controller: _Barcodecontroller,
+                controller: _barcodefieldcontroller,
                 onSubmitted: (String value) async {
-                  bookController.findFromBarcode(_Barcodecontroller.text);
+                  bookController.findFromBarcode(_barcodefieldcontroller.text);
                 },
               ),
             ),
             Expanded(
               child: Obx(() {
-                // Obx widget listens to changes in the observable
                 return Text(bookController.resultSearch.value);
               }),
             ),
