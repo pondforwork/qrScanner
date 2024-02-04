@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -8,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 class BookController extends GetxController {
   late var _database;
   RxString resultSearch = 'No Result'.obs;
-  RxString resultSearchScan = 'No Result'.obs;
+  RxString resultsearchonDialog = 'No Result'.obs;
 
   @override
   Future<void> onInit() async {
@@ -41,17 +42,34 @@ class BookController extends GetxController {
     });
 
     if (result.isNotEmpty) {
-      // Get the first result
       Map<String, dynamic> firstResult = result.first;
-      // Access the value of a specific column (replace 'columnName' with the actual column name)
       String firstValue = firstResult['TITLE'];
-      // Store the result in the 'result' variable
-      // result.value = firstValue;
       resultSearch.value = firstValue;
-      print(resultSearch.value);
-      //resultSearchScan.value = firstValue;
-      print("FirstValue");
-      // print(resultSearch.value+"Test");
+      Get.defaultDialog(
+        title: "Result",
+        content: Text("First Value: $firstValue"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back(); // Close the dialog
+            },
+            child: Text("OK"),
+          ),
+        ],
+      );
+    }else{
+      Get.defaultDialog(
+        title: "Search Result",
+        content: Text("No Result"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back(); // Close the dialog
+            },
+            child: Text("OK"),
+          ),
+        ],
+      );
     }
   }
 }
