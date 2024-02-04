@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/dropdowncontroller.dart';
 import 'package:qr_scan/controller/productcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
@@ -9,6 +10,8 @@ class DropdownPage extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
   final ProductController productController = Get.put(ProductController());
+  final BookController bookController = Get.put(BookController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +42,7 @@ class DropdownPage extends StatelessWidget {
                         height: 20,
                       ),
                       Obx(() => Text(scannercontroller.barcodeResult.value)),
+                      Obx(() => Text(bookController.resultSearch.value)),
                       //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(
@@ -49,37 +53,37 @@ class DropdownPage extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      Text("Category"),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      // Text("Category"),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
 
-                      Obx(
-                        () => DropdownButton(
-                          value:
-                              dropdownController.selectedItem.value.isNotEmpty
-                                  ? dropdownController.selectedItem.value
-                                  : dropdownController.dropdownItems.isNotEmpty
-                                      ? dropdownController.dropdownItems[0]
-                                      : null,
-                          items: dropdownController.dropdownItems
-                              .map(
-                                (String item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(item),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (String? selectedItem) {
-                            // Update the selected value in the controller
-                            dropdownController.selectedItem.value =
-                                selectedItem!;
+                      // Obx(
+                      //   () => DropdownButton(
+                      //     value:
+                      //         dropdownController.selectedItem.value.isNotEmpty
+                      //             ? dropdownController.selectedItem.value
+                      //             : dropdownController.dropdownItems.isNotEmpty
+                      //                 ? dropdownController.dropdownItems[0]
+                      //                 : null,
+                      //     items: dropdownController.dropdownItems
+                      //         .map(
+                      //           (String item) => DropdownMenuItem<String>(
+                      //             value: item,
+                      //             child: Text(item),
+                      //           ),
+                      //         )
+                      //         .toList(),
+                      //     onChanged: (String? selectedItem) {
+                      //       // Update the selected value in the controller
+                      //       dropdownController.selectedItem.value =
+                      //           selectedItem!;
 
-                            // Handle the selected item (you can remove this if you don't need it)
-                            print("Selected Item: $selectedItem");
-                          },
-                        ),
-                      ),
+                      //       // Handle the selected item (you can remove this if you don't need it)
+                      //       print("Selected Item: $selectedItem");
+                      //     },
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 30,
                       ),
@@ -117,7 +121,7 @@ class DropdownPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // scannercontroller.barcodeResult.value="Tdasadsf";
-          scannercontroller.scanBarcode();
+          scannercontroller.scanandsearchFromDB();
         },
         child: Icon(Icons.qr_code_2_outlined),
       ),

@@ -48,7 +48,7 @@ class BookController extends GetxController {
       // result.value = firstValue;
       resultSearch.value = firstValue;
       print("FirstValue");
-      print(resultSearch.value+"Test");
+      // print(resultSearch.value+"Test");
     }
   }
 }
