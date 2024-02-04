@@ -8,10 +8,11 @@ import 'package:sqflite/sqflite.dart';
 class BookController extends GetxController {
   late var _database;
   RxString resultSearch = 'No Result'.obs;
+  RxString resultSearchScan = 'No Result'.obs;
 
   @override
   Future<void> onInit() async {
-    await openDatabaseConnection(); 
+    await openDatabaseConnection();
     super.onInit();
   }
 
@@ -47,6 +48,7 @@ class BookController extends GetxController {
       // Store the result in the 'result' variable
       // result.value = firstValue;
       resultSearch.value = firstValue;
+      resultSearchScan.value = firstValue;
       print("FirstValue");
       // print(resultSearch.value+"Test");
     }

@@ -11,7 +11,6 @@ class DropdownPage extends StatelessWidget {
   final TextEditingController textEditingController = TextEditingController();
   final ProductController productController = Get.put(ProductController());
   final BookController bookController = Get.put(BookController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +41,9 @@ class DropdownPage extends StatelessWidget {
                         height: 20,
                       ),
                       Obx(() => Text(scannercontroller.barcodeResult.value)),
-                      Obx(() => Text(bookController.resultSearch.value)),
+
+
+                      Obx(() => Text(bookController.resultSearch.value+"2")),
                       //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(
@@ -53,51 +54,13 @@ class DropdownPage extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      // Text("Category"),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-
-                      // Obx(
-                      //   () => DropdownButton(
-                      //     value:
-                      //         dropdownController.selectedItem.value.isNotEmpty
-                      //             ? dropdownController.selectedItem.value
-                      //             : dropdownController.dropdownItems.isNotEmpty
-                      //                 ? dropdownController.dropdownItems[0]
-                      //                 : null,
-                      //     items: dropdownController.dropdownItems
-                      //         .map(
-                      //           (String item) => DropdownMenuItem<String>(
-                      //             value: item,
-                      //             child: Text(item),
-                      //           ),
-                      //         )
-                      //         .toList(),
-                      //     onChanged: (String? selectedItem) {
-                      //       // Update the selected value in the controller
-                      //       dropdownController.selectedItem.value =
-                      //           selectedItem!;
-
-                      //       // Handle the selected item (you can remove this if you don't need it)
-                      //       print("Selected Item: $selectedItem");
-                      //     },
-                      //   ),
-                      // ),
+                     
                       const SizedBox(
                         height: 30,
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          String name = textEditingController.text;
-                          String category =
-                              dropdownController.selectedItem.value;
-                          productController.addProduct(
-                              scannercontroller.barcodeResult.value,
-                              name,
-                              category);
-                          clearForm();
-                          Get.back();
+                          bookController.findFromBarcode(textEditingController.text);
                         },
                         child: const Text('Save'),
                       ),

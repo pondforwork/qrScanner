@@ -51,6 +51,6 @@ class ScannerController extends GetxController {
     }else{
       BookController().findFromBarcode(barcodeScanResult);
     }
-    BookController().findFromBarcode(barcodeScanResult);
+    // BookController().findFromBarcode(barcodeScanResult);
   }
 }
