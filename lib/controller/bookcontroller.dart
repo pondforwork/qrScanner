@@ -48,6 +48,7 @@ class BookController extends GetxController {
       // Store the result in the 'result' variable
       // result.value = firstValue;
       resultSearch.value = firstValue;
+      print(resultSearch.value);
       //resultSearchScan.value = firstValue;
       print("FirstValue");
       // print(resultSearch.value+"Test");
