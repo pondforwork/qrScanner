@@ -19,7 +19,7 @@ class BookController extends GetxController {
   Future<void> openDatabaseConnection() async {
     //New Database
     var databasesPath = await getDatabasesPath();
-    var path = join(databasesPath, "books.db");
+    var path = join(databasesPath, "localbooks.db");
     await deleteDatabase(path);
     try {
       await Directory(dirname(path)).create(recursive: true);
@@ -48,7 +48,7 @@ class BookController extends GetxController {
       // Store the result in the 'result' variable
       // result.value = firstValue;
       resultSearch.value = firstValue;
-      resultSearchScan.value = firstValue;
+      //resultSearchScan.value = firstValue;
       print("FirstValue");
       // print(resultSearch.value+"Test");
     }

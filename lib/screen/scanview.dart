@@ -43,7 +43,7 @@ class DropdownPage extends StatelessWidget {
                       Obx(() => Text(scannercontroller.barcodeResult.value)),
 
 
-                      Obx(() => Text(bookController.resultSearch.value+"2")),
+                      Obx(() => Text(bookController.resultSearch.value)),
                       //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(
@@ -70,13 +70,8 @@ class DropdownPage extends StatelessWidget {
               ),
 
               SizedBox(height: 20),
-              // Display the selected item
-              // Obx(
-              //   () => Text(
-              //     'Selected Item: ${dropdownController.selectedItem}',
-              //     style: TextStyle(fontSize: 18),
-              //   ),
-              // ),
+            
+ 
             ],
           ),
         ),
