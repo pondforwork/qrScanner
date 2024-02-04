@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+
 class BookController extends GetxController {
   late var _database;
   RxString resultSearch = 'No Result'.obs;
@@ -47,7 +48,7 @@ class BookController extends GetxController {
       resultSearch.value = firstValue;
       Get.defaultDialog(
         title: "Result",
-        content: Text("First Value: $firstValue"),
+        content: Text("Book Name : $firstValue"),
         actions: [
           TextButton(
             onPressed: () {
