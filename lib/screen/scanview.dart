@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/dropdowncontroller.dart';
-import 'package:qr_scan/controller/productcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class DropdownPage extends StatelessWidget {
   final DropdownController dropdownController = Get.find();
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
-  final ProductController productController = Get.put(ProductController());
   final BookController bookController = Get.put(BookController());
   @override
   Widget build(BuildContext context) {

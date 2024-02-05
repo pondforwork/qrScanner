@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
-import 'package:qr_scan/controller/productcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class SearchBookView extends StatelessWidget {
@@ -14,7 +13,6 @@ class SearchBookView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(CategoryController());
-    Get.put(ProductController());
     Get.put(BookController());
 
     return Scaffold(

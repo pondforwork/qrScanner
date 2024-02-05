@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qr_scan/screen/addCategory.dart';
-import 'package:qr_scan/screen/mainview.dart';
-import 'package:qr_scan/screen/productview.dart';
 import 'package:qr_scan/screen/searchbookview.dart';
 
 class MyDrawer extends StatelessWidget {
