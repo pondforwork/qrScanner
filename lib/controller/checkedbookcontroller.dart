@@ -1,41 +1,46 @@
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-@HiveType(typeId: 0)
-class Checkedbook extends HiveObject {
-  @HiveField(0)
-  late String barcode;
+import '../models/chekedbook.dart';
 
-  @HiveField(1)
-  late String callNo;
+// @HiveType(typeId: 0)
+// class Checkedbook extends HiveObject {
+//   @HiveField(0)
+//   late String barcode;
 
-  @HiveField(2)
-  late String title;
+//   @HiveField(1)
+//   late String callNo;
 
-  @HiveField(3)
-  late String collectionName;
+//   @HiveField(2)
+//   late String title;
 
-  @HiveField(4)
-  late String itemStatusName;
+//   @HiveField(3)
+//   late String collectionName;
 
-  @HiveField(5)
-  late String collectionId;
+//   @HiveField(4)
+//   late String itemStatusName;
 
-  @HiveField(6)
-  late int found;
-}
+//   @HiveField(5)
+//   late String collectionId;
+
+//   @HiveField(6)
+//   late int found;
+// }
 
 class DatabaseHelper {
+  
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() {
     return _instance;
   }
   DatabaseHelper._internal();
   String boxName = 'checkedbook';
-  Future<void> initDatabase() async {
+  Future<void> initDatabase() async { 
     final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDir.path);
+  // Hive.registerAdapter(ChekedbookAdapter());
     await Hive.openBox<Checkedbook>(boxName);
+    
   }
 
   Box<Checkedbook> get box => Hive.box<Checkedbook>(boxName);

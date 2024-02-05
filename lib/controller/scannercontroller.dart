@@ -1,12 +1,21 @@
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
+import 'package:qr_scan/controller/checkedbookcontroller.dart';
 
 class ScannerController extends GetxController {
   RxString barcodeResult = "No data yet. Please Scan QR or Barcode".obs;
   RxString dropdownValue = 'One'.obs;
   List<String> list = ['One', 'Two', 'Three', 'Four'];
   final BookController bookcontroller = Get.put(BookController());
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  @override
+  Future<void> onInit() async {
+    await databaseHelper.initDatabase();
+    // TODO: implement onInit
+    super.onInit();
+  }
+// Initialize the database
 
   Future<void> scanBarcode() async {
     String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
@@ -31,13 +40,12 @@ class ScannerController extends GetxController {
     barcodeResult.value = barcodeScanResult;
     if (barcodeResult.value == "-1") {
       barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-    }else{
+    } else {
       BookController().findFromBarcode(barcodeScanResult);
     }
     BookController().findFromBarcode(value);
   }
 
-  
   Future<void> scanandsearchFromDB() async {
     String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
       "#ff6666", // Color for the scan button
@@ -48,10 +56,9 @@ class ScannerController extends GetxController {
     barcodeResult.value = barcodeScanResult;
     if (barcodeResult.value == "-1") {
       barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-    }else{
+    } else {
       BookController().findFromBarcode(barcodeScanResult);
     }
-   
   }
   // bookController.findFromBarcode(textEditingController.text);
 }
