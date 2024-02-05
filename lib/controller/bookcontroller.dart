@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BookController extends GetxController {
-  Database? _database; 
+  Database? _database;
 
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
  
+
   @override
   Future<void> onInit() async {
     await openDatabaseConnection();
@@ -61,13 +63,13 @@ class BookController extends GetxController {
             
               Get.back(); // Close the dialog
             },
-            child: Text("Add"),
+            child: Text("Insert"),
           ),
           TextButton(
             onPressed: () async {
               print('Database path: ${_database!.path}');
               // await _database?.rawQuery('SELECT * FROM books');
-        
+             
               Get.back(); // Close the dialog
             },
             child: Text("Print"),
@@ -89,5 +91,4 @@ class BookController extends GetxController {
       );
     }
   }
-
 }
