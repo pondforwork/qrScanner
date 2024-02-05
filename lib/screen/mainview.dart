@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/categorycontroller.dart';
-import 'package:qr_scan/controller/dropdowncontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
 import 'package:qr_scan/screen/scanview.dart';
 
@@ -12,8 +11,6 @@ class MainView extends StatelessWidget {
     //call category to load dropdown first
     // ignore: unused_local_variable
     final categoryController = Get.put(CategoryController());
-    DropdownController dropdownController = Get.put(DropdownController());
-
     // Now you can use dropdownController.dropdownItems in your UI to populate the dropdown.
     SnackBar snackBar = const SnackBar(
       content: Text('No Prodruct Category. Please Add One On left Menu'),

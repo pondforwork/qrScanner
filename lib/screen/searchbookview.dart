@@ -39,9 +39,7 @@ class SearchBookView extends StatelessWidget {
                 return Text(bookController.resultSearch.value);
               }),
             ),
-            // Expanded(
-            //   child: Text(ScannerController().barcodeResult()),
-            // ),
+           
           ],
         ),
       ),

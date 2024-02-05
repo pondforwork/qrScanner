@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
-import 'package:qr_scan/controller/dropdowncontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class DropdownPage extends StatelessWidget {
-  final DropdownController dropdownController = Get.find();
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
   final BookController bookController = Get.put(BookController());
@@ -84,11 +82,5 @@ class DropdownPage extends StatelessWidget {
     );
   }
 
-  void clearForm() {
-    scannercontroller.barcodeResult.value =
-        "No data yet. Please Scan QR or Barcode";
-    textEditingController.text = ''; // Clear the text field
-    dropdownController.selectedItem.value = dropdownController
-        .dropdownItems[0]; // Reset the selected item in the dropdown
-  }
+  
 }

@@ -1,14 +1,12 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qr_scan/controller/dropdowncontroller.dart';
 import 'package:qr_scan/models/catgegory.dart';
 import 'package:uuid/uuid.dart';
 
 class CategoryController extends GetxController {
   var allCategory = <ItemCategory>[].obs;
   RxList<String> globalList = <String>[].obs;
-  final dropdownController = Get.put(DropdownController());
   @override
   void onInit() {
     fetchCategory();
@@ -42,7 +40,6 @@ class CategoryController extends GetxController {
       // allData.sort((a, b) => a.order.compareTo(b.order));
       print("init");
       allCategory.assignAll(allData);
-      await dropdownController.fetchDropdownItems();
     } catch (error) {
       print("Error while accessing data: $error");
     }
