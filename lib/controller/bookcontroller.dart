@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BookController extends GetxController {
   Database? _database;
-
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
   final isLoading = false.obs; // Observable for tracking loading state
+  final scanDBhelper scandbhelper = Get.put(scanDBhelper());
 
   @override
   Future<void> onInit() async {
@@ -58,31 +59,30 @@ class BookController extends GetxController {
         actions: [
           TextButton(
             onPressed: () async {
-              Get.back(); // Close the dialog
+              scandbhelper.fetchToDo();
+              Get.back();
             },
-            child: Text("Create DB"),
+            child: Text("Fetch"),
           ),
           TextButton(
             onPressed: () async {
-              // Checkedbook data = Checkedbook(
-              //   barcode: "111",
-              //   callNo: "2342",
-              //   collectionId: "55",
-              //   collectionName: "55",
-              //   itemStatusName: "55",
-              //   found: 1,
-              //   title: "55",
-              // );
-
+              Checkedbook checkedbook = Checkedbook(
+                firstResult['BARCODE'],
+                firstResult['CALLNO'],
+                firstResult['TITLE'],
+                firstResult['COLLECTIONNAME'],
+                firstResult['ITEMSTATUSNAME'],
+                firstResult['COLLECTIONID'],
+                "Y",
+              );
+              scandbhelper.addData(checkedbook.barcode, checkedbook.callNo, checkedbook.title, checkedbook.collectionName, checkedbook.itemStatusName, checkedbook.collectionId, checkedbook.found);
+              scandbhelper.fetchToDo();
               Get.back(); // Close the dialog
             },
             child: Text("Insert"),
           ),
           TextButton(
             onPressed: () async {
-              print('Database path: ${_database!.path}');
-              // await _database?.rawQuery('SELECT * FROM books');
-
               Get.back(); // Close the dialog
             },
             child: Text("Print"),

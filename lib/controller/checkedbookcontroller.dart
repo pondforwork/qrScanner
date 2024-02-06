@@ -8,7 +8,7 @@ import 'dart:io';
 // import 'package:csv/csv.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 
-class ToDoController extends GetxController {
+class scanDBhelper extends GetxController {
   var todo = <Checkedbook>[].obs;
   var finishedtodo = <Checkedbook>[].obs;
   @override
