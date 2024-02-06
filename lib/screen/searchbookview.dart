@@ -37,6 +37,10 @@ class SearchBookView extends StatelessWidget {
                 return Text(bookController.resultSearch.value);
               }),
             ),
+            Expanded(child: TextButton(onPressed: () {  
+              bookController.openDatabaseConnection();
+            },
+            child: Text("SELECT DB"),))
            
           ],
         ),

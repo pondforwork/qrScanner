@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,28 +18,85 @@ class BookController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    await openDatabaseConnection();
+    await _openLocalDatabase();
     super.onInit();
   }
 
+  // Future<void> openDatabaseConnection() async {
+  //   // New Database
+  //   var databasesPath = await getDatabasesPath();
+  //   var path = join(databasesPath, "localbooks.db");
+  //   // await deleteDatabase(path);
+  //   try {
+  //     await Directory(dirname(path)).create(recursive: true);
+  //   } catch (_) {}
+  //   ByteData data = await rootBundle.load(join("assets", "books1.db"));
+  //   List<int> bytes =
+  //       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  //   await File(path).writeAsBytes(bytes, flush: true);
+  //   // Open the database
+  //   _database = await openDatabase(path, readOnly: false);
+  // }
+
+  // Future<void> openDatabaseConnection() async {
+  //   // New Database
+  //   var databasesPath = await getDatabasesPath();
+  //   var path = join(databasesPath, "localbooks.db");
+
+  //   // Show file picker
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.any,
+  //   );
+
+  //   if (result != null && result.files.isNotEmpty) {
+  //     // Copy the selected file to the app's database directory
+  //     File selectedFile = File(result.files.single.path!);
+  //     await selectedFile.copy(path);
+
+  //     // Open the database
+  //     _database = await openDatabase(path, readOnly: false);
+  //   } else {
+  //     // User canceled the file picker or no file was selected
+  //     // Handle accordingly
+  //   }
+  // }
+
   Future<void> openDatabaseConnection() async {
-    // New Database
+    // Let the user choose a file using a file picker
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null && result.files.isNotEmpty) {
+      // Selected file
+      PlatformFile file = result.files.first;
+
+      // New Database
+      var databasesPath = await getDatabasesPath();
+      var path = join(databasesPath, "localbooks.db");
+
+      try {
+        await Directory(dirname(path)).create(recursive: true);
+      } catch (_) {}
+
+      // Read data from the selected file
+      List<int> bytes = await File(file.path ?? "").readAsBytes();
+
+      // Write data to localbooks.db
+      await File(path).writeAsBytes(bytes, flush: true);
+
+      // Open the database
+      await _openLocalDatabase();
+    }
+  }
+
+  Future<void> _openLocalDatabase() async {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "localbooks.db");
-    // await deleteDatabase(path);
-    try {
-      await Directory(dirname(path)).create(recursive: true);
-    } catch (_) {}
-    ByteData data = await rootBundle.load(join("assets", "books1.db"));
-    List<int> bytes =
-        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    await File(path).writeAsBytes(bytes, flush: true);
-    // Open the database
     _database = await openDatabase(path, readOnly: false);
   }
+
   //THIS IS FIND FROM CLICK SEARCH
   Future<void> findFromBarcode(String barcode) async {
-    await openDatabaseConnection();
+    await _openLocalDatabase();
     isLoading.value = true; // Loading
     print(isLoading.value);
     await Future.delayed(Duration(seconds: 2));
@@ -75,7 +133,14 @@ class BookController extends GetxController {
                 firstResult['COLLECTIONID'],
                 "Y",
               );
-              scandbhelper.addData(checkedbook.barcode, checkedbook.callNo, checkedbook.title, checkedbook.collectionName, checkedbook.itemStatusName, checkedbook.collectionId, checkedbook.found);
+              scandbhelper.addData(
+                  checkedbook.barcode,
+                  checkedbook.callNo,
+                  checkedbook.title,
+                  checkedbook.collectionName,
+                  checkedbook.itemStatusName,
+                  checkedbook.collectionId,
+                  checkedbook.found);
               scandbhelper.fetchToDo();
               Get.back(); // Close the dialog
             },
