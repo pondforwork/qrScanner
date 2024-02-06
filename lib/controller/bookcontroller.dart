@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -13,7 +12,7 @@ class BookController extends GetxController {
 
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
-  DatabaseHelper databaseHelper = DatabaseHelper();
+  final isLoading = false.obs; // Observable for tracking loading state
 
   @override
   Future<void> onInit() async {
@@ -39,11 +38,14 @@ class BookController extends GetxController {
 
   Future<void> findFromBarcode(String barcode) async {
     await openDatabaseConnection();
+    isLoading.value = true; // Loading
+
     List<Map<String, dynamic>> result = await _database!
         .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
     result.forEach((row) {
       print(row);
     });
+    isLoading.value = false; // Load Finish
 
     if (result.isNotEmpty) {
       Map<String, dynamic> firstResult = result.first;
@@ -60,11 +62,18 @@ class BookController extends GetxController {
             child: Text("Create DB"),
           ),
           TextButton(
-            onPressed: () async {
-              //Checkedbook data = Checkedbook(barcode: "111",);
-                
+            onPressed: () 
+            async {
+              // Checkedbook data = Checkedbook(
+              //   barcode: "111",
+              //   callNo: "2342",
+              //   collectionId: "55",
+              //   collectionName: "55",
+              //   itemStatusName: "55",
+              //   found: 1,
+              //   title: "55",
+              // );
 
-              //await databaseHelper.insertData(data);
               Get.back(); // Close the dialog
             },
             child: Text("Insert"),
