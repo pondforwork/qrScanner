@@ -83,9 +83,10 @@ class BookController extends GetxController {
           ),
           TextButton(
             onPressed: () async {
+              scandbhelper.exportToCSV();
               Get.back(); // Close the dialog
             },
-            child: Text("Print"),
+            child: Text("Export CSV"),
           ),
         ],
       );

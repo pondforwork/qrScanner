@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-// import 'package:csv/csv.dart';
 import 'package:qr_scan/models/chekedbook.dart';
+// import 'package:open_file/open_file.dart'; // Import the open_file package
+
 
 class scanDBhelper extends GetxController {
   var todo = <Checkedbook>[].obs;
@@ -107,27 +106,42 @@ class scanDBhelper extends GetxController {
     print("Clear Data SUccess");
   }
 
-  // Future<void> exportToCSV() async {
+  Future<void> exportToCSV() async {
+    try {
+      final downloadsDirectory = await getDownloadsDirectory();
+      final file = File('${downloadsDirectory!.path}/CheckBook.csv');
+      final sink = file.openWrite();
+
+      // Write headers to the CSV file
+      sink.writeln('Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
+
+      // Write todo items to the CSV file
+      for (Checkedbook item in todo) {
+        sink.writeln(
+          '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
+        );
+      }
+
+      await sink.flush();
+      await sink.close();
+      // openDirectory();
+      print('Data exported to CSV file: ${file.path}');
+    } catch (error) {
+      print('Error exporting data to CSV: $error');
+    }
+  }
+
+  // Future<void> openDirectory() async {
   //   try {
-  //     final documentDirectory = await getApplicationDocumentsDirectory();
-  //     final file = File('${documentDirectory.path}/todo_data.csv');
-  //     final sink = file.openWrite();
-
-  //     // Write headers to the CSV file
-  //     sink.write('ID,Topic,IsFinish,Color,Order\n');
-
-  //     // Write todo items to the CSV file
-  //     for (Checkedbook item in todo) {
-  //       sink.write(
-  //           '${item.id},"${item.topic}",${item.isfinish},"${item.color.value}",${item.order.toIso8601String()}\n');
+  //     final downloadsDirectory = await getDownloadsDirectory();
+  //     if (downloadsDirectory != null) {
+  //       await OpenFile.open(downloadsDirectory.path);
+  //     } else {
+  //       print('Downloads directory not found.');
   //     }
-
-  //     await sink.flush();
-  //     await sink.close();
-
-  //     print('Data exported to CSV file: ${file.path}');
   //   } catch (error) {
-  //     print('Error exporting data to CSV: $error');
+  //     print('Error opening directory: $error');
   //   }
   // }
+
 }
