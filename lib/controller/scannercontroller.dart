@@ -5,7 +5,7 @@ import 'package:qr_scan/controller/checkedbookcontroller.dart';
 
 class ScannerController extends GetxController {
   RxString barcodeResult = "No data yet. Please Scan QR or Barcode".obs;
-  RxString dropdownValue = 'One'.obs;
+  RxString barcode = ''.obs;
   List<String> list = ['One', 'Two', 'Three', 'Four'];
   final BookController bookcontroller = Get.put(BookController());
 
@@ -75,7 +75,8 @@ class ScannerController extends GetxController {
         barcodeResult.value = "No data yet. Please Scan QR or Barcode";
       } else {
         // Perform the search operation using the obtained barcode
-        await BookController().findFromBarcode(barcodeScanResult);
+        barcode = barcodeResult;
+        
       }
     } finally {
       // Ensure the loading indicator is turned off, even in case of an exception
