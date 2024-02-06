@@ -75,7 +75,7 @@ class ScannerController extends GetxController {
         barcodeResult.value = "No data yet. Please Scan QR or Barcode";
       } else {
         // Perform the search operation using the obtained barcode
-        barcode = barcodeResult;
+        barcode.value = barcodeScanResult;
         
       }
     } finally {

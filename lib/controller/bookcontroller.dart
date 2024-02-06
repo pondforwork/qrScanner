@@ -40,6 +40,7 @@ class BookController extends GetxController {
   Future<void> findFromBarcode(String barcode) async {
     await openDatabaseConnection();
     isLoading.value = true; // Loading
+    print(isLoading.value);
     await Future.delayed(Duration(seconds: 2));
     List<Map<String, dynamic>> result = await _database!
         .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");

@@ -82,6 +82,7 @@ class DropdownPage extends StatelessWidget {
           // scannercontroller.barcodeResult.value="Tdasadsf";
           await scannercontroller.scanandsearchFromDB();
           await bookController.findFromBarcode(scannercontroller.barcode.value);
+          print(scannercontroller.barcode.value);
         },
         child: Icon(Icons.qr_code_2_outlined),
       ),
