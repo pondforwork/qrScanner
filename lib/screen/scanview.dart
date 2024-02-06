@@ -36,7 +36,7 @@ class DropdownPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Obx(() => Text(scannercontroller.barcodeResult.value)),
+                      // Obx(() => Text(scannercontroller.barcodeResult.value)),
                       SizedBox(
                         height: 35,
                       ),

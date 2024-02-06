@@ -12,7 +12,7 @@ class BookController extends GetxController {
   Database? _database;
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
-  final isLoading = false.obs; // Observable for tracking loading state
+  RxBool isLoading = false.obs; // Observable for tracking loading state
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
 
   @override
@@ -36,12 +36,11 @@ class BookController extends GetxController {
     // Open the database
     _database = await openDatabase(path, readOnly: false);
   }
-
+  //THIS IS FIND FROM CLICK SEARCH
   Future<void> findFromBarcode(String barcode) async {
     await openDatabaseConnection();
     isLoading.value = true; // Loading
     await Future.delayed(Duration(seconds: 2));
-
     List<Map<String, dynamic>> result = await _database!
         .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
     result.forEach((row) {
