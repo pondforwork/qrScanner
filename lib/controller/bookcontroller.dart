@@ -13,6 +13,8 @@ class BookController extends GetxController {
   Database? _database;
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
+  RxString currentdb = ''.obs;
+
   RxBool isLoading = false.obs; // Observable for tracking loading state
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
 
@@ -68,7 +70,8 @@ class BookController extends GetxController {
     if (result != null && result.files.isNotEmpty) {
       // Selected file
       PlatformFile file = result.files.first;
-
+      //Assign Current DatabaseName
+      currentdb.value = file.name;
       // New Database
       var databasesPath = await getDatabasesPath();
       var path = join(databasesPath, "localbooks.db");

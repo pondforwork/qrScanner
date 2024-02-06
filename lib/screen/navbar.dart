@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/screen/searchbookview.dart';
+import 'package:qr_scan/screen/selectdbview.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -49,6 +50,12 @@ class MyDrawer extends StatelessWidget {
                   title: Text('Search DB'),
                   onTap: () {
                     Get.to(() => SearchBookView());
+                  },
+                ),
+                ListTile(
+                  title: Text('Select DB'),
+                  onTap: () {
+                    Get.to(() => SelectDBview());
                   },
                 ),
               ],
