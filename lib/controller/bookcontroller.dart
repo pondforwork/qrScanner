@@ -39,6 +39,7 @@ class BookController extends GetxController {
   Future<void> findFromBarcode(String barcode) async {
     await openDatabaseConnection();
     isLoading.value = true; // Loading
+    await Future.delayed(Duration(seconds: 2));
 
     List<Map<String, dynamic>> result = await _database!
         .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
@@ -62,8 +63,7 @@ class BookController extends GetxController {
             child: Text("Create DB"),
           ),
           TextButton(
-            onPressed: () 
-            async {
+            onPressed: () async {
               // Checkedbook data = Checkedbook(
               //   barcode: "111",
               //   callNo: "2342",

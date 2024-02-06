@@ -37,9 +37,12 @@ class DropdownPage extends StatelessWidget {
                         height: 20,
                       ),
                       Obx(() => Text(scannercontroller.barcodeResult.value)),
-
-
-                      Obx(() => Text(bookController.resultSearch.value)),
+                      Obx(
+                        () => bookController.isLoading.value
+                            ? CircularProgressIndicator() // Show loading indicator
+                            : Text(bookController.resultSearch
+                                .value), // Display resultSearch value
+                      ),
                       //  Text(scannercontroller.barcodeResult.value),
                       SizedBox(height: 10), // Add some spacing
                       TextField(
@@ -50,13 +53,14 @@ class DropdownPage extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                     
+
                       const SizedBox(
                         height: 30,
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          bookController.findFromBarcode(textEditingController.text);
+                          bookController
+                              .findFromBarcode(textEditingController.text);
                         },
                         child: const Text('Save'),
                       ),
@@ -66,8 +70,6 @@ class DropdownPage extends StatelessWidget {
               ),
 
               SizedBox(height: 20),
-            
- 
             ],
           ),
         ),
@@ -81,6 +83,4 @@ class DropdownPage extends StatelessWidget {
       ),
     );
   }
-
-  
 }
