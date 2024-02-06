@@ -90,6 +90,7 @@ class BookController extends GetxController {
         ],
       );
     } else {
+      resultSearch.value = "No result";
       Get.defaultDialog(
         title: "Search Result",
         content: Text("No Result"),
