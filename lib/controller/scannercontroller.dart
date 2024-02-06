@@ -8,13 +8,7 @@ class ScannerController extends GetxController {
   RxString dropdownValue = 'One'.obs;
   List<String> list = ['One', 'Two', 'Three', 'Four'];
   final BookController bookcontroller = Get.put(BookController());
-  DatabaseHelper databaseHelper = DatabaseHelper();
-  @override
-  Future<void> onInit() async {
-    await databaseHelper.initDatabase();
-    // TODO: implement onInit
-    super.onInit();
-  }
+  
 // Initialize the database
 
   Future<void> scanBarcode() async {

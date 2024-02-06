@@ -1,67 +1,133 @@
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+// import 'package:csv/csv.dart';
+import 'package:qr_scan/models/chekedbook.dart';
 
-import '../models/chekedbook.dart';
-
-// @HiveType(typeId: 0)
-// class Checkedbook extends HiveObject {
-//   @HiveField(0)
-//   late String barcode;
-
-//   @HiveField(1)
-//   late String callNo;
-
-//   @HiveField(2)
-//   late String title;
-
-//   @HiveField(3)
-//   late String collectionName;
-
-//   @HiveField(4)
-//   late String itemStatusName;
-
-//   @HiveField(5)
-//   late String collectionId;
-
-//   @HiveField(6)
-//   late int found;
-// }
-
-class DatabaseHelper {
-  
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
-  factory DatabaseHelper() {
-    return _instance;
-  }
-  DatabaseHelper._internal();
-  String boxName = 'checkedbook';
-  Future<void> initDatabase() async { 
-    final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
-    Hive.init(appDocumentDir.path);
-  // Hive.registerAdapter(ChekedbookAdapter());
-    await Hive.openBox<Checkedbook>(boxName);
-    
+class ToDoController extends GetxController {
+  var todo = <Checkedbook>[].obs;
+  var finishedtodo = <Checkedbook>[].obs;
+  @override
+  void onInit() {
+    initHive();
+    fetchToDo();
+    // fetchFinishedToDo();
+    // clearData();
+    super.onInit();
   }
 
-  Box<Checkedbook> get box => Hive.box<Checkedbook>(boxName);
-
-  Future<void> closeDatabase() async {
-    await Hive.close();
+  addToDo(Checkedbook checkedbook) {
+    todo.add(checkedbook);
+    fetchToDo();
   }
 
-  Future<void> insertData(Checkedbook data) async {
-    await box.add(data);
+  Future<void> initHive() async {
+    final documentDirectory = await getApplicationDocumentsDirectory();
+    try {
+      await Hive.initFlutter(documentDirectory.path);
+      // Hive.registerAdapter(ColorAdapter());
+      await Hive.openBox('checkedbook');
+      // await clearData();
+    } catch (error) {
+      print("Hive initialization error: $error");
+    }
   }
 
-  Future<void> updateData(int index, Checkedbook newData) async {
-    await box.putAt(index, newData);
+  Future<void> fetchToDo() async {
+    try {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter(documentDirectory.path);
+      await Hive.openBox('data');
+      var data = Hive.box('data');
+      List<dynamic> values = data.values.toList();
+      List<Checkedbook> allData = [];
+
+      for (dynamic value in values) {
+        allData.add(Checkedbook(
+          value['barcode'],
+          value['callNo'],
+          value['title'],
+          value['collectionName'],
+          value['itemStatusName'],
+          value['collectionId'],
+          value['found'],
+        ));
+      }
+      print(allData);
+      // Sort the list by the "order" property
+      allData.sort((a, b) => a.barcode.compareTo(b.barcode));
+      todo.assignAll(allData);
+    } catch (error) {
+      print("Error while accessing data: $error");
+    }
   }
 
-  Future<void> deleteData(int index) async {
-    await box.deleteAt(index);
+  Future<void> addData(
+      String barcode,
+      String callNo,
+      String title,
+      String collectionName,
+      String itemStatusName,
+      int collectionId,
+      String found) async {
+    var data = Hive.box('data');
+    data.put(barcode, {
+      'barcode': barcode,
+      'callNo': callNo,
+      'title': title,
+      'collectionName': collectionName,
+      'itemStatusName': itemStatusName,
+      'collectionId': collectionId,
+      'found': found,
+    });
+    fetchToDo();
   }
 
-  List<Checkedbook> getAllData() {
-    return box.values.toList();
+  Future<void> deleteData(String id) async {
+    var data = Hive.box('data');
+    if (data.containsKey(id)) {
+      await data.delete(id);
+      fetchToDo();
+    } else {
+      print('Data with ID $id not found.');
+    }
   }
+
+  Future<void> clearData() async {
+    final documentDirectory = await getApplicationDocumentsDirectory();
+    await Hive.initFlutter(documentDirectory.path);
+    await Hive.openBox('data');
+    var data = Hive.box('data');
+    await data.clear();
+    fetchToDo(); // Refresh the list after clearing data
+    print("Clear Data SUccess");
+  }
+
+  // Future<void> exportToCSV() async {
+  //   try {
+  //     final documentDirectory = await getApplicationDocumentsDirectory();
+  //     final file = File('${documentDirectory.path}/todo_data.csv');
+  //     final sink = file.openWrite();
+
+  //     // Write headers to the CSV file
+  //     sink.write('ID,Topic,IsFinish,Color,Order\n');
+
+  //     // Write todo items to the CSV file
+  //     for (Checkedbook item in todo) {
+  //       sink.write(
+  //           '${item.id},"${item.topic}",${item.isfinish},"${item.color.value}",${item.order.toIso8601String()}\n');
+  //     }
+
+  //     await sink.flush();
+  //     await sink.close();
+
+  //     print('Data exported to CSV file: ${file.path}');
+  //   } catch (error) {
+  //     print('Error exporting data to CSV: $error');
+  //   }
+  // }
 }
