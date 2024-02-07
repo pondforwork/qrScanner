@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
-// import 'package:open_file/open_file.dart'; // Import the open_file package
+import 'package:open_file_plus/open_file_plus.dart';
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
@@ -149,7 +149,7 @@ class scanDBhelper extends GetxController {
   Future<void> exportToCSV() async {
     try {
       final downloadsDirectory = await getDownloadsDirectory();
-      final file = File('${downloadsDirectory!.path}/ResultCheck.csv');
+      final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(
           'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
@@ -161,6 +161,12 @@ class scanDBhelper extends GetxController {
       await sink.flush();
       await sink.close();
       print('Data exported to CSV file: ${file.path}');
+      OpenFile.open("${downloadsDirectory.path}/TestExport.csv");
+
+      //print("${downloadsDirectory.path}");
+      //OpenFile.open("${downloadsDirectory.path}");
+
+
     } catch (error) {
       print('Error exporting data to CSV: $error');
     }
