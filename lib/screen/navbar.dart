@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/screen/historyview.dart';
+import 'package:qr_scan/screen/loginview.dart';
 import 'package:qr_scan/screen/searchbookview.dart';
 import 'package:qr_scan/screen/selectdbview.dart';
 
@@ -14,52 +15,54 @@ class MyDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                const SizedBox(
-                  height: 110,
+                SizedBox(
+                  height: 200,
                   child: DrawerHeader(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.blue,
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Menu',
+                        const Text(
+                          'You Are Not Logged In',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.to(() => LoginView());
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors
+                                .white, // Set the background color to white
+                            minimumSize: Size(150, 50),
+                          ),
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                              color:
+                                  Colors.black, // Set the text color to black
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                // ListTile(
-                //   title: Text('Add Category'),
-                //   onTap: () {
-                //     Get.to(() => AddCategory());
-                //   },
-                // ),
-                // ListTile(
-                //   title: Text('All Product'),
-                //   onTap: () {
-                //     Get.to(() => ProductView());
-                //   },
-                // ),
-                // ListTile(
-                //   title: Text('Search DB'),
-                //   onTap: () {
-                //     Get.to(() => SearchBookView());
-                //   },
-                // ),
                 ListTile(
                   title: Text('Select DB'),
                   onTap: () {
                     Get.to(() => SelectDBview());
                   },
                 ),
-                 ListTile(
+                ListTile(
                   title: Text('History and Export'),
                   onTap: () {
                     Get.to(() => HistoryView());
@@ -79,7 +82,7 @@ class MyDrawer extends StatelessWidget {
           //       SizedBox(height: 30,)
           //     ],
           //   ),
-            
+
           // ),
         ],
       ),
