@@ -146,32 +146,6 @@ class scanDBhelper extends GetxController {
     print("Clear Data SUccess");
   }
 
-  // Future<void> exportToCSV() async {
-  //   try {
-  //     final downloadsDirectory = await getDownloadsDirectory();
-  //     final file = File('${downloadsDirectory!.path}/CheckBook.csv');
-  //     final sink = file.openWrite();
-
-  //     // Write headers to the CSV file
-  //     sink.writeln(
-  //         'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
-
-  //     // Write todo items to the CSV file
-  //     for (Checkedbook item in todo) {
-  //       sink.writeln(
-  //         '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
-  //       );
-  //     }
-
-  //     await sink.flush();
-  //     await sink.close();
-  //     // openDirectory();
-  //     print('Data exported to CSV file: ${file.path}');
-  //   } catch (error) {
-  //     print('Error exporting data to CSV: $error');
-  //   }
-  // }
-
   Future<void> exportToCSV() async {
   try {
     // Prompt user to choose a directory

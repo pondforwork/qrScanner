@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_scan/screen/historyview.dart';
 import 'package:qr_scan/screen/searchbookview.dart';
 import 'package:qr_scan/screen/selectdbview.dart';
 
@@ -56,6 +57,12 @@ class MyDrawer extends StatelessWidget {
                   title: Text('Select DB'),
                   onTap: () {
                     Get.to(() => SelectDBview());
+                  },
+                ),
+                 ListTile(
+                  title: Text('History'),
+                  onTap: () {
+                    Get.to(() => HistoryView());
                   },
                 ),
               ],
