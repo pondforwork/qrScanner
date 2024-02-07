@@ -155,23 +155,17 @@ class scanDBhelper extends GetxController {
           'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
       for (Checkedbook item in todo) {
         sink.writeln(
-          '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
+          '"${item.barcode}","${item.callNo}","${item.title}","${item.collectionName}","${item.itemStatusName}","${item.collectionId}","${item.found}"',
         );
       }
       await sink.flush();
       await sink.close();
       print('Data exported to CSV file: ${file.path}');
       OpenFile.open("${downloadsDirectory.path}/TestExport.csv");
-
-      //print("${downloadsDirectory.path}");
-      //OpenFile.open("${downloadsDirectory.path}");
-
-
     } catch (error) {
       print('Error exporting data to CSV: $error');
     }
   }
-
   // Future<void> exportToCSV() async {
   //   try {
   //     final downloadsDirectory = await getDownloadsDirectory();
@@ -199,7 +193,7 @@ class scanDBhelper extends GetxController {
   //     // FilePickerResult? result = await FilePicker.platform.getDirectoryPath();
 
   //     if (result != null) {
-       
+
   //       final file = File('$result/NewExport.csv');
   //       final sink = file.openWrite();
   //       sink.writeln(
