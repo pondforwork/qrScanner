@@ -14,6 +14,8 @@ class LoginView extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Center(child: SizedBox(child: Text("เข้าสู่ระบบ",style: TextStyle(fontSize: 35),)),),
+          SizedBox(height: 100,),
           Center(
             child: SizedBox(
               width: 350,
@@ -40,7 +42,7 @@ class LoginView extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        "Login With Google",
+                        "เข้าสู่ระบบด้วย Google",
                         style: TextStyle(
                           color: Colors.white,
                         ),
