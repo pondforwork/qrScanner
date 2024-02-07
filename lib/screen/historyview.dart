@@ -58,11 +58,15 @@ class HistoryView extends StatelessWidget {
                               ),
                             ),
                             trailing: controller.todo[index].found == "Y"
-                                ? const Icon(
-                                    Icons.check,
+                                ? Image.asset(
+                                    'assets/images/correct.png', // Replace with the actual path to the check image
+                                    width: 50, // Set the width as needed
+                                    height: 50, // Set the height as needed
                                   )
-                                : const Icon(
-                                    Icons.close,
+                                : Image.asset(
+                                    'assets/images/incorrect.png', // Replace with the actual path to the close image
+                                    width: 50, // Set the width as needed
+                                    height: 50, // Set the height as needed
                                   ),
                             children: [
                               ListTile(

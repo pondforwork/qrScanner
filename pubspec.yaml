@@ -38,4 +38,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-  - assets/books1.db
+  - assets/images/correct.png
+  - assets/images/incorrect.png
