@@ -9,6 +9,7 @@ class HistoryView extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
+
   @override
   Widget build(BuildContext context) {
     Get.put(BookController());
@@ -17,7 +18,7 @@ class HistoryView extends StatelessWidget {
         title: const Text("History and Export"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.archive_rounded), 
+            icon: const Icon(Icons.archive_rounded),
             onPressed: () {
               checkedbookcontroller.exportToCSV();
             },
@@ -25,50 +26,77 @@ class HistoryView extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-          child: Column(
-        children: [
-          Expanded(child: GetX<scanDBhelper>(
-            builder: (controller) {
-              return ListView.builder(
-                  itemCount: controller.todo.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      margin: EdgeInsets.all(12),
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
+        child: Column(
+          children: [
+            Expanded(
+              child: GetX<scanDBhelper>(
+                builder: (controller) {
+                  return ListView.builder(
+                    itemCount: controller.todo.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          print("Click On ${controller.todo[index].title} ");
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: ExpansionTile(
+                            title: Text(
                               controller.todo[index].title.length <= 50
                                   ? controller.todo[index].title
                                   : '${controller.todo[index].title.substring(0, 50)}...',
-                              style: TextStyle(
-                                fontSize: 18, // Adjust the font size as needed
-                                fontWeight: FontWeight
-                                    .bold, // Adjust the font weight as needed
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
-                                height:
-                                    8), // Add some spacing between title and subtitle
-                            Text(
+                            subtitle: Text(
                               '${controller.todo[index].barcode}',
                               style: TextStyle(
-                                fontSize: 16, // Adjust the font size as needed
-                                color: Colors
-                                    .grey, // Adjust the text color as needed
+                                fontSize: 16,
+                                color: Colors.grey,
                               ),
                             ),
-                          ],
+                            trailing: controller.todo[index].found == "Y"
+                                ? const Icon(
+                                    Icons.check,
+                                  )
+                                : const Icon(
+                                    Icons.close,
+                                  ),
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'ชื่อหนังสือ : ${controller.todo[index].title}',
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'รหัสหนังสือ : ${controller.todo[index].barcode}',
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'ผู้สแกน : ยังไม่มี',
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'หมายเหตุ : ยังไม่มี',
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  });
-            },
-          )),
-        ],
-      )),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
