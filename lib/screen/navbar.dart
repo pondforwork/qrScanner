@@ -47,12 +47,12 @@ class MyDrawer extends StatelessWidget {
                 //     Get.to(() => ProductView());
                 //   },
                 // ),
-                ListTile(
-                  title: Text('Search DB'),
-                  onTap: () {
-                    Get.to(() => SearchBookView());
-                  },
-                ),
+                // ListTile(
+                //   title: Text('Search DB'),
+                //   onTap: () {
+                //     Get.to(() => SearchBookView());
+                //   },
+                // ),
                 ListTile(
                   title: Text('Select DB'),
                   onTap: () {
@@ -60,7 +60,7 @@ class MyDrawer extends StatelessWidget {
                   },
                 ),
                  ListTile(
-                  title: Text('History'),
+                  title: Text('History and Export'),
                   onTap: () {
                     Get.to(() => HistoryView());
                   },

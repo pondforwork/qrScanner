@@ -14,7 +14,15 @@ class HistoryView extends StatelessWidget {
     Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("History"),
+        title: const Text("History and Export"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.archive_rounded), 
+            onPressed: () {
+              checkedbookcontroller.exportToCSV();
+            },
+          ),
+        ],
       ),
       body: SafeArea(
           child: Column(

@@ -47,11 +47,12 @@ class DropdownPage extends StatelessWidget {
                                 .value), // Display resultSearch value
                       ),
                       //  Text(scannercontroller.barcodeResult.value),
-                      SizedBox(height: 10), // Add some spacing
+                      SizedBox(height: 40), // Add some spacing
                       TextField(
                         controller: textEditingController,
                         decoration: const InputDecoration(
-                            labelText: 'Enter Barcode Of book'),
+                            labelText:
+                                'Scan Barcode or InsertBarcode No. Here'),
                       ),
                       SizedBox(
                         height: 30,
@@ -62,8 +63,17 @@ class DropdownPage extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          bookController
-                              .findFromBarcode(textEditingController.text);
+                          if (textEditingController.text.isNotEmpty) {
+                            bookController
+                                .findFromBarcode(textEditingController.text);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Please enter a barcode"),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
                         },
                         child: const Text('Search'),
                       ),
