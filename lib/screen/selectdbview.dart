@@ -8,7 +8,7 @@ class SelectDBview extends StatelessWidget {
   SelectDBview({Key? key}) : super(key: key);
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
-    final scanDBhelper scandbController = Get.put(scanDBhelper());
+  final scanDBhelper scandbController = Get.put(scanDBhelper());
 
   @override
   Widget build(BuildContext context) {
@@ -22,40 +22,23 @@ class SelectDBview extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 60,
-              ),
+              SizedBox(height: 20), // Adjust the height as needed
               const Text(
                 "Current Database",
                 style: TextStyle(fontSize: 25),
               ),
+              const SizedBox(height: 50),
+
               Obx(() => Text(scandbController.currentdb.value)),
-              Expanded(
-                  child: TextButton(
-                onPressed: () {
-                  bookController.openDatabaseConnection();
-                },
-                child: const Text("SELECT DB"),
-              )),
-              Expanded(
-                  child: TextButton(
-                onPressed: () {
-                  scandbController.getDBName();
-                },
-                child: const Text("CheckDBName"),
-              )), Expanded(
-                  child: TextButton(
-                onPressed: () {
-                  scandbController.setDBName("BBB");
-                },
-                child: const Text("Add Dbname"),
-              )), Expanded(
-                  child: TextButton(
-                onPressed: () {
-                  scandbController.clearDBNameBox();
-                },
-                child: const Text("Clearname"),
-              ))
+              const SizedBox(height: 450),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    bookController.openDatabaseConnection();
+                  },
+                  child: const Text("SELECT DB"),
+                ),
+              ),
             ],
           ),
         ),

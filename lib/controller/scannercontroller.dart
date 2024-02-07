@@ -40,23 +40,6 @@ class ScannerController extends GetxController {
     BookController().findFromBarcode(value);
   }
 
-  // Future<void> scanandsearchFromDB() async {
-  //   String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-  //     "#ff6666", // Color for the scan button
-  //     "Cancel", // Text for the cancel button
-  //     true, // Show flash icon
-  //     ScanMode.DEFAULT, // Specify the type of scan
-  //   );
-  //   //HERE IS PROBLEM
-  //   //barcodeResult.value = barcodeScanResult;
-  //   if (barcodeResult.value == "-1") {
-  //     barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-  //   } else {
-  //     BookController().isLoading.value = true;
-
-  //     BookController().findFromBarcode(barcodeScanResult);
-  //   }
-  // }
 
   Future<void> scanandsearchFromDB() async {
     try {

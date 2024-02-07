@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
+import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class DropdownPage extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
   final BookController bookController = Get.put(BookController());
+  final scanDBhelper scandbhelper = Get.put(scanDBhelper());
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,4 +103,5 @@ class DropdownPage extends StatelessWidget {
       ),
     );
   }
+
 }
