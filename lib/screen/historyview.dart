@@ -40,56 +40,63 @@ class HistoryView extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: ExpansionTile(
-                            title: Text(
-                              controller.todo[index].title.length <= 50
-                                  ? controller.todo[index].title
-                                  : '${controller.todo[index].title.substring(0, 50)}...',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${controller.todo[index].barcode}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            trailing: controller.todo[index].found == "Y"
-                                ? Image.asset(
-                                    'assets/images/correct.png', // Replace with the actual path to the check image
-                                    width: 50, // Set the width as needed
-                                    height: 50, // Set the height as needed
-                                  )
-                                : Image.asset(
-                                    'assets/images/incorrect.png', // Replace with the actual path to the close image
-                                    width: 50, // Set the width as needed
-                                    height: 50, // Set the height as needed
-                                  ),
+                          child: Column(
                             children: [
-                              ListTile(
+                              ExpansionTile(
                                 title: Text(
-                                  'ชื่อหนังสือ : ${controller.todo[index].title}',
+                                  controller.todo[index].title.length <= 50
+                                      ? controller.todo[index].title
+                                      : '${controller.todo[index].title.substring(0, 50)}...',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'รหัสหนังสือ : ${controller.todo[index].barcode}',
+                                subtitle: Text(
+                                  '${controller.todo[index].barcode}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
                                 ),
+                                trailing: controller.todo[index].found == "Y"
+                                    ? Image.asset(
+                                        'assets/images/correct.png', // Replace with the actual path to the check image
+                                        width: 50, // Set the width as needed
+                                        height: 50, // Set the height as needed
+                                      )
+                                    : Image.asset(
+                                        'assets/images/incorrect.png', // Replace with the actual path to the close image
+                                        width: 50, // Set the width as needed
+                                        height: 50, // Set the height as needed
+                                      ),
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      'ชื่อหนังสือ : ${controller.todo[index].title}',
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'รหัสหนังสือ : ${controller.todo[index].barcode}',
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'ผู้สแกน : ยังไม่มี',
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'หมายเหตุ : ยังไม่มี',
+                                    ),
+                                  ),
+                                ],
                               ),
-                              ListTile(
-                                title: Text(
-                                  'ผู้สแกน : ยังไม่มี',
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'หมายเหตุ : ยังไม่มี',
-                                ),
-                              ),
+                              const Icon(Icons.more_horiz),
+                              const SizedBox(height: 5,)
                             ],
+                            
                           ),
                         ),
                       );
