@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,7 +7,6 @@ import 'package:qr_scan/controller/bookcontroller.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
 // import 'package:open_file/open_file.dart'; // Import the open_file package
-
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
@@ -146,15 +146,10 @@ class scanDBhelper extends GetxController {
     print("Clear Data SUccess");
   }
 
-  // Future<void> exportToCSV() async {
-  //   try {
-  //     final documentDirectory = await getApplicationDocumentsDirectory();
-  //     final file = File('${documentDirectory.path}/todo_data.csv');
-  //     final sink = file.openWrite();
   Future<void> exportToCSV() async {
     try {
       final downloadsDirectory = await getDownloadsDirectory();
-      final file = File('${downloadsDirectory!.path}/CheckBook2.csv');
+      final file = File('${downloadsDirectory!.path}/ResultCheck.csv');
       final sink = file.openWrite();
       sink.writeln(
           'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
@@ -171,5 +166,51 @@ class scanDBhelper extends GetxController {
     }
   }
 
-  
+  // Future<void> exportToCSV() async {
+  //   try {
+  //     final downloadsDirectory = await getDownloadsDirectory();
+  //     final file = File('${downloadsDirectory!.path}/ResultCheck.csv');
+  //     final sink = file.openWrite();
+  //     sink.writeln(
+  //         'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
+  //     for (Checkedbook item in todo) {
+  //       sink.writeln(
+  //         '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
+  //       );
+  //     }
+  //     await sink.flush();
+  //     await sink.close();
+  //     print('Data exported to CSV file: ${file.path}');
+  //   } catch (error) {
+  //     print('Error exporting data to CSV: $error');
+  //   }
+  // }
+  // Future<void> exportToCSV() async {
+  //   try {
+  //     String? result = await FilePicker.platform.getDirectoryPath();
+
+  //     print("FileLocation+$result");
+  //     // FilePickerResult? result = await FilePicker.platform.getDirectoryPath();
+
+  //     if (result != null) {
+       
+  //       final file = File('$result/NewExport.csv');
+  //       final sink = file.openWrite();
+  //       sink.writeln(
+  //           'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
+  //       for (Checkedbook item in todo) {
+  //         sink.writeln(
+  //           '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
+  //         );
+  //       }
+  //       await sink.flush();
+  //       await sink.close();
+  //       print('Data exported to CSV file: ${file.path}');
+  //     } else {
+  //       print('User canceled the file picker');
+  //     }
+  //   } catch (error) {
+  //     print('Error exporting data to CSV: $error');
+  //   }
+  // }
 }
