@@ -39,6 +39,12 @@ class SelectDBview extends StatelessWidget {
                   child: const Text("SELECT DB"),
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                   
+                  },
+                  child: const Text("OpenFolder"),
+                ),
             ],
           ),
         ),

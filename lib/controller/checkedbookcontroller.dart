@@ -6,7 +6,7 @@ import 'package:qr_scan/controller/bookcontroller.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
 // import 'package:open_file/open_file.dart'; // Import the open_file package
-import 'package:file_picker/file_picker.dart';
+
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
@@ -146,37 +146,30 @@ class scanDBhelper extends GetxController {
     print("Clear Data SUccess");
   }
 
+  // Future<void> exportToCSV() async {
+  //   try {
+  //     final documentDirectory = await getApplicationDocumentsDirectory();
+  //     final file = File('${documentDirectory.path}/todo_data.csv');
+  //     final sink = file.openWrite();
   Future<void> exportToCSV() async {
-  try {
-    // Prompt user to choose a directory
-    String? directoryPath = await FilePicker.platform.getDirectoryPath();
-
-    if (directoryPath == null) {
-      // User canceled the directory selection
-      return;
-    }
-
-    // Use the selected directory path to create the file
-    final file = File('$directoryPath/CheckBook.csv');
-    final sink = file.openWrite();
-
-    // Write headers to the CSV file
-    sink.writeln(
-        'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
-
-    // Write todo items to the CSV file
-    for (Checkedbook item in todo) {
+    try {
+      final downloadsDirectory = await getDownloadsDirectory();
+      final file = File('${downloadsDirectory!.path}/CheckBook2.csv');
+      final sink = file.openWrite();
       sink.writeln(
-        '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
-      );
+          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
+      for (Checkedbook item in todo) {
+        sink.writeln(
+          '${item.barcode},${item.callNo},${item.title},${item.collectionName},${item.itemStatusName},${item.collectionId},${item.found}',
+        );
+      }
+      await sink.flush();
+      await sink.close();
+      print('Data exported to CSV file: ${file.path}');
+    } catch (error) {
+      print('Error exporting data to CSV: $error');
     }
-
-    await sink.flush();
-    await sink.close();
-    print('Data exported to CSV file: ${file.path}');
-  } catch (error) {
-    print('Error exporting data to CSV: $error');
   }
-}
 
+  
 }
