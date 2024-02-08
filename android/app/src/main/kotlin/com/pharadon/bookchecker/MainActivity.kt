@@ -1,4 +1,4 @@
-package com.example.qr_scan
+package com.pharadon.bookchecker
 
 import io.flutter.embedding.android.FlutterActivity
 
