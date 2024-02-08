@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "75331372711",
+    "project_id": "bookcheckerapp",
+    "storage_bucket": "bookcheckerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75331372711:android:09237bb651624ef82f7d82",
+        "android_client_info": {
+          "package_name": "com.pharadon.bookchecker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75331372711-f2g86ku2hkb2edogba3u5far1996q1kc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7e2QruuU8oLDZX4Gf8FXwMFTjiAOwOlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75331372711-f2g86ku2hkb2edogba3u5far1996q1kc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
