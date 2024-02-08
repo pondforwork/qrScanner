@@ -70,4 +70,14 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation platform('com.google.firebase:firebase-bom:32.7.1')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.firebase:firebase-auth' // Add Fir
+
 }
+
+googleServices {
+    disableVersionCheck = false
+    version = "4.3.10" // Use the latest version available
+}
+
+apply plugin: 'com.google.gms.google-services'
