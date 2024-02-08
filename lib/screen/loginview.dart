@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +20,21 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    initializeFirebase();
+    _firebase = _initializeFirebase();
   }
-   Future<FirebaseApp> initializeFirebase() async {
-    try {
+
+  Future<FirebaseApp> _initializeFirebase() async {
+    if (Platform.isAndroid) {
+      return await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: 'AIzaSyC7e2QruuU8oLDZX4Gf8FXwMFTjiAOwOlw',
+          appId: '1:75331372711:android:09237bb651624ef82f7d82',
+          messagingSenderId: '75331372711',
+          projectId: 'bookcheckerapp',
+        ),
+      );
+    } else {
       return await Firebase.initializeApp();
-    } catch (e) {
-      print('Error initializing Firebase: $e');
-    throw e; // Rethrow the error to handle it at a higher level if needed
     }
   }
 
