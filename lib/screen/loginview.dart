@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
                   onPressed: () async {
                     // signInWithGoogle();
                     // await loginEmailAndPassword();
-                    await usercontroller.signInWithGoogle();
+                    await  usercontroller.signInWithGoogle();
                     print("Test");
                   },
                   style: ElevatedButton.styleFrom(

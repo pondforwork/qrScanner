@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/screen/historyview.dart';
 import 'package:qr_scan/screen/loginview.dart';
-import 'package:qr_scan/screen/searchbookview.dart';
 import 'package:qr_scan/screen/selectdbview.dart';
 
 class MyDrawer extends StatelessWidget {
+  final UserController userController = Get.put(UserController());
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -25,37 +27,65 @@ class MyDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          'You Are Not Logged In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.to(() => LoginView());
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors
-                                .white, // Set the background color to white
-                            minimumSize: Size(150, 50),
-                          ),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              color:
-                                  Colors.black, // Set the text color to black
-                            ),
-                          ),
-                        ),
+                        Obx(() {
+                          // Use Obx to listen to changes in userController.currentUser
+                          if (userController.currentUser.value == "") {
+                            return Column(
+                              children: [
+                                const Text(
+                                  'You Are Not Logged In',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.to(() => LoginView());
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    minimumSize: Size(150, 50),
+                                  ),
+                                  child: const Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                const Text(
+                                  'Welcome, User!',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                // Display additional user information if needed
+                                Text(
+                                  'Logged in as: ${userController.currentUser.value}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        }),
                       ],
                     ),
                   ),
                 ),
+                // Other list tile items
                 ListTile(
                   title: Text('Select DB'),
                   onTap: () {
@@ -71,19 +101,6 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Container with social media links at the bottom
-          // Container(
-          //   child: const Column(
-          //     children: [
-          //       Divider(),
-          //       ListTile(
-          //         title: Text(''),
-          //       ),
-          //       SizedBox(height: 30,)
-          //     ],
-          //   ),
-
-          // ),
         ],
       ),
     );
