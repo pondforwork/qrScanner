@@ -61,7 +61,7 @@ class BookController extends GetxController {
 
   //THIS IS FIND FROM CLICK SEARCH
   Future<void> findFromBarcode(String barcode) async {
-    if (scandbhelper.currentdb.value != "No Database Selected") {
+    if (checkdbAvial() == true) {
       await _openLocalDatabase();
       isLoading.value = true; // Loading
 
@@ -130,6 +130,17 @@ class BookController extends GetxController {
       }
     } else {
       print("Select DB First");
+    }
+  }
+
+  bool checkdbAvial() {
+    if (scandbhelper.currentdb.value != "No Database Selected") {
+      //Database Selected
+      print("true");
+      return true;
+    } else {
+      //Database Selected
+      return false;
     }
   }
 }

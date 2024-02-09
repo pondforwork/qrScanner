@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
+import 'package:qr_scan/screen/navbar.dart';
 
 class DropdownPage extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
@@ -10,24 +11,21 @@ class DropdownPage extends StatelessWidget {
   final BookController bookController = Get.put(BookController());
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Scanning Page'),
       ),
+      drawer: MyDrawer(), // Add the drawer here
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Obx widget for reactive updates
               Card(
-                color: Color.fromARGB(
-                    255, 255, 249, 171), // Set the background color of the Card
+                color: Color.fromARGB(255, 255, 249, 171),
                 child: Container(
                   width: 500,
                   height: 370,
@@ -41,8 +39,7 @@ class DropdownPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      // Obx(() => Text(scannercontroller.barcodeResult.value)),
-                      SizedBox(
+                      const SizedBox(
                         height: 35,
                       ),
                       Obx(
@@ -52,14 +49,14 @@ class DropdownPage extends StatelessWidget {
                                 .value), // Display resultSearch value
                       ),
                       //  Text(scannercontroller.barcodeResult.value),
-                      SizedBox(height: 40), // Add some spacing
+                      const SizedBox(height: 40), // Add some spacing
                       TextField(
                         controller: textEditingController,
                         decoration: const InputDecoration(
                             labelText:
                                 'Scan Barcode or InsertBarcode No. Here'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
 
@@ -68,13 +65,23 @@ class DropdownPage extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          if (textEditingController.text.isNotEmpty) {
+                          if (textEditingController.text.isNotEmpty &&
+                              bookController.checkdbAvial() == true) {
                             bookController
                                 .findFromBarcode(textEditingController.text);
-                          } else {
+                          } else if (textEditingController.text.isNotEmpty &&
+                              bookController.checkdbAvial() == false) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("Please enter a barcode"),
+                                content: Text("Please Add DB"),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          } else if (textEditingController.text.isEmpty &&
+                              bookController.checkdbAvial() == false) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Please Add DB"),
                                 duration: Duration(seconds: 3),
                               ),
                             );
@@ -86,8 +93,7 @@ class DropdownPage extends StatelessWidget {
                   ),
                 ),
               ),
-
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -103,5 +109,4 @@ class DropdownPage extends StatelessWidget {
       ),
     );
   }
-
 }

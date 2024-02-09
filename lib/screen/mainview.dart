@@ -30,7 +30,7 @@ class MainView extends StatelessWidget {
         onPressed: () {
           Get.to(() => DropdownPage());
         },
-        child: Icon(Icons.qr_code),
+        child: Icon(Icons.qr_code,),
       ),
     );
   }
