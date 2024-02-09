@@ -1,42 +1,17 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:qr_scan/screen/navbar.dart';
-import 'package:qr_scan/screen/scanview.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 
 class LoginView extends StatefulWidget {
-  LoginView({Key? key}) : super(key: key);
-
+  const LoginView({Key? key}) : super(key: key);
+  
   @override
   _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
-  late final Future<FirebaseApp> _firebase;
 
-  @override
-  void initState() {
-    super.initState();
-    _firebase = _initializeFirebase();
-  }
-
-  Future<FirebaseApp> _initializeFirebase() async {
-    if (Platform.isAndroid) {
-      return await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: 'AIzaSyC7e2QruuU8oLDZX4Gf8FXwMFTjiAOwOlw',
-          appId: '1:75331372711:android:09237bb651624ef82f7d82',
-          messagingSenderId: '75331372711',
-          projectId: 'bookcheckerapp',
-        ),
-      );
-    } else {
-      return await Firebase.initializeApp();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +37,9 @@ class _LoginViewState extends State<LoginView> {
                 padding: const EdgeInsets.all(0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    await loginEmailAndPassword();
+                    // signInWithGoogle();
+                    // await loginEmailAndPassword();
+                    await signInWithGoogle();
                     print("Test");
                   },
                   style: ElevatedButton.styleFrom(
@@ -98,17 +75,24 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Future<void> loginEmailAndPassword() async {
-    try {
-      await _firebase; // Ensure Firebase is initialized
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "ponduuu123@gmail.com",
-        password: "Pxnd124",
-      );
-      // Navigate to the next screen or perform other actions upon successful login
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-      // Handle login error (show message to user, etc.)
-    }
-  }
+  Future<User?> signInWithGoogle() async {
+  // Initialize the GoogleSignIn
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Sign in to Firebase with the Google [UserCredential]
+  final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+
+  // Return the user
+  return userCredential.user;
+}
 }

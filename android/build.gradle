@@ -6,15 +6,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.4.0'
+        classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.android.tools.build:gradle:7.0.0' // Update to the latest version
+
     }
 }
 
-// plugins {
-//     id 'com.google.gms.google-services' version '4.4.0' apply false
-// }
 
 allprojects {
     repositories {
