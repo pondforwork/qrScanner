@@ -1,6 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:get/get.dart';
+import 'package:qr_scan/controller/usercontroller.dart';
+
+
 
 
 class LoginView extends StatefulWidget {
@@ -11,6 +13,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final UserController usercontroller = Get.put(UserController());
 
 
   @override
@@ -39,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
                   onPressed: () async {
                     // signInWithGoogle();
                     // await loginEmailAndPassword();
-                    await signInWithGoogle();
+                    await usercontroller.signInWithGoogle();
                     print("Test");
                   },
                   style: ElevatedButton.styleFrom(
@@ -75,24 +78,5 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Future<User?> signInWithGoogle() async {
-  // Initialize the GoogleSignIn
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-
-  // Sign in to Firebase with the Google [UserCredential]
-  final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-
-  // Return the user
-  return userCredential.user;
-}
+  
 }
