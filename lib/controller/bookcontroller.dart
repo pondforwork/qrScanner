@@ -144,6 +144,7 @@ class BookController extends GetxController {
     TextEditingController titleController = TextEditingController();
     TextEditingController collectionIdController = TextEditingController();
     TextEditingController noteController = TextEditingController();
+
     Get.defaultDialog(
       title: "Book Not Found!!!",
       content: Column(
@@ -158,6 +159,10 @@ class BookController extends GetxController {
           TextField(
             controller: collectionIdController,
             decoration: InputDecoration(labelText: 'Collection ID'),
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+            ],
           ),
           TextField(
             controller: noteController,
@@ -175,7 +180,30 @@ class BookController extends GetxController {
         const SizedBox(width: 50),
         TextButton(
           onPressed: () async {
-            Checkedbook checkedbook = Checkedbook(
+            Get.back(); // Close the current dialog
+
+            bool confirmAdd = await Get.defaultDialog(
+              title: "Add Missing Book?",
+              content: Text("Are you sure you want to add this book?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back(result: false); // Cancel
+                  },
+                  child: const Text("No"),
+                ),
+                const SizedBox(width: 50),
+                TextButton(
+                  onPressed: () {
+                    Get.back(result: true); // Confirm
+                  },
+                  child: const Text("Yes"),
+                ),
+              ],
+            );
+
+            if (confirmAdd == true) {
+              Checkedbook checkedbook = Checkedbook(
                 barcode,
                 "",
                 titleController.text,
@@ -184,8 +212,9 @@ class BookController extends GetxController {
                 int.parse(collectionIdController.text),
                 "N",
                 userController.currentUser.value,
-                "");
-            scandbhelper.addData(
+                noteController.text,
+              );
+              scandbhelper.addData(
                 checkedbook.barcode,
                 checkedbook.callNo,
                 checkedbook.title,
@@ -194,9 +223,10 @@ class BookController extends GetxController {
                 checkedbook.collectionId,
                 checkedbook.found,
                 checkedbook.recorder,
-                checkedbook.note);
-            scandbhelper.fetchToDo();
-            Get.back(); // Close the dialog
+                checkedbook.note,
+              );
+              scandbhelper.fetchToDo();
+            }
           },
           child: const Text("Add"),
         ),
