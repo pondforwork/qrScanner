@@ -84,12 +84,12 @@ class HistoryView extends StatelessWidget {
                                   ),
                                   ListTile(
                                     title: Text(
-                                      'ผู้สแกน : ยังไม่มี',
+                                      'ผู้สแกน : ${controller.todo[index].recorder}',
                                     ),
                                   ),
                                   ListTile(
                                     title: Text(
-                                      'หมายเหตุ : ยังไม่มี',
+                                      'หมายเหตุ : ${controller.todo[index].note}',
                                     ),
                                   ),
                                 ],

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
+import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -13,9 +14,9 @@ class BookController extends GetxController {
   Database? _database;
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
-
   RxBool isLoading = false.obs; // Observable for tracking loading state
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
+  final UserController userController = Get.put(UserController());
 
   @override
   Future<void> onInit() async {
@@ -89,14 +90,15 @@ class BookController extends GetxController {
             TextButton(
               onPressed: () async {
                 Checkedbook checkedbook = Checkedbook(
-                  firstResult['BARCODE'],
-                  firstResult['CALLNO'],
-                  firstResult['TITLE'],
-                  firstResult['COLLECTIONNAME'],
-                  firstResult['ITEMSTATUSNAME'],
-                  firstResult['COLLECTIONID'],
-                  "Y",
-                );
+                    firstResult['BARCODE'],
+                    firstResult['CALLNO'],
+                    firstResult['TITLE'],
+                    firstResult['COLLECTIONNAME'],
+                    firstResult['ITEMSTATUSNAME'],
+                    firstResult['COLLECTIONID'],
+                    "Y",
+                    userController.currentUser.value,
+                    "");
                 scandbhelper.addData(
                     checkedbook.barcode,
                     checkedbook.callNo,
@@ -104,7 +106,9 @@ class BookController extends GetxController {
                     checkedbook.collectionName,
                     checkedbook.itemStatusName,
                     checkedbook.collectionId,
-                    checkedbook.found);
+                    checkedbook.found,
+                    checkedbook.recorder,
+                    checkedbook.note);
                 scandbhelper.fetchToDo();
                 Get.back(); // Close the dialog
               },
@@ -116,13 +120,18 @@ class BookController extends GetxController {
         resultSearch.value = "No result";
         Get.defaultDialog(
           title: "Search Result",
-          content: const Text("No Result"),
+          content: Column(
+            children: [
+              Text("BARCODE : ${barcode}"),
+              Text("Book Not Found"),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Get.back(); // Close the dialog
               },
-              child: const Text("OK"),
+              child: const Text("Close"),
             ),
           ],
         );

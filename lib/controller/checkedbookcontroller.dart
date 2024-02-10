@@ -56,6 +56,8 @@ class scanDBhelper extends GetxController {
           value['itemStatusName'],
           value['collectionId'],
           value['found'],
+          value['recorder'],
+          value['note']
         ));
       }
       print(allData);
@@ -111,7 +113,9 @@ class scanDBhelper extends GetxController {
       String collectionName,
       String itemStatusName,
       int collectionId,
-      String found) async {
+      String found,
+      String recorder,
+      String note) async {
     var data = Hive.box('data');
     data.put(barcode, {
       'barcode': barcode,
@@ -121,6 +125,8 @@ class scanDBhelper extends GetxController {
       'itemStatusName': itemStatusName,
       'collectionId': collectionId,
       'found': found,
+      'recorder': recorder,
+      'note': note,
     });
     fetchToDo();
   }
@@ -149,7 +155,7 @@ class scanDBhelper extends GetxController {
     try {
       final downloadsDirectory = await getDownloadsDirectory();
       final docDirectory = await getApplicationDocumentsDirectory();
-      
+
       final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(

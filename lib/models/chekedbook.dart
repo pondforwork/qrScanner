@@ -6,7 +6,9 @@ class Checkedbook {
   late String itemStatusName;
   late int collectionId;
   late String found;
+  late String recorder;
+  late String note;
 
   Checkedbook(this.barcode, this.callNo, this.title, this.collectionName,
-      this.itemStatusName, this.collectionId, this.found);
+      this.itemStatusName, this.collectionId, this.found,this.recorder,this.note);
 }
