@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
   
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: userController.userloggedIn() ? DropdownPage() : LoginView(),
+      home:  LoginView(),
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),

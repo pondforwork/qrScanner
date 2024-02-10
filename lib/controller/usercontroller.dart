@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:qr_scan/screen/mainview.dart';
 
 class UserController extends GetxController {
   RxString currentUser = ''.obs;
   @override
   Future<void> onInit() async {
+
+ 
     super.onInit();
   }
 
@@ -31,6 +34,7 @@ class UserController extends GetxController {
     currentUser.value = userCredential.user!.displayName!;
     print(currentUser.value);
     // Return the user
+
     return userCredential.user;
   }
 

@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
-
-
-
+import 'package:qr_scan/screen/mainview.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
-  
+
   @override
   _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
   final UserController usercontroller = Get.put(UserController());
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +39,8 @@ class _LoginViewState extends State<LoginView> {
                   onPressed: () async {
                     // signInWithGoogle();
                     // await loginEmailAndPassword();
-                    await  usercontroller.signInWithGoogle();
-                    Get.back();
-                 
+                    await usercontroller.signInWithGoogle();
+                    Get.offAll(() => MainView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -78,6 +74,4 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
-
-  
 }
