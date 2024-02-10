@@ -43,7 +43,8 @@ class _LoginViewState extends State<LoginView> {
                     // signInWithGoogle();
                     // await loginEmailAndPassword();
                     await  usercontroller.signInWithGoogle();
-                    print("Test");
+                    Get.back();
+                 
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,

@@ -34,7 +34,7 @@ class DropdownPage extends StatelessWidget {
                     children: [
                       const Text(
                         "Scan Result",
-                        style: TextStyle(fontSize: 25),
+                        style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
                         height: 20,
@@ -44,17 +44,17 @@ class DropdownPage extends StatelessWidget {
                       ),
                       Obx(
                         () => bookController.isLoading.value
-                            ? CircularProgressIndicator() // Show loading indicator
+                            ? Row(mainAxisAlignment: MainAxisAlignment.center,
+                              children: [CircularProgressIndicator() ,SizedBox(width: 20,),Text("Searching")],)
                             : Text(bookController.resultSearch
-                                .value), // Display resultSearch value
+                                .value), 
                       ),
-                      //  Text(scannercontroller.barcodeResult.value),
-                      const SizedBox(height: 40), // Add some spacing
+                      const SizedBox(height: 40),
                       TextField(
                         controller: textEditingController,
                         decoration: const InputDecoration(
                             labelText:
-                                'Scan Barcode or InsertBarcode No. Here'),
+                                'Scan Barcode or InsertBarcode NO. Here'),
                       ),
                       const SizedBox(
                         height: 30,

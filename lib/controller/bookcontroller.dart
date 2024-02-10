@@ -64,7 +64,7 @@ class BookController extends GetxController {
     if (checkdbAvial() == true) {
       await _openLocalDatabase();
       isLoading.value = true; // Loading
-
+      await Future.delayed(Duration(seconds: 10));
       List<Map<String, dynamic>> result = await _database!
           .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
       result.forEach((row) {});

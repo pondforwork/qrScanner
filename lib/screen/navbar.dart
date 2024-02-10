@@ -33,7 +33,7 @@ class MyDrawer extends StatelessWidget {
                             return Column(
                               children: [
                                 const Text(
-                                  'You Are Not Logged In',
+                                  'You Are Not Log In.',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -94,6 +94,13 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text('History and Export'),
+                  onTap: () {
+                    Get.to(() => HistoryView());
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: Text('Logout'),
                   onTap: () {
                     Get.to(() => HistoryView());
                   },

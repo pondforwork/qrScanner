@@ -27,11 +27,8 @@ class UserController extends GetxController {
     // Sign in to Firebase with the Google [UserCredential]
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-
     print("User signed in: ${userCredential.user?.displayName}");
-
     currentUser.value = userCredential.user!.displayName!;
-
     print(currentUser.value);
     // Return the user
     return userCredential.user;
