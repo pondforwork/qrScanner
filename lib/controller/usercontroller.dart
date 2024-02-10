@@ -60,4 +60,12 @@ class UserController extends GetxController {
   //     print("Error signing out: $e");
   //   }
   // }
+
+  userloggedIn(){
+    if(currentUser.value == ""){
+      return false;
+    }else{
+      return true;
+    }
+  }
 }
