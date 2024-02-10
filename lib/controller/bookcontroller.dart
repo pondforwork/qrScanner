@@ -100,7 +100,10 @@ class BookController extends GetxController {
       title: "Book Found!!!",
       content: Text("Book Name : $bookName"),
       actions: [
-        TextButton(
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+          ),
           onPressed: () async {
             Get.back(); // Close the dialog
           },
@@ -109,7 +112,10 @@ class BookController extends GetxController {
         const SizedBox(
           width: 50,
         ),
-        TextButton(
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+          ),
           onPressed: () async {
             Checkedbook checkedbook = Checkedbook(
                 firstResult['BARCODE'],
