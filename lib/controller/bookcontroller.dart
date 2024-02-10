@@ -26,7 +26,6 @@ class BookController extends GetxController {
   Future<void> openDatabaseConnection() async {
     // Let the user choose a file using a file picker
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-
     if (result != null && result.files.isNotEmpty) {
       // Selected file
       PlatformFile file = result.files.first;

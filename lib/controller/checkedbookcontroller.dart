@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:open_file_plus/open_file_plus.dart';
+//import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
-import 'package:open_file_plus/open_file_plus.dart';
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
@@ -147,6 +148,8 @@ class scanDBhelper extends GetxController {
   Future<void> exportToCSV() async {
     try {
       final downloadsDirectory = await getDownloadsDirectory();
+      final docDirectory = await getApplicationDocumentsDirectory();
+      
       final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(
@@ -159,10 +162,8 @@ class scanDBhelper extends GetxController {
       await sink.flush();
       await sink.close();
       print('Data exported to CSV file: ${file.path}');
-      print("Opening");
-      print("${downloadsDirectory.path}/TestExport.csv");
-      OpenFile.open("${downloadsDirectory.path}/TestExport.csv");
-      print("Opened");
+      print('${downloadsDirectory.path}/TestExport.csv');
+      OpenFile.open('${downloadsDirectory.path}/TestExport.csv');
     } catch (error) {
       print('Error exporting data to CSV: $error');
     }
