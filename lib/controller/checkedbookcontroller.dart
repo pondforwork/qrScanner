@@ -163,6 +163,7 @@ class scanDBhelper extends GetxController {
       await sink.close();
       print('Data exported to CSV file: ${file.path}');
       print('${downloadsDirectory.path}/TestExport.csv');
+      //OpenFile.open('${downloadsDirectory.path}');
       OpenFile.open('${downloadsDirectory.path}/TestExport.csv');
     } catch (error) {
       print('Error exporting data to CSV: $error');
