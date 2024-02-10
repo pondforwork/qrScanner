@@ -20,8 +20,11 @@ class MainApp extends StatelessWidget {
       home: DropdownPage(),
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              color: Colors.blue,
-              titleTextStyle: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
+            iconTheme: IconThemeData(color: Colors.white),
+            color: Colors.blue,
+            titleTextStyle: TextStyle(
+                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+          ),
           scaffoldBackgroundColor: Colors.white),
     );
   }

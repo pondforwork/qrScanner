@@ -19,7 +19,7 @@ class HistoryView extends StatelessWidget {
         title: const Text("History and Export"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.archive_rounded),
+            icon: const Icon(Icons.archive_rounded,color: Colors.white,),
             onPressed: () {
               checkedbookcontroller.exportToCSV();
             },
