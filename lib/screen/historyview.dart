@@ -9,17 +9,18 @@ class HistoryView extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
-
   @override
   Widget build(BuildContext context) {
     Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
-        
         title: const Text("History and Export"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.archive_rounded,color: Colors.white,),
+            icon: const Icon(
+              Icons.archive_rounded,
+              color: Colors.white,
+            ),
             onPressed: () {
               checkedbookcontroller.exportToCSV();
             },
@@ -84,7 +85,7 @@ class HistoryView extends StatelessWidget {
                                   ),
                                   ListTile(
                                     title: Text(
-                                      'ผู้สแกน : ${controller.todo[index].recorder}',
+                                      'ผู้บันทึก : ${controller.todo[index].recorder}',
                                     ),
                                   ),
                                   ListTile(
@@ -95,9 +96,10 @@ class HistoryView extends StatelessWidget {
                                 ],
                               ),
                               const Icon(Icons.more_horiz),
-                              const SizedBox(height: 5,)
+                              const SizedBox(
+                                height: 5,
+                              )
                             ],
-                            
                           ),
                         ),
                       );

@@ -64,7 +64,7 @@ class BookController extends GetxController {
     if (checkdbAvial() == true) {
       await _openLocalDatabase();
       isLoading.value = true; // Loading
-      await Future.delayed(Duration(seconds: 3));
+      //await Future.delayed(Duration(seconds: 3));
       List<Map<String, dynamic>> result = await _database!
           .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
       result.forEach((row) {});
@@ -73,68 +73,10 @@ class BookController extends GetxController {
       if (result.isNotEmpty) {
         Map<String, dynamic> firstResult = result.first;
         String firstValue = firstResult['TITLE'];
-        resultSearch.value = firstValue;
-        Get.defaultDialog(
-          title: "Result",
-          content: Text("Book Name : $firstValue"),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Get.back(); // Close the dialog
-              },
-              child: const Text("Cancel"),
-            ),
-            const SizedBox(
-              width: 50,
-            ),
-            TextButton(
-              onPressed: () async {
-                Checkedbook checkedbook = Checkedbook(
-                    firstResult['BARCODE'],
-                    firstResult['CALLNO'],
-                    firstResult['TITLE'],
-                    firstResult['COLLECTIONNAME'],
-                    firstResult['ITEMSTATUSNAME'],
-                    firstResult['COLLECTIONID'],
-                    "Y",
-                    userController.currentUser.value,
-                    "");
-                scandbhelper.addData(
-                    checkedbook.barcode,
-                    checkedbook.callNo,
-                    checkedbook.title,
-                    checkedbook.collectionName,
-                    checkedbook.itemStatusName,
-                    checkedbook.collectionId,
-                    checkedbook.found,
-                    checkedbook.recorder,
-                    checkedbook.note);
-                scandbhelper.fetchToDo();
-                Get.back(); // Close the dialog
-              },
-              child: const Text("Add"),
-            ),
-          ],
-        );
+        showDialogForResult(firstValue, firstResult['TITLE'], firstResult);
       } else {
         resultSearch.value = "No result";
-        Get.defaultDialog(
-          title: "Search Result",
-          content: Column(
-            children: [
-              Text("BARCODE : ${barcode}"),
-              Text("Book Not Found"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back(); // Close the dialog
-              },
-              child: const Text("Close"),
-            ),
-          ],
-        );
+        showDialogNotFound(barcode);
       }
     } else {
       print("Select DB First");
@@ -150,5 +92,115 @@ class BookController extends GetxController {
       //Database Selected
       return false;
     }
+  }
+
+  Future<void> showDialogForResult(
+      String bookName, String barcode, Map<String, dynamic> firstResult) async {
+    Get.defaultDialog(
+      title: "Book Found!!!",
+      content: Text("Book Name : $bookName"),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            Get.back(); // Close the dialog
+          },
+          child: const Text("Cancel"),
+        ),
+        const SizedBox(
+          width: 50,
+        ),
+        TextButton(
+          onPressed: () async {
+            Checkedbook checkedbook = Checkedbook(
+                firstResult['BARCODE'],
+                firstResult['CALLNO'],
+                firstResult['TITLE'],
+                firstResult['COLLECTIONNAME'],
+                firstResult['ITEMSTATUSNAME'],
+                firstResult['COLLECTIONID'],
+                "Y",
+                userController.currentUser.value,
+                "");
+            scandbhelper.addData(
+                checkedbook.barcode,
+                checkedbook.callNo,
+                checkedbook.title,
+                checkedbook.collectionName,
+                checkedbook.itemStatusName,
+                checkedbook.collectionId,
+                checkedbook.found,
+                checkedbook.recorder,
+                checkedbook.note);
+            scandbhelper.fetchToDo();
+            Get.back(); // Close the dialog
+          },
+          child: const Text("Add"),
+        ),
+      ],
+    );
+  }
+
+  Future<void> showDialogNotFound(String barcode) async {
+    TextEditingController titleController = TextEditingController();
+    TextEditingController collectionIdController = TextEditingController();
+    TextEditingController noteController = TextEditingController();
+    Get.defaultDialog(
+      title: "Book Not Found!!!",
+      content: Column(
+        children: [
+          Text("BARCODE : $barcode"),
+          SizedBox(height: 10),
+          Text("Enter Book Information:"),
+          TextField(
+            controller: titleController,
+            decoration: InputDecoration(labelText: 'Title'),
+          ),
+          TextField(
+            controller: collectionIdController,
+            decoration: InputDecoration(labelText: 'Collection ID'),
+          ),
+          TextField(
+            controller: noteController,
+            decoration: InputDecoration(labelText: 'Note'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            Get.back(); // Close the dialog
+          },
+          child: const Text("Cancel"),
+        ),
+        const SizedBox(width: 50),
+        TextButton(
+          onPressed: () async {
+            Checkedbook checkedbook = Checkedbook(
+                barcode,
+                "",
+                titleController.text,
+                "",
+                "",
+                int.parse(collectionIdController.text),
+                "N",
+                userController.currentUser.value,
+                "");
+            scandbhelper.addData(
+                checkedbook.barcode,
+                checkedbook.callNo,
+                checkedbook.title,
+                checkedbook.collectionName,
+                checkedbook.itemStatusName,
+                checkedbook.collectionId,
+                checkedbook.found,
+                checkedbook.recorder,
+                checkedbook.note);
+            scandbhelper.fetchToDo();
+            Get.back(); // Close the dialog
+          },
+          child: const Text("Add"),
+        ),
+      ],
+    );
   }
 }
