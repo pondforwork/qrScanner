@@ -159,10 +159,10 @@ class scanDBhelper extends GetxController {
       final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(
-          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found');
+          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Note');
       for (Checkedbook item in todo) {
         sink.writeln(
-          '"${item.barcode}","${item.callNo}","${item.title}","${item.collectionName}","${item.itemStatusName}","${item.collectionId}","${item.found}"',
+          '"${item.barcode}","${item.callNo}","${item.title}","${item.collectionName}","${item.itemStatusName}","${item.collectionId}","${item.found}","${item.recorder}","${item.note}"',
         );
       }
       await sink.flush();
