@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
-import 'package:qr_scan/screen/mainview.dart';
+
+
+import 'scanview.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -40,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
                     // signInWithGoogle();
                     // await loginEmailAndPassword();
                     await usercontroller.signInWithGoogle();
-                    Get.offAll(() => MainView());
+                    Get.offAll(() => Scanview());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,

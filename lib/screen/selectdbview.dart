@@ -41,17 +41,6 @@ class SelectDBview extends StatelessWidget {
                   child: const Text("SELECT DB"),
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                          final downloadsDirectory = await getDownloadsDirectory();
-                          var path = downloadsDirectory?.path;
-                          print(path);
-                          OpenFile.open('${path}/TestExport.csv');
-                         //await OpenFile.open("${downloadsDirectory?.path}");
-
-                  },
-                  child: const Text("OpenFolder"),
-                ),
             ],
           ),
         ),

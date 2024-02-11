@@ -7,35 +7,58 @@ class UserController extends GetxController {
   RxString currentUser = ''.obs;
   @override
   Future<void> onInit() async {
-
- 
     super.onInit();
   }
 
   Future<User?> signInWithGoogle() async {
-    // Initialize the GoogleSignIn
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    try {
+      // Initialize the GoogleSignIn
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+      // If the user cancels the sign-in, googleUser will be null
+      if (googleUser == null) {
+        print("Google sign-in canceled");
+        return null;
+      }
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    // Sign in to Firebase with the Google [UserCredential]
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    print("User signed in: ${userCredential.user?.displayName}");
-    currentUser.value = userCredential.user!.displayName!;
-    print(currentUser.value);
-    // Return the user
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    return userCredential.user;
+      // Sign in to Firebase with the Google [UserCredential]
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      print("User signed in: ${userCredential.user?.displayName}");
+      currentUser.value = userCredential.user!.displayName!;
+      print(currentUser.value);
+
+      // Return the user
+      return userCredential.user;
+    } catch (error) {
+      // Handle specific errors or log the general error
+      print("Error signing in with Google: $error");
+
+      // You can handle different types of errors here if needed
+      // For example, you might want to differentiate between login failure and cancellation
+      if (error is FirebaseAuthException) {
+        if (error.code == 'user-not-found') {
+          // Handle the case where the user is not found
+        } else if (error.code == 'wrong-password') {
+          // Handle the case where the password is incorrect
+        }
+      }
+
+      // Return null or handle the error in an appropriate way
+      return null;
+    }
   }
 
   Future<void> signOut() async {
@@ -65,10 +88,10 @@ class UserController extends GetxController {
   //   }
   // }
 
-  userloggedIn(){
-    if(currentUser.value == ""){
+  userloggedIn() {
+    if (currentUser.value == "") {
       return false;
-    }else{
+    } else {
       return true;
     }
   }

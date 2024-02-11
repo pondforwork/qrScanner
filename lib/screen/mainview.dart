@@ -28,7 +28,7 @@ class MainView extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => DropdownPage());
+          Get.to(() => Scanview());
         },
         child: Icon(Icons.qr_code,),
       ),

@@ -5,7 +5,7 @@ import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 import 'package:qr_scan/screen/navbar.dart';
 
-class DropdownPage extends StatelessWidget {
+class Scanview extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final TextEditingController textEditingController = TextEditingController();
   final BookController bookController = Get.put(BookController());
