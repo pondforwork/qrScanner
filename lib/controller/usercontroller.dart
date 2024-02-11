@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:qr_scan/screen/mainview.dart';
 
 class UserController extends GetxController {
-  RxString currentUser = ''.obs;
+  RxString currentUser = 'Guest'.obs;
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -68,7 +68,7 @@ class UserController extends GetxController {
     try {
       await googleSignIn.signOut(); // Sign out from Google
       await FirebaseAuth.instance.signOut(); // Sign out from Firebase
-      currentUser.value = ""; // Reset the current user value
+      currentUser.value = "Guest"; // Reset the current user value
     } catch (e) {
       print("Error signing out: $e");
     }

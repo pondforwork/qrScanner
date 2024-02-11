@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/screen/historyview.dart';
 import 'package:qr_scan/screen/loginview.dart';
+import 'package:qr_scan/screen/scanview.dart';
 import 'package:qr_scan/screen/selectdbview.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -29,7 +30,7 @@ class MyDrawer extends StatelessWidget {
                       children: [
                         Obx(() {
                           // Use Obx to listen to changes in userController.currentUser
-                          if (userController.currentUser.value == "") {
+                          if (userController.currentUser.value == "Guest") {
                             return Column(
                               children: [
                                 const Text(
@@ -63,7 +64,7 @@ class MyDrawer extends StatelessWidget {
                             return Column(
                               children: [
                                 const Text(
-                                  'Welcome, User!',
+                                  'Welcome',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -102,7 +103,8 @@ class MyDrawer extends StatelessWidget {
                 ListTile(
                   title: Text('Logout'),
                   onTap: () {
-                    Get.to(() => HistoryView());
+                    userController.signOut();
+                    Get.offAll(Scanview());
                   },
                 ),
               ],

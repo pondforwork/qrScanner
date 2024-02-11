@@ -100,47 +100,59 @@ class BookController extends GetxController {
       title: "Book Found!!!",
       content: Text("Book Name : $bookName"),
       actions: [
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+        SizedBox(
+          width: 100,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+            ),
+            onPressed: () async {
+              Get.back(); // Close the dialog
+            },
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-          onPressed: () async {
-            Get.back(); // Close the dialog
-          },
-          child: const Text("Cancel"),
         ),
         const SizedBox(
           width: 50,
         ),
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+        SizedBox(
+          width: 100,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+            onPressed: () async {
+              Checkedbook checkedbook = Checkedbook(
+                  firstResult['BARCODE'],
+                  firstResult['CALLNO'],
+                  firstResult['TITLE'],
+                  firstResult['COLLECTIONNAME'],
+                  firstResult['ITEMSTATUSNAME'],
+                  firstResult['COLLECTIONID'],
+                  "Y",
+                  userController.currentUser.value,
+                  "");
+              scandbhelper.addData(
+                  checkedbook.barcode,
+                  checkedbook.callNo,
+                  checkedbook.title,
+                  checkedbook.collectionName,
+                  checkedbook.itemStatusName,
+                  checkedbook.collectionId,
+                  checkedbook.found,
+                  checkedbook.recorder,
+                  checkedbook.note);
+              scandbhelper.fetchToDo();
+              Get.back(); // Close the dialog
+            },
+            child: const Text(
+              "Add",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-          onPressed: () async {
-            Checkedbook checkedbook = Checkedbook(
-                firstResult['BARCODE'],
-                firstResult['CALLNO'],
-                firstResult['TITLE'],
-                firstResult['COLLECTIONNAME'],
-                firstResult['ITEMSTATUSNAME'],
-                firstResult['COLLECTIONID'],
-                "Y",
-                userController.currentUser.value,
-                "");
-            scandbhelper.addData(
-                checkedbook.barcode,
-                checkedbook.callNo,
-                checkedbook.title,
-                checkedbook.collectionName,
-                checkedbook.itemStatusName,
-                checkedbook.collectionId,
-                checkedbook.found,
-                checkedbook.recorder,
-                checkedbook.note);
-            scandbhelper.fetchToDo();
-            Get.back(); // Close the dialog
-          },
-          child: const Text("Add"),
         ),
       ],
     );

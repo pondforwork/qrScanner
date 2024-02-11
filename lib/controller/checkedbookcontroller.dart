@@ -49,20 +49,19 @@ class scanDBhelper extends GetxController {
 
       for (dynamic value in values) {
         allData.add(Checkedbook(
-          value['barcode'],
-          value['callNo'],
-          value['title'],
-          value['collectionName'],
-          value['itemStatusName'],
-          value['collectionId'],
-          value['found'],
-          value['recorder'],
-          value['note']
-        ));
+            value['barcode'],
+            value['callNo'],
+            value['title'],
+            value['collectionName'],
+            value['itemStatusName'],
+            value['collectionId'],
+            value['found'],
+            value['recorder'],
+            value['note']));
       }
-      print(allData);
+
       // Sort the list by the "order" property
-      allData.sort((a, b) => a.barcode.compareTo(b.barcode));
+      // allData.sort((a, b) => a.barcode.compareTo(b.barcode));
       todo.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
