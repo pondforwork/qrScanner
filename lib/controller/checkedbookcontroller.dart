@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 //import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -156,22 +157,33 @@ class scanDBhelper extends GetxController {
   Future<void> exportToCSV() async {
     try {
       final downloadsDirectory = await getDownloadsDirectory();
-      final docDirectory = await getApplicationDocumentsDirectory();
-
       final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(
           'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Note,CheckTime');
+
       for (Checkedbook item in todo) {
+        String formattedDate =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
+
+        // Escape quotes in the title and note
+        String escapedTitle = item.title?.replaceAll('"', '""') ?? '';
+        //String escapedNote = item.note?.replaceAll('"', '""') ?? '';
+
+        // Check if recorder is not an empty string before including DateTime in the note
+        // String noteValue =
+        //     item.recorder.isNotEmpty ? formattedDate : escapedNote;
+
         sink.writeln(
-          '"${item.barcode}","${item.callNo}","${item.title}","${item.collectionName}","${item.itemStatusName}","${item.collectionId}","${item.found}","${item.recorder}","${item.note}","${item.checktime}"',
+          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.recorder ?? ''}","${item.note}","$formattedDate"',
         );
       }
+
       await sink.flush();
       await sink.close();
-      print('Data exported to CSV file: ${file.path}');
-      print('${downloadsDirectory.path}/TestExport.csv');
-      //OpenFile.open('${downloadsDirectory.path}');
+
+      // print('Data exported to CSV file: ${file.path}');
+      // print('${downloadsDirectory.path}/TestExport.csv');
       OpenFile.open('${downloadsDirectory.path}/TestExport.csv');
     } catch (error) {
       print('Error exporting data to CSV: $error');

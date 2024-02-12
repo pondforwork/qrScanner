@@ -95,7 +95,12 @@ class HistoryView extends StatelessWidget {
                                   ),
                                   ListTile(
                                     title: Text(
-                                      'วันเวลา : ${controller.todo[index].checktime}',
+                                      'วันเวลา : ${controller.todo[index].checktime.day.toString().padLeft(2, '0')}'
+                                      '/${controller.todo[index].checktime.month.toString().padLeft(2, '0')}'
+                                      '/${controller.todo[index].checktime.year} '
+                                      '${controller.todo[index].checktime.hour.toString().padLeft(2, '0')}'
+                                      ':${controller.todo[index].checktime.minute.toString().padLeft(2, '0')}'
+                                      ':${controller.todo[index].checktime.second.toString().padLeft(2, '0')}',
                                     ),
                                   ),
                                 ],

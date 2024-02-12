@@ -242,7 +242,7 @@ class BookController extends GetxController {
 // No need to subtract milliseconds from seconds as they are integers already
 
               var dateWithoutMilliseconds =
-                  DateTime(now.year, now.month, now.day, minutes, seconds);
+                  DateTime(now.year, now.month, now.day, minutes, seconds,0);
               print(dateWithoutMilliseconds);
 
               Checkedbook checkedbook = Checkedbook(
