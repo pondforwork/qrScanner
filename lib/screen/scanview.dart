@@ -15,7 +15,7 @@ class Scanview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scanning Page'),
+        title: const Text('Scanning Page'),
       ),
       drawer: MyDrawer(), // Add the drawer here
       body: Container(
@@ -23,7 +23,7 @@ class Scanview extends StatelessWidget {
           children: [
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(5.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -31,7 +31,7 @@ class Scanview extends StatelessWidget {
                       color: Color.fromARGB(255, 255, 249, 171),
                       child: Container(
                         width: 500,
-                        height: 370,
+                        height: 330,
                         padding: EdgeInsets.all(16.0),
                         child: Column(
                           children: [
@@ -43,12 +43,10 @@ class Scanview extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
-                            const SizedBox(
-                              height: 35,
-                            ),
+                          
                             Obx(
                               () => bookController.isLoading.value
-                                  ? Row(
+                                  ? const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
