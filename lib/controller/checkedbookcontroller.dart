@@ -7,6 +7,7 @@ import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
+import 'package:share_plus/share_plus.dart';
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
@@ -63,7 +64,7 @@ class scanDBhelper extends GetxController {
       }
 
       // Sort the list by the "order" property
-      // allData.sort((a, b) => a.barcode.compareTo(b.barcode));
+      allData.sort((a, b) => b.checktime.compareTo(a.checktime));
       todo.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
@@ -184,7 +185,9 @@ class scanDBhelper extends GetxController {
 
       // print('Data exported to CSV file: ${file.path}');
       // print('${downloadsDirectory.path}/TestExport.csv');
-      OpenFile.open('${downloadsDirectory.path}/TestExport.csv');
+      //OpenFile.open('${downloadsDirectory.path}/TestExport.csv');
+      Share.shareFiles(['${downloadsDirectory.path}/TestExport.csv'],
+          text: 'Check out the exported CSV file:');
     } catch (error) {
       print('Error exporting data to CSV: $error');
     }
