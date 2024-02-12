@@ -97,6 +97,7 @@ class MyDrawer extends StatelessWidget {
                   title: Text('History and Export'),
                   onTap: () {
                     Get.to(() => HistoryView());
+                    
                   },
                 ),
                 Divider(),

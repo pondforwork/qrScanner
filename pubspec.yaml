@@ -28,6 +28,7 @@ dependencies:
   firebase_core: ^2.24.2
   google_sign_in: ^6.2.1
   open_file: ^3.3.2
+  intl: ^0.19.0
  
 
   

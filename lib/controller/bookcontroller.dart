@@ -9,6 +9,7 @@ import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:intl/intl.dart';
 
 class BookController extends GetxController {
   Database? _database;
@@ -103,7 +104,9 @@ class BookController extends GetxController {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Book Name : $bookName"),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Text("Collection Id :  $colId")
         ],
       ),
@@ -133,6 +136,8 @@ class BookController extends GetxController {
               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             ),
             onPressed: () async {
+              DateTime checktime = DateTime.now();
+
               Checkedbook checkedbook = Checkedbook(
                   firstResult['BARCODE'],
                   firstResult['CALLNO'],
@@ -142,7 +147,8 @@ class BookController extends GetxController {
                   firstResult['COLLECTIONID'],
                   "Y",
                   userController.currentUser.value,
-                  "");
+                  "",
+                  checktime);
               scandbhelper.addData(
                   checkedbook.barcode,
                   checkedbook.callNo,
@@ -152,7 +158,8 @@ class BookController extends GetxController {
                   checkedbook.collectionId,
                   checkedbook.found,
                   checkedbook.recorder,
-                  checkedbook.note);
+                  checkedbook.note,
+                  checkedbook.checktime);
               scandbhelper.fetchToDo();
               Get.back(); // Close the dialog
             },
@@ -229,28 +236,37 @@ class BookController extends GetxController {
             );
 
             if (confirmAdd == true) {
+              var now = DateTime.now().toLocal();
+              var minutes = now.minute;
+              var seconds = now.second;
+// No need to subtract milliseconds from seconds as they are integers already
+
+              var dateWithoutMilliseconds =
+                  DateTime(now.year, now.month, now.day, minutes, seconds);
+              print(dateWithoutMilliseconds);
+
               Checkedbook checkedbook = Checkedbook(
-                barcode,
-                "",
-                titleController.text,
-                "",
-                "",
-                int.parse(collectionIdController.text),
-                "N",
-                userController.currentUser.value,
-                noteController.text,
-              );
+                  barcode,
+                  "",
+                  titleController.text,
+                  "",
+                  "",
+                  int.parse(collectionIdController.text),
+                  "N",
+                  userController.currentUser.value,
+                  noteController.text,
+                  dateWithoutMilliseconds);
               scandbhelper.addData(
-                checkedbook.barcode,
-                checkedbook.callNo,
-                checkedbook.title,
-                checkedbook.collectionName,
-                checkedbook.itemStatusName,
-                checkedbook.collectionId,
-                checkedbook.found,
-                checkedbook.recorder,
-                checkedbook.note,
-              );
+                  checkedbook.barcode,
+                  checkedbook.callNo,
+                  checkedbook.title,
+                  checkedbook.collectionName,
+                  checkedbook.itemStatusName,
+                  checkedbook.collectionId,
+                  checkedbook.found,
+                  checkedbook.recorder,
+                  checkedbook.note,
+                  checkedbook.checktime);
               scandbhelper.fetchToDo();
             }
           },

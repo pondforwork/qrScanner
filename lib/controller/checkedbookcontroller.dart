@@ -57,7 +57,8 @@ class scanDBhelper extends GetxController {
             value['collectionId'],
             value['found'],
             value['recorder'],
-            value['note']));
+            value['note'],
+            value['checktime']));
       }
 
       // Sort the list by the "order" property
@@ -114,7 +115,8 @@ class scanDBhelper extends GetxController {
       int collectionId,
       String found,
       String recorder,
-      String note) async {
+      String note,
+      DateTime checktime) async {
     var data = Hive.box('data');
     data.put(barcode, {
       'barcode': barcode,
@@ -126,6 +128,7 @@ class scanDBhelper extends GetxController {
       'found': found,
       'recorder': recorder,
       'note': note,
+      'checktime': checktime
     });
     fetchToDo();
   }
@@ -158,10 +161,10 @@ class scanDBhelper extends GetxController {
       final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(
-          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Note');
+          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Note,CheckTime');
       for (Checkedbook item in todo) {
         sink.writeln(
-          '"${item.barcode}","${item.callNo}","${item.title}","${item.collectionName}","${item.itemStatusName}","${item.collectionId}","${item.found}","${item.recorder}","${item.note}"',
+          '"${item.barcode}","${item.callNo}","${item.title}","${item.collectionName}","${item.itemStatusName}","${item.collectionId}","${item.found}","${item.recorder}","${item.note}","${item.checktime}"',
         );
       }
       await sink.flush();

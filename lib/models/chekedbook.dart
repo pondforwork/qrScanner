@@ -8,7 +8,8 @@ class Checkedbook {
   late String found;
   late String recorder;
   late String note;
+  late DateTime checktime;
 
   Checkedbook(this.barcode, this.callNo, this.title, this.collectionName,
-      this.itemStatusName, this.collectionId, this.found,this.recorder,this.note);
+      this.itemStatusName, this.collectionId, this.found,this.recorder,this.note,this.checktime);
 }

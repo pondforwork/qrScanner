@@ -93,6 +93,11 @@ class HistoryView extends StatelessWidget {
                                       'หมายเหตุ : ${controller.todo[index].note}',
                                     ),
                                   ),
+                                  ListTile(
+                                    title: Text(
+                                      'วันเวลา : ${controller.todo[index].checktime}',
+                                    ),
+                                  ),
                                 ],
                               ),
                               const Icon(Icons.more_horiz),
