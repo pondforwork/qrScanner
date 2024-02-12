@@ -236,14 +236,7 @@ class BookController extends GetxController {
             );
 
             if (confirmAdd == true) {
-              var now = DateTime.now().toLocal();
-              var minutes = now.minute;
-              var seconds = now.second;
-// No need to subtract milliseconds from seconds as they are integers already
-
-              var dateWithoutMilliseconds =
-                  DateTime(now.year, now.month, now.day, minutes, seconds,0);
-              print(dateWithoutMilliseconds);
+              DateTime checktime = DateTime.now();
 
               Checkedbook checkedbook = Checkedbook(
                   barcode,
@@ -255,7 +248,7 @@ class BookController extends GetxController {
                   "N",
                   userController.currentUser.value,
                   noteController.text,
-                  dateWithoutMilliseconds);
+                  checktime);
               scandbhelper.addData(
                   checkedbook.barcode,
                   checkedbook.callNo,
