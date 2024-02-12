@@ -97,17 +97,24 @@ class MyDrawer extends StatelessWidget {
                   title: Text('History and Export'),
                   onTap: () {
                     Get.to(() => HistoryView());
-                    
                   },
                 ),
-                Divider(),
-                ListTile(
-                  title: Text('Logout'),
-                  onTap: () {
-                    userController.signOut();
-                    Get.offAll(Scanview());
-                  },
-                ),
+                const Divider(),
+                Obx(() {
+                  // Use Obx to listen to changes in userController.currentUser
+                  if (userController.currentUser.value != "Guest") {
+                    return ListTile(
+                      title: Text('Logout'),
+                      onTap: () {
+                        userController.signOut();
+                        Get.offAll(Scanview());
+                      },
+                    );
+                  } else {
+                    // You may want to add additional logic or message handling for the "Guest" case
+                    return Container(); // or return null; depending on your preference
+                  }
+                }),
               ],
             ),
           ),
