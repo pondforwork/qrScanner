@@ -31,7 +31,7 @@ class Scanview extends StatelessWidget {
                       color: Color.fromARGB(255, 255, 249, 171),
                       child: Container(
                         width: 500,
-                        height: 330,
+                        height: 270,
                         padding: EdgeInsets.all(16.0),
                         child: Column(
                           children: [
@@ -67,11 +67,9 @@ class Scanview extends StatelessWidget {
                                       'Scan Barcode or InsertBarcode NO. Here'),
                             ),
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
+                            
                             ElevatedButton(
                               onPressed: () {
                                 if (textEditingController.text.isNotEmpty &&
@@ -122,7 +120,7 @@ class Scanview extends StatelessWidget {
                   } else {
                     // Display the ListView.builder when there are books checked
                     return ListView.builder(
-                      itemCount: controller.todo.length,
+                      itemCount: 5,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
