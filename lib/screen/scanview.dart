@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
@@ -120,7 +122,7 @@ class Scanview extends StatelessWidget {
                   } else {
                     // Display the ListView.builder when there are books checked
                     return ListView.builder(
-                      itemCount: 5,
+                     itemCount: min(5, controller.todo.length),
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
