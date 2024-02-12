@@ -96,9 +96,17 @@ class BookController extends GetxController {
 
   Future<void> showDialogForResult(
       String bookName, String barcode, Map<String, dynamic> firstResult) async {
+    String colId = firstResult['COLLECTIONID'].toString();
     Get.defaultDialog(
       title: "Book Found!!!",
-      content: Text("Book Name : $bookName"),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Book Name : $bookName"),
+          const SizedBox(height: 20,),
+          Text("Collection Id :  $colId")
+        ],
+      ),
       actions: [
         SizedBox(
           width: 100,
