@@ -139,12 +139,12 @@ class BookController extends GetxController {
               DateTime checktime = DateTime.now();
 
               Checkedbook checkedbook = Checkedbook(
-                  firstResult['BARCODE'],
-                  firstResult['CALLNO'],
-                  firstResult['TITLE'],
-                  firstResult['COLLECTIONNAME'],
-                  firstResult['ITEMSTATUSNAME'],
-                  firstResult['COLLECTIONID'],
+                  firstResult['BARCODE'] ?? "",
+                  firstResult['CALLNO'] ?? "",
+                  firstResult['TITLE'] ?? "",
+                  firstResult['COLLECTIONNAME'] ?? "",
+                  firstResult['ITEMSTATUSNAME'] ?? "",
+                  firstResult['COLLECTIONID'] ?? "",
                   "Y",
                   userController.currentUser.value,
                   "",

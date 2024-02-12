@@ -18,85 +18,140 @@ class Scanview extends StatelessWidget {
         title: Text('Scanning Page'),
       ),
       drawer: MyDrawer(), // Add the drawer here
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                color: Color.fromARGB(255, 255, 249, 171),
-                child: Container(
-                  width: 500,
-                  height: 370,
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Scan Result",
-                        style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+      body: Container(
+        child: Column(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Card(
+                      color: Color.fromARGB(255, 255, 249, 171),
+                      child: Container(
+                        width: 500,
+                        height: 370,
+                        padding: EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Scan Result",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const SizedBox(
+                              height: 35,
+                            ),
+                            Obx(
+                              () => bookController.isLoading.value
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircularProgressIndicator(),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text("Searching")
+                                      ],
+                                    )
+                                  : Text(bookController.resultSearch.value),
+                            ),
+                            const SizedBox(height: 40),
+                            TextField(
+                              controller: textEditingController,
+                              decoration: const InputDecoration(
+                                  labelText:
+                                      'Scan Barcode or InsertBarcode NO. Here'),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (textEditingController.text.isNotEmpty &&
+                                    bookController.checkdbAvial() == true) {
+                                  bookController.findFromBarcode(
+                                      textEditingController.text);
+                                } else if (textEditingController
+                                        .text.isNotEmpty &&
+                                    bookController.checkdbAvial() == false) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Please Add DB"),
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                } else if (textEditingController.text.isEmpty &&
+                                    bookController.checkdbAvial() == false) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Please Add DB"),
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text('Search'),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                      Obx(
-                        () => bookController.isLoading.value
-                            ? Row(mainAxisAlignment: MainAxisAlignment.center,
-                              children: [CircularProgressIndicator() ,SizedBox(width: 20,),Text("Searching")],)
-                            : Text(bookController.resultSearch
-                                .value), 
-                      ),
-                      const SizedBox(height: 40),
-                      TextField(
-                        controller: textEditingController,
-                        decoration: const InputDecoration(
-                            labelText:
-                                'Scan Barcode or InsertBarcode NO. Here'),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (textEditingController.text.isNotEmpty &&
-                              bookController.checkdbAvial() == true) {
-                            bookController
-                                .findFromBarcode(textEditingController.text);
-                          } else if (textEditingController.text.isNotEmpty &&
-                              bookController.checkdbAvial() == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please Add DB"),
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
-                          } else if (textEditingController.text.isEmpty &&
-                              bookController.checkdbAvial() == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please Add DB"),
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                          
-                        },
-                        child: const Text('Search'),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+            Expanded(
+              child: GetX<scanDBhelper>(
+                builder: (controller) {
+                  if (controller.todo.length == 0) {
+                    // Display a message when no books are checked
+                    return Center(
+                      child: Text(
+                        'No books checked.',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else {
+                    // Display the ListView.builder when there are books checked
+                    return ListView.builder(
+                      itemCount: controller.todo.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(
+                            controller.todo[index].title.length <= 50
+                                ? controller.todo[index].title
+                                : '${controller.todo[index].title.substring(0, 50)}...',
+                          ),
+                          subtitle: Text(controller.todo[index].barcode),
+                          trailing: controller.todo[index].found == "Y"
+                              ? Image.asset(
+                                  'assets/images/correct.png',
+                                  width: 50,
+                                  height: 50,
+                                )
+                              : Image.asset(
+                                  'assets/images/incorrect.png',
+                                  width: 50,
+                                  height: 50,
+                                ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
