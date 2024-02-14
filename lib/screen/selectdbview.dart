@@ -30,8 +30,27 @@ class SelectDBview extends StatelessWidget {
                 style: TextStyle(fontSize: 25),
               ),
               const SizedBox(height: 50),
+              Obx(() {
+                if (bookController.isDownloadingDB.value == true) {
+                  return const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("Downloading"),
+                    ],
+                  );
+                } else {
+                  return Obx(() => Text(scandbController.currentdb.value));
+                }
+                // Other code when not downloading
+              }),
 
-              Obx(() => Text(scandbController.currentdb.value)),
+              const SizedBox(height: 50),
+
+              // Obx(() => Text(scandbController.currentdb.value)),
               const SizedBox(height: 450),
               Center(
                 child: ElevatedButton(

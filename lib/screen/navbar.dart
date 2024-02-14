@@ -88,13 +88,13 @@ class MyDrawer extends StatelessWidget {
                 ),
                 // Other list tile items
                 ListTile(
-                  title: Text('Select DB'),
+                  title: const Text('Fetch DB'),
                   onTap: () {
                     Get.to(() => SelectDBview());
                   },
                 ),
                 ListTile(
-                  title: Text('History and Export'),
+                  title: const Text('History and Export'),
                   onTap: () {
                     Get.to(() => HistoryView());
                   },

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -15,7 +16,8 @@ class BookController extends GetxController {
   Database? _database;
   RxString resultSearch = 'No Result'.obs;
   RxString resultsearchonDialog = 'No Result'.obs;
-  RxBool isLoading = false.obs; // Observable for tracking loading state
+  RxBool isLoading = false.obs;
+  RxBool isDownloadingDB = false.obs;
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
   final UserController userController = Get.put(UserController());
 
@@ -324,7 +326,7 @@ class BookController extends GetxController {
 
   downloadFile() async {
     requestStoragePermission();
-
+    isDownloadingDB.value = true;
     String downloadedFilePath = ''; // Variable to store the path
 
     await FileDownloader.downloadFile(
@@ -342,6 +344,9 @@ class BookController extends GetxController {
       },
     );
     openDatabaseConnectionWithPath(downloadedFilePath);
+    isDownloadingDB.value = false;
+        print(isDownloadingDB.value);
+
   }
 
   Future<void> requestStoragePermission() async {
