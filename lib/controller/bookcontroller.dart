@@ -5,12 +5,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:flutter_archive/flutter_archive.dart';
 
 class BookController extends GetxController {
   Database? _database;
@@ -24,6 +26,7 @@ class BookController extends GetxController {
   @override
   Future<void> onInit() async {
     await _openLocalDatabase();
+    isDownloadingDB.value = false;
     super.onInit();
   }
 
@@ -329,24 +332,41 @@ class BookController extends GetxController {
     isDownloadingDB.value = true;
     String downloadedFilePath = ''; // Variable to store the path
 
-    await FileDownloader.downloadFile(
-      url: "https://platform.buu.in.th/download/Books.db",
-      name: "Books",
-      onProgress: (String? name, double progress) {
-        print('FILE fileName HAS PROGRESS $progress');
-      },
-      onDownloadCompleted: (String path) {
-        print('FILE DOWNLOADED TO PATH: $path');
-        downloadedFilePath = path;
-      },
-      onDownloadError: (String error) {
-        print('DOWNLOAD ERROR: $error');
-      },
-    );
-    openDatabaseConnectionWithPath(downloadedFilePath);
-    isDownloadingDB.value = false;
-        print(isDownloadingDB.value);
+    if (await File("/storage/emulated/0/Download/Books.zip").exists()) {
+      File("/storage/emulated/0/Download/Books.zip").delete();
+    } else if (await File("/storage/emulated/0/Download/Books.db").exists()) {
+      File("/storage/emulated/0/Download/Books.db").delete();
+    } else {
+      await FileDownloader.downloadFile(
+        url: "https://platform.buu.in.th/downloads/BooksZip.zip",
+        name: "Books",
+        onProgress: (String? name, double progress) {
+          print('FILE fileName HAS PROGRESS $progress');
+        },
+        onDownloadCompleted: (String path) {
+          print('FILE DOWNLOADED TO PATH: $path');
+          downloadedFilePath = path;
+        },
+        onDownloadError: (String error) {
+          print('DOWNLOAD ERROR: $error');
+        },
+      );
+      final zipFile = File(downloadedFilePath);
+      final destinationDir = Directory("/storage/emulated/0/Download/");
+      try {
+        await ZipFile.extractToDirectory(
+            zipFile: zipFile, destinationDir: destinationDir);
+      } catch (e) {
+        print(e);
+      }
+      isDownloadingDB.value = false;
+      print(isDownloadingDB.value);
+      openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
+    }
 
+    // // openDatabaseConnectionWithPath(downloadedFilePath);
+
+    // // var downloadFolder = await getExternalStorageDirectories();
   }
 
   Future<void> requestStoragePermission() async {
