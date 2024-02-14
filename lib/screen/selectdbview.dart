@@ -32,14 +32,15 @@ class SelectDBview extends StatelessWidget {
               const SizedBox(height: 50),
               Obx(() {
                 if (bookController.isDownloadingDB.value == true) {
-                  return const Row(
+                  return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(),
                       SizedBox(
                         width: 20,
                       ),
-                      Text("Downloading"),
+                      Text("Downloading "),
+                      Text(bookController.loadingprogress.value + " %"),
                     ],
                   );
                 } else {

@@ -22,6 +22,7 @@ class BookController extends GetxController {
   RxBool isDownloadingDB = false.obs;
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
   final UserController userController = Get.put(UserController());
+  RxString loadingprogress = "0".obs;
 
   @override
   Future<void> onInit() async {
@@ -341,6 +342,7 @@ class BookController extends GetxController {
         url: "https://platform.buu.in.th/downloads/BooksZip.zip",
         name: "Books",
         onProgress: (String? name, double progress) {
+          loadingprogress.value = progress.toString();
           print('FILE fileName HAS PROGRESS $progress');
         },
         onDownloadCompleted: (String path) {
