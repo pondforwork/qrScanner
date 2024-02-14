@@ -54,6 +54,38 @@ class BookController extends GetxController {
     }
   }
 
+  Future<void> openDatabaseConnectionWithPath(String downloadedfilepath) async {
+    // Let the user choose a file using a file picker
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
+    // if (result != null && result.files.isNotEmpty) {
+
+    // }
+    // Need To Get File Path
+
+    //Set Current DatabaseName
+    
+    // New Database
+    var databasesPath = await getDatabasesPath();
+    var path = join(databasesPath, "localbooks.db");
+
+    try {
+      await Directory(dirname(path)).create(recursive: true);
+    } catch (_) {}
+
+    // Read data from the selected file
+    List<int> bytes = await File(downloadedfilepath).readAsBytes();
+
+    scandbhelper.currentdb.value = downloadedfilepath;
+    scandbhelper.setDBName(downloadedfilepath);
+
+
+    // Write data to localbooks.db
+    await File(path).writeAsBytes(bytes, flush: true);
+
+    // Open the database
+    await _openLocalDatabase();
+  }
+
   Future<void> _openLocalDatabase() async {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "localbooks.db");
@@ -271,39 +303,43 @@ class BookController extends GetxController {
 
   downloadFile() async {
     requestStoragePermission();
-    FileDownloader.downloadFile(
+
+    String downloadedFilePath = ''; // Variable to store the path
+
+    await FileDownloader.downloadFile(
       url: "https://platform.buu.in.th/download/Books.db",
-      name: "Download Files",
-      
+      name: "Books",
       onProgress: (String? name, double progress) {
         print('FILE fileName HAS PROGRESS $progress');
       },
       onDownloadCompleted: (String path) {
         print('FILE DOWNLOADED TO PATH: $path');
+        downloadedFilePath = path;
       },
       onDownloadError: (String error) {
         print('DOWNLOAD ERROR: $error');
       },
     );
+    openDatabaseConnectionWithPath(downloadedFilePath);
   }
 
   Future<void> requestStoragePermission() async {
-  // Check if permission is already granted
-  var status = await Permission.storage.status;
-  
-  if (status.isGranted) {
-    // Permission already granted
-    return;
-  }
+    // Check if permission is already granted
+    var status = await Permission.storage.status;
 
-  // Request storage permission
-  var result = await Permission.storage.request();
-  
-  if (result.isGranted) {
-    // Permission granted
-  } else {
-    // Permission denied
-    // You may want to handle this case or inform the user why the permission is necessary
+    if (status.isGranted) {
+      // Permission already granted
+      return;
+    }
+
+    // Request storage permission
+    var result = await Permission.storage.request();
+
+    if (result.isGranted) {
+      // Permission granted
+    } else {
+      // Permission denied
+      // You may want to handle this case or inform the user why the permission is necessary
+    }
   }
-}
 }
