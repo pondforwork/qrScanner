@@ -63,7 +63,7 @@ class BookController extends GetxController {
     // Need To Get File Path
 
     //Set Current DatabaseName
-    
+
     // New Database
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "localbooks.db");
@@ -77,7 +77,6 @@ class BookController extends GetxController {
 
     scandbhelper.currentdb.value = downloadedfilepath;
     scandbhelper.setDBName(downloadedfilepath);
-
 
     // Write data to localbooks.db
     await File(path).writeAsBytes(bytes, flush: true);
@@ -209,31 +208,47 @@ class BookController extends GetxController {
     TextEditingController titleController = TextEditingController();
     TextEditingController collectionIdController = TextEditingController();
     TextEditingController noteController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
 
     Get.defaultDialog(
       title: "Book Not Found!!!",
-      content: Column(
-        children: [
-          Text("BARCODE : $barcode"),
-          SizedBox(height: 10),
-          Text("Enter Book Information:"),
-          TextField(
-            controller: titleController,
-            decoration: InputDecoration(labelText: 'Title'),
-          ),
-          TextField(
-            controller: collectionIdController,
-            decoration: InputDecoration(labelText: 'Collection ID'),
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-          ),
-          TextField(
-            controller: noteController,
-            decoration: InputDecoration(labelText: 'Note'),
-          ),
-        ],
+      content: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Text("BARCODE : $barcode"),
+            SizedBox(height: 10),
+            Text("Enter Book Information:"),
+            TextFormField(
+              controller: titleController,
+              decoration: InputDecoration(labelText: 'Title'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a title';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: collectionIdController,
+              decoration: InputDecoration(labelText: 'Collection ID'),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a collection ID';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: noteController,
+              decoration: InputDecoration(labelText: 'Note'),
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -245,32 +260,35 @@ class BookController extends GetxController {
         const SizedBox(width: 50),
         TextButton(
           onPressed: () async {
-            Get.back(); // Close the current dialog
+            if (_formKey.currentState?.validate() ?? false) {
+              // Form is valid, proceed with the action
 
-            bool confirmAdd = await Get.defaultDialog(
-              title: "Add Missing Book?",
-              content: Text("Are you sure you want to add this book?"),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Get.back(result: false); // Cancel
-                  },
-                  child: const Text("No"),
-                ),
-                const SizedBox(width: 50),
-                TextButton(
-                  onPressed: () {
-                    Get.back(result: true); // Confirm
-                  },
-                  child: const Text("Yes"),
-                ),
-              ],
-            );
+              Get.back(); // Close the current dialog
 
-            if (confirmAdd == true) {
-              DateTime checktime = DateTime.now();
+              bool confirmAdd = await Get.defaultDialog(
+                title: "Add Missing Book?",
+                content: Text("Are you sure you want to add this book?"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back(result: false); // Cancel
+                    },
+                    child: const Text("No"),
+                  ),
+                  const SizedBox(width: 50),
+                  TextButton(
+                    onPressed: () {
+                      Get.back(result: true); // Confirm
+                    },
+                    child: const Text("Yes"),
+                  ),
+                ],
+              );
 
-              Checkedbook checkedbook = Checkedbook(
+              if (confirmAdd == true) {
+                DateTime checktime = DateTime.now();
+
+                Checkedbook checkedbook = Checkedbook(
                   barcode,
                   "",
                   titleController.text,
@@ -280,8 +298,9 @@ class BookController extends GetxController {
                   "N",
                   userController.currentUser.value,
                   noteController.text,
-                  checktime);
-              scandbhelper.addData(
+                  checktime,
+                );
+                scandbhelper.addData(
                   checkedbook.barcode,
                   checkedbook.callNo,
                   checkedbook.title,
@@ -291,8 +310,10 @@ class BookController extends GetxController {
                   checkedbook.found,
                   checkedbook.recorder,
                   checkedbook.note,
-                  checkedbook.checktime);
-              scandbhelper.fetchToDo();
+                  checkedbook.checktime,
+                );
+                scandbhelper.fetchToDo();
+              }
             }
           },
           child: const Text("Add"),
