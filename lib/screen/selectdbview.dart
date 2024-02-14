@@ -36,7 +36,8 @@ class SelectDBview extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    bookController.openDatabaseConnection();
+                    //bookController.openDatabaseConnection();
+                    bookController.downloadFile();
                   },
                   child: const Text("SELECT DB"),
                 ),

@@ -1,15 +1,15 @@
-import 'dart:typed_data';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 class BookController extends GetxController {
   Database? _database;
@@ -268,4 +268,42 @@ class BookController extends GetxController {
       ],
     );
   }
+
+  downloadFile() async {
+    requestStoragePermission();
+    FileDownloader.downloadFile(
+      url: "https://platform.buu.in.th/download/Books.db",
+      name: "Download Files",
+      
+      onProgress: (String? name, double progress) {
+        print('FILE fileName HAS PROGRESS $progress');
+      },
+      onDownloadCompleted: (String path) {
+        print('FILE DOWNLOADED TO PATH: $path');
+      },
+      onDownloadError: (String error) {
+        print('DOWNLOAD ERROR: $error');
+      },
+    );
+  }
+
+  Future<void> requestStoragePermission() async {
+  // Check if permission is already granted
+  var status = await Permission.storage.status;
+  
+  if (status.isGranted) {
+    // Permission already granted
+    return;
+  }
+
+  // Request storage permission
+  var result = await Permission.storage.request();
+  
+  if (result.isGranted) {
+    // Permission granted
+  } else {
+    // Permission denied
+    // You may want to handle this case or inform the user why the permission is necessary
+  }
+}
 }
