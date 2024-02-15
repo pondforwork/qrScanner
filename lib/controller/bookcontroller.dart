@@ -331,7 +331,7 @@ class BookController extends GetxController {
   }
 
   downloadFile() async {
-    requestStoragePermission();
+    await requestStoragePermission();
     isDownloadingDB.value = true;
     String filePathZip = "/storage/emulated/0/Download/Books.zip";
     if (await File(filePathZip).exists()) {
@@ -378,7 +378,8 @@ class BookController extends GetxController {
   }
 
   unzip() async {
-    requestStoragePermission();
+    loadingprogress.value = "Unzipping";
+    await requestStoragePermission();
     if (await File("/storage/emulated/0/Download/Books.db").exists()) {
       File("/storage/emulated/0/Download/Books.db").delete();
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
@@ -388,6 +389,7 @@ class BookController extends GetxController {
             zipFile: zipFile, destinationDir: destinationDir);
         openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
       } catch (e) {
+        loadingprogress.value = e.toString();
         print(e);
       }
       //print("$downloadDirectoryPath/Books.db");
@@ -400,6 +402,7 @@ class BookController extends GetxController {
         await ZipFile.extractToDirectory(
             zipFile: zipFile, destinationDir: destinationDir);
         openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
+        loadingprogress.value = "Fetch Success";
       } catch (e) {
         print(e);
       }
