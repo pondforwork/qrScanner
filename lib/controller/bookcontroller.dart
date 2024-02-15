@@ -333,20 +333,29 @@ class BookController extends GetxController {
   downloadFile() async {
     requestStoragePermission();
     isDownloadingDB.value = true;
-    String? downloadDirectoryPath = await getDownloadDirectoryPath();
-    print(downloadDirectoryPath);
-    String filePathZip = "$downloadDirectoryPath/Books.zip";
-
+    String filePathZip = "/storage/emulated/0/Download/Books.zip";
     if (await File(filePathZip).exists()) {
       print("BooksZip Found");
       try {
         await File(filePathZip).delete();
+        await FileDownloader.downloadFile(
+          url: "https://platform.buu.in.th/downloads/BooksZip.zip",
+          name: "Books",
+          downloadDestination: DownloadDestinations.publicDownloads,
+          onProgress: (String? name, double progress) {
+            loadingprogress.value = progress.toString();
+            print('FILE fileName HAS PROGRESS $progress');
+          },
+          onDownloadCompleted: (String path) {
+            print('FILE DOWNLOADED TO PATH: $path');
+            downloadedPath.value = path;
+          },
+          onDownloadError: (String error) {
+            print('DOWNLOAD ERROR: $error');
+          },
+        );
       } catch (e) {
         print(e);
-      }
-      if (await File("/storage/emulated/0/Download/Books.db").exists()) {
-        print("BooksDB Found");
-        //await File("/storage/emulated/0/Download/Books.db").delete();
       }
     } else {
       await FileDownloader.downloadFile(
@@ -365,60 +374,50 @@ class BookController extends GetxController {
           print('DOWNLOAD ERROR: $error');
         },
       );
-
-      // Directory destinationDir = Directory("$downloadDirectoryPath");
-      // final zipFile = File(downloadedFilePath);
-      // try {
-      //   await ZipFile.extractToDirectory(
-      //       zipFile: zipFile, destinationDir: destinationDir);
-      //   openDatabaseConnectionWithPath("$downloadDirectoryPath/Books.db");
-      // } catch (e) {
-      //   print(e);
-      // }
-      // isDownloadingDB.value = false;
-      // print(isDownloadingDB.value);
     }
-  }
-
-  getDownloadDirectory() async {
-    String? downloadDirectoryPath = await getDownloadDirectoryPath();
-    print(downloadDirectoryPath);
   }
 
   unzip() async {
-    String? downloadDirectoryPath = await getDownloadDirectoryPath();
-    print(downloadDirectoryPath);
-    Directory destinationDir = Directory("$downloadDirectoryPath");
-    final zipFile = File(downloadedPath.value);
-    try {
-      await ZipFile.extractToDirectory(
-          zipFile: zipFile, destinationDir: destinationDir);
-    } catch (e) {
-      print(e);
+    requestStoragePermission();
+    if (await File("/storage/emulated/0/Download/Books.db").exists()) {
+      File("/storage/emulated/0/Download/Books.db").delete();
+      Directory destinationDir = Directory("/storage/emulated/0/Download/");
+      final zipFile = File(downloadedPath.value);
+      try {
+        await ZipFile.extractToDirectory(
+            zipFile: zipFile, destinationDir: destinationDir);
+        openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
+      } catch (e) {
+        print(e);
+      }
+      //print("$downloadDirectoryPath/Books.db");
+      isDownloadingDB.value = false;
+      print(isDownloadingDB.value);
+    } else {
+      Directory destinationDir = Directory("/storage/emulated/0/Download/");
+      final zipFile = File(downloadedPath.value);
+      try {
+        await ZipFile.extractToDirectory(
+            zipFile: zipFile, destinationDir: destinationDir);
+        openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
+      } catch (e) {
+        print(e);
+      }
     }
-    //print("$downloadDirectoryPath/Books.db");
-    openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
-    isDownloadingDB.value = false;
-    print(isDownloadingDB.value);
   }
 
   Future<void> requestStoragePermission() async {
-    // Check if permission is already granted
     var status = await Permission.storage.status;
-
     if (status.isGranted) {
-      // Permission already granted
       return;
     }
-
-    // Request storage permission
     var result = await Permission.storage.request();
-
     if (result.isGranted) {
-      // Permission granted
-    } else {
-      // Permission denied
-      // You may want to handle this case or inform the user why the permission is necessary
-    }
+    } else {}
+  }
+
+  downloadandapplyDB() async {
+    await downloadFile();
+    await unzip();
   }
 }

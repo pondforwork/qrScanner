@@ -56,14 +56,7 @@ class SelectDBview extends StatelessWidget {
                 ),
               ),
               // const SizedBox(height: 450),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    bookController.getDownloadDirectory();
-                  },
-                  child: const Text("Get Directory"),
-                ),
-              ),
+              
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -71,6 +64,15 @@ class SelectDBview extends StatelessWidget {
                     bookController.unzip();
                   },
                   child: const Text("Unzip"),
+                ),
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    //bookController.openDatabaseConnection();
+                    bookController.downloadandapplyDB();
+                  },
+                  child: const Text("Fetch Database"),
                 ),
               ),
             ],

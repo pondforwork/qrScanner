@@ -22,7 +22,7 @@ class MyDrawer extends StatelessWidget {
                   height: 200,
                   child: DrawerHeader(
                     decoration: const BoxDecoration(
-                      color: Colors.blue,
+                      color: Colors.green,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -34,7 +34,7 @@ class MyDrawer extends StatelessWidget {
                             return Column(
                               children: [
                                 const Text(
-                                  'You Are Not Log In.',
+                                  'You are not logged in.',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
