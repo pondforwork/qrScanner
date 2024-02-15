@@ -33,6 +33,7 @@ dependencies:
   flutter_file_downloader: ^1.2.1
   permission_handler: ^11.3.0
   flutter_archive: ^6.0.0
+  downloadsfolder: ^0.1.1
  
 
   

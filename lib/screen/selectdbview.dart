@@ -46,20 +46,31 @@ class SelectDBview extends StatelessWidget {
                 } else {
                   return Obx(() => Text(scandbController.currentdb.value));
                 }
-                // Other code when not downloading
               }),
-
-              const SizedBox(height: 50),
-
-              // Obx(() => Text(scandbController.currentdb.value)),
-              const SizedBox(height: 450),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    bookController.downloadFile();
+                  },
+                  child: const Text("SELECT DB"),
+                ),
+              ),
+              // const SizedBox(height: 450),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    bookController.getDownloadDirectory();
+                  },
+                  child: const Text("Get Directory"),
+                ),
+              ),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     //bookController.openDatabaseConnection();
-                    bookController.downloadFile();
+                    bookController.unzip();
                   },
-                  child: const Text("SELECT DB"),
+                  child: const Text("Unzip"),
                 ),
               ),
             ],

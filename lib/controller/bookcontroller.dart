@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,6 +24,7 @@ class BookController extends GetxController {
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
   final UserController userController = Get.put(UserController());
   RxString loadingprogress = "0".obs;
+  RxString downloadedPath = "".obs;
 
   @override
   Future<void> onInit() async {
@@ -331,44 +333,73 @@ class BookController extends GetxController {
   downloadFile() async {
     requestStoragePermission();
     isDownloadingDB.value = true;
-    String downloadedFilePath = ''; // Variable to store the path
+    String? downloadDirectoryPath = await getDownloadDirectoryPath();
+    print(downloadDirectoryPath);
+    String filePathZip = "$downloadDirectoryPath/Books.zip";
 
-    if (await File("/storage/emulated/0/Download/Books.zip").exists()) {
-      File("/storage/emulated/0/Download/Books.zip").delete();
-    } else if (await File("/storage/emulated/0/Download/Books.db").exists()) {
-      File("/storage/emulated/0/Download/Books.db").delete();
+    if (await File(filePathZip).exists()) {
+      print("BooksZip Found");
+      try {
+        await File(filePathZip).delete();
+      } catch (e) {
+        print(e);
+      }
+      if (await File("/storage/emulated/0/Download/Books.db").exists()) {
+        print("BooksDB Found");
+        //await File("/storage/emulated/0/Download/Books.db").delete();
+      }
     } else {
       await FileDownloader.downloadFile(
         url: "https://platform.buu.in.th/downloads/BooksZip.zip",
         name: "Books",
+        downloadDestination: DownloadDestinations.publicDownloads,
         onProgress: (String? name, double progress) {
           loadingprogress.value = progress.toString();
           print('FILE fileName HAS PROGRESS $progress');
         },
         onDownloadCompleted: (String path) {
           print('FILE DOWNLOADED TO PATH: $path');
-          downloadedFilePath = path;
+          downloadedPath.value = path;
         },
         onDownloadError: (String error) {
           print('DOWNLOAD ERROR: $error');
         },
       );
-      final zipFile = File(downloadedFilePath);
-      final destinationDir = Directory("/storage/emulated/0/Download/");
-      try {
-        await ZipFile.extractToDirectory(
-            zipFile: zipFile, destinationDir: destinationDir);
-      } catch (e) {
-        print(e);
-      }
-      isDownloadingDB.value = false;
-      print(isDownloadingDB.value);
-      openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
+
+      // Directory destinationDir = Directory("$downloadDirectoryPath");
+      // final zipFile = File(downloadedFilePath);
+      // try {
+      //   await ZipFile.extractToDirectory(
+      //       zipFile: zipFile, destinationDir: destinationDir);
+      //   openDatabaseConnectionWithPath("$downloadDirectoryPath/Books.db");
+      // } catch (e) {
+      //   print(e);
+      // }
+      // isDownloadingDB.value = false;
+      // print(isDownloadingDB.value);
     }
+  }
 
-    // // openDatabaseConnectionWithPath(downloadedFilePath);
+  getDownloadDirectory() async {
+    String? downloadDirectoryPath = await getDownloadDirectoryPath();
+    print(downloadDirectoryPath);
+  }
 
-    // // var downloadFolder = await getExternalStorageDirectories();
+  unzip() async {
+    String? downloadDirectoryPath = await getDownloadDirectoryPath();
+    print(downloadDirectoryPath);
+    Directory destinationDir = Directory("$downloadDirectoryPath");
+    final zipFile = File(downloadedPath.value);
+    try {
+      await ZipFile.extractToDirectory(
+          zipFile: zipFile, destinationDir: destinationDir);
+    } catch (e) {
+      print(e);
+    }
+    //print("$downloadDirectoryPath/Books.db");
+    openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
+    isDownloadingDB.value = false;
+    print(isDownloadingDB.value);
   }
 
   Future<void> requestStoragePermission() async {
