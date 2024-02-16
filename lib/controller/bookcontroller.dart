@@ -383,7 +383,7 @@ class BookController extends GetxController {
     if (await File("/storage/emulated/0/Download/Books.db").exists()) {
       File("/storage/emulated/0/Download/Books.db").delete();
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
-      final zipFile = File(downloadedPath.value);
+      final zipFile = File("/storage/emulated/0/Download/Books.zip");
       try {
         await ZipFile.extractToDirectory(
             zipFile: zipFile, destinationDir: destinationDir);
@@ -397,7 +397,7 @@ class BookController extends GetxController {
       print(isDownloadingDB.value);
     } else {
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
-      final zipFile = File(downloadedPath.value);
+      final zipFile = File("/storage/emulated/0/Download/Books.zip");
       try {
         await ZipFile.extractToDirectory(
             zipFile: zipFile, destinationDir: destinationDir);
