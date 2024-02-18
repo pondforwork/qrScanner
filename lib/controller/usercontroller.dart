@@ -12,63 +12,48 @@ class UserController extends GetxController {
 
   Future<User?> signInWithGoogle() async {
     try {
-      // Initialize the GoogleSignIn
       final GoogleSignIn googleSignIn = GoogleSignIn();
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-      // If the user cancels the sign-in, googleUser will be null
       if (googleUser == null) {
         print("Google sign-in canceled");
         return null;
       }
-
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
-
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
-      // Sign in to Firebase with the Google [UserCredential]
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
+        print("User signed in: ${userCredential.user?.displayName}");
+        currentUser.value = userCredential.user!.displayName!;
+        print(currentUser.value);
 
-      print("User signed in: ${userCredential.user?.displayName}");
-      currentUser.value = userCredential.user!.displayName!;
-      print(currentUser.value);
-
-      // Return the user
-      return userCredential.user;
+        return userCredential.user;
+      } else {
+        print("Invalid email domain. Sign-in not allowed.");
+        await googleSignIn.signOut();
+        return null;
+      }
     } catch (error) {
-      // Handle specific errors or log the general error
       print("Error signing in with Google: $error");
-
-      // You can handle different types of errors here if needed
-      // For example, you might want to differentiate between login failure and cancellation
       if (error is FirebaseAuthException) {
         if (error.code == 'user-not-found') {
-          // Handle the case where the user is not found
-        } else if (error.code == 'wrong-password') {
-          // Handle the case where the password is incorrect
-        }
+        } else if (error.code == 'wrong-password') {}
       }
-
-      // Return null or handle the error in an appropriate way
       return null;
     }
   }
 
   Future<void> signOut() async {
-    // Initialize the GoogleSignIn
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
-      await googleSignIn.signOut(); // Sign out from Google
-      await FirebaseAuth.instance.signOut(); // Sign out from Firebase
-      currentUser.value = "Guest"; // Reset the current user value
+      await googleSignIn.signOut();
+      await FirebaseAuth.instance.signOut();
+      currentUser.value = "Guest";
     } catch (e) {
       print("Error signing out: $e");
     }
