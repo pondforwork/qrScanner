@@ -2,11 +2,9 @@ import 'dart:io';
 import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
@@ -23,8 +21,9 @@ class BookController extends GetxController {
   RxBool isDownloadingDB = false.obs;
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
   final UserController userController = Get.put(UserController());
-  RxString loadingprogress = "0".obs;
+  RxString loadingprogress = "0.0".obs;
   RxString downloadedPath = "".obs;
+  RxBool unzippingstatus = false.obs;
 
   @override
   Future<void> onInit() async {
@@ -34,61 +33,34 @@ class BookController extends GetxController {
   }
 
   Future<void> openDatabaseConnection() async {
-    // Let the user choose a file using a file picker
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null && result.files.isNotEmpty) {
-      // Selected file
       PlatformFile file = result.files.first;
-      //Set Current DatabaseName
       scandbhelper.currentdb.value = file.name;
       scandbhelper.setDBName(file.name);
-
-      // New Database
       var databasesPath = await getDatabasesPath();
       var path = join(databasesPath, "localbooks.db");
-
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
-
-      // Read data from the selected file
       List<int> bytes = await File(file.path ?? "").readAsBytes();
-
-      // Write data to localbooks.db
       await File(path).writeAsBytes(bytes, flush: true);
-
-      // Open the database
       await _openLocalDatabase();
     }
   }
 
   Future<void> openDatabaseConnectionWithPath(String downloadedfilepath) async {
-    // Let the user choose a file using a file picker
-    // FilePickerResult? result = await FilePicker.platform.pickFiles();
-    // if (result != null && result.files.isNotEmpty) {
-
-    // }
-    // Need To Get File Path
-
-    //Set Current DatabaseName
-
-    // New Database
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "localbooks.db");
 
     try {
       await Directory(dirname(path)).create(recursive: true);
     } catch (_) {}
-
-    // Read data from the selected file
     List<int> bytes = await File(downloadedfilepath).readAsBytes();
-
     scandbhelper.currentdb.value = downloadedfilepath;
     scandbhelper.setDBName(downloadedfilepath);
-
     // Write data to localbooks.db
     await File(path).writeAsBytes(bytes, flush: true);
-
     // Open the database
     await _openLocalDatabase();
   }
@@ -126,10 +98,8 @@ class BookController extends GetxController {
   bool checkdbAvial() {
     if (scandbhelper.currentdb.value != "No Database Selected") {
       //Database Selected
-      print("true");
       return true;
     } else {
-      //Database Selected
       return false;
     }
   }
@@ -157,7 +127,7 @@ class BookController extends GetxController {
               backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
             ),
             onPressed: () async {
-              Get.back(); // Close the dialog
+              Get.back();
             },
             child: const Text(
               "Cancel",
@@ -335,7 +305,6 @@ class BookController extends GetxController {
     isDownloadingDB.value = true;
     String filePathZip = "/storage/emulated/0/Download/Books.zip";
     if (await File(filePathZip).exists()) {
-      print("BooksZip Found");
       try {
         await File(filePathZip).delete();
         await FileDownloader.downloadFile(
@@ -347,12 +316,9 @@ class BookController extends GetxController {
             print('FILE fileName HAS PROGRESS $progress');
           },
           onDownloadCompleted: (String path) {
-            print('FILE DOWNLOADED TO PATH: $path');
             downloadedPath.value = path;
           },
-          onDownloadError: (String error) {
-            print('DOWNLOAD ERROR: $error');
-          },
+          onDownloadError: (String error) {},
         );
       } catch (e) {
         print(e);
@@ -367,19 +333,17 @@ class BookController extends GetxController {
           print('FILE fileName HAS PROGRESS $progress');
         },
         onDownloadCompleted: (String path) {
-          print('FILE DOWNLOADED TO PATH: $path');
           downloadedPath.value = path;
         },
-        onDownloadError: (String error) {
-          print('DOWNLOAD ERROR: $error');
-        },
+        onDownloadError: (String error) {},
       );
     }
+    isDownloadingDB.value = false;
   }
 
   unzip() async {
-    loadingprogress.value = "Unzipping";
     await requestStoragePermission();
+    unzippingstatus.value = true;
     if (await File("/storage/emulated/0/Download/Books.db").exists()) {
       File("/storage/emulated/0/Download/Books.db").delete();
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
@@ -392,7 +356,6 @@ class BookController extends GetxController {
         loadingprogress.value = e.toString();
         print(e);
       }
-      //print("$downloadDirectoryPath/Books.db");
       isDownloadingDB.value = false;
       print(isDownloadingDB.value);
     } else {
@@ -402,11 +365,11 @@ class BookController extends GetxController {
         await ZipFile.extractToDirectory(
             zipFile: zipFile, destinationDir: destinationDir);
         openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
-        loadingprogress.value = "Fetch Success";
       } catch (e) {
         print(e);
       }
     }
+    unzippingstatus.value = false;
   }
 
   Future<void> requestStoragePermission() async {

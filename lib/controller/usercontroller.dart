@@ -74,20 +74,6 @@ class UserController extends GetxController {
     }
   }
 
-  // Future<void> checkCurrent() async {
-  //   // Initialize the GoogleSignIn
-  //   final GoogleSignIn googleSignIn = GoogleSignIn();
-  //   print("User signed in: ${userCredential.user?.displayName}");
-
-  //   try {
-  //     await googleSignIn.signOut(); // Sign out from Google
-  //     await FirebaseAuth.instance.signOut(); // Sign out from Firebase
-  //     currentUser.value = ""; // Reset the current user value
-  //   } catch (e) {
-  //     print("Error signing out: $e");
-  //   }
-  // }
-
   userloggedIn() {
     if (currentUser.value == "") {
       return false;

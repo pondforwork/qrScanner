@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
@@ -17,16 +15,16 @@ class SelectDBview extends StatelessWidget {
     Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select Database"),
+        title: const Text("Fetch Database"),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 20), // Adjust the height as needed
+              const SizedBox(height: 20),
               const Text(
-                "Current Database",
+                "Database Status",
                 style: TextStyle(fontSize: 25),
               ),
               const SizedBox(height: 50),
@@ -35,41 +33,27 @@ class SelectDBview extends StatelessWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(
+                      const CircularProgressIndicator(),
+                      const SizedBox(
                         width: 20,
                       ),
-                      Text("Downloading "),
+                      const Text("Downloading "),
                       Text(bookController.loadingprogress.value + " %"),
                     ],
                   );
+                } else if (bookController.checkdbAvial() == false) {
+                  return const Text("No DB Selected");
                 } else {
-                  return Obx(() => Text(scandbController.currentdb.value));
+                  if (bookController.unzippingstatus.value == true) {
+                    return const Text("Unziping");
+                  } else {
+                    return const Text("Fetch DB Success");
+                  }
                 }
               }),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    bookController.downloadFile();
-                  },
-                  child: const Text("SELECT DB"),
-                ),
-              ),
-              // const SizedBox(height: 450),
-              
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    //bookController.openDatabaseConnection();
-                    bookController.unzip();
-                  },
-                  child: const Text("Unzip"),
-                ),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    //bookController.openDatabaseConnection();
                     bookController.downloadandapplyDB();
                   },
                   child: const Text("Fetch Database"),
@@ -79,11 +63,6 @@ class SelectDBview extends StatelessWidget {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(onPressed: () {
-      //   scannercontroller.scanBarcode();
-
-      //   // ScannerController().barcodeResult();
-      // }),
     );
   }
 }
