@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:qr_scan/screen/mainview.dart';
 
+import '../screen/scanview.dart';
+
 class UserController extends GetxController {
   RxString currentUser = 'Guest'.obs;
   @override
@@ -26,10 +28,9 @@ class UserController extends GetxController {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
-        print("User signed in: ${userCredential.user?.displayName}");
         currentUser.value = userCredential.user!.displayName!;
-        print(currentUser.value);
-
+        showSuccessSnackbar();
+        Get.offAll(() => Scanview());
         return userCredential.user;
       } else {
         print("Invalid email domain. Sign-in not allowed.");
@@ -42,6 +43,7 @@ class UserController extends GetxController {
         if (error.code == 'user-not-found') {
         } else if (error.code == 'wrong-password') {}
       }
+      showErrorSnackbar();
       return null;
     }
   }
@@ -64,5 +66,23 @@ class UserController extends GetxController {
     } else {
       return true;
     }
+  }
+
+   void showSuccessSnackbar() {
+    Get.snackbar(
+      'Success',
+      'User signed in: ${currentUser.value}',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: Duration(seconds: 3),
+    );
+  }
+
+  void showErrorSnackbar() {
+    Get.snackbar(
+      'Error',
+      'Invalid email domain. Sign-in not allowed.',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: Duration(seconds: 3),
+    );
   }
 }
