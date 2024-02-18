@@ -9,7 +9,7 @@ class Checkedbook {
   late String recorder;
   late String note;
   late DateTime checktime;
-
+  late String recorderemail;
   Checkedbook(this.barcode, this.callNo, this.title, this.collectionName,
-      this.itemStatusName, this.collectionId, this.found,this.recorder,this.note,this.checktime);
+      this.itemStatusName, this.collectionId, this.found,this.recorder,this.recorderemail,this.note,this.checktime);
 }

@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-//import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
@@ -58,11 +57,11 @@ class scanDBhelper extends GetxController {
             value['collectionId'],
             value['found'],
             value['recorder'],
+            value['recorderemail'],
             value['note'],
             value['checktime']));
       }
 
-      // Sort the list by the "order" property
       allData.sort((a, b) => b.checktime.compareTo(a.checktime));
       todo.assignAll(allData);
     } catch (error) {
@@ -116,6 +115,7 @@ class scanDBhelper extends GetxController {
       int collectionId,
       String found,
       String recorder,
+      String recorderemail,
       String note,
       DateTime checktime) async {
     var data = Hive.box('data');
@@ -128,6 +128,7 @@ class scanDBhelper extends GetxController {
       'collectionId': collectionId,
       'found': found,
       'recorder': recorder,
+      'recorderemail': recorderemail,
       'note': note,
       'checktime': checktime
     });
@@ -160,31 +161,18 @@ class scanDBhelper extends GetxController {
       final file = File('${downloadsDirectory!.path}/TestExport.csv');
       final sink = file.openWrite();
       sink.writeln(
-          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Note,CheckTime');
+          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Recorder-Email,Note,CheckTime');
 
       for (Checkedbook item in todo) {
         String formattedDate =
             DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
-
-        // Escape quotes in the title and note
         String escapedTitle = item.title?.replaceAll('"', '""') ?? '';
-        //String escapedNote = item.note?.replaceAll('"', '""') ?? '';
-
-        // Check if recorder is not an empty string before including DateTime in the note
-        // String noteValue =
-        //     item.recorder.isNotEmpty ? formattedDate : escapedNote;
-
         sink.writeln(
-          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.recorder ?? ''}","${item.note}","$formattedDate"',
+          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.recorder ?? ''}","${item.recorderemail ?? ''}","${item.note}","$formattedDate"',
         );
       }
-
       await sink.flush();
       await sink.close();
-
-      // print('Data exported to CSV file: ${file.path}');
-      // print('${downloadsDirectory.path}/TestExport.csv');
-      //OpenFile.open('${downloadsDirectory.path}/TestExport.csv');
       Share.shareFiles(['${downloadsDirectory.path}/TestExport.csv'],
           text: 'Check out the exported CSV file:');
     } catch (error) {

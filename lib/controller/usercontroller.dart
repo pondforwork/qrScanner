@@ -7,6 +7,8 @@ import '../screen/scanview.dart';
 
 class UserController extends GetxController {
   RxString currentUser = 'Guest'.obs;
+  RxString currentUserEmail = 'No-Email'.obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -29,6 +31,7 @@ class UserController extends GetxController {
           await FirebaseAuth.instance.signInWithCredential(credential);
       if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
         currentUser.value = userCredential.user!.displayName!;
+        currentUserEmail.value = userCredential.user!.email!;
         showSuccessSnackbar();
         Get.offAll(() => Scanview());
         return userCredential.user;
@@ -55,6 +58,7 @@ class UserController extends GetxController {
       await googleSignIn.signOut();
       await FirebaseAuth.instance.signOut();
       currentUser.value = "Guest";
+      currentUserEmail.value = "No-Email";
     } catch (e) {
       print("Error signing out: $e");
     }
@@ -68,7 +72,7 @@ class UserController extends GetxController {
     }
   }
 
-   void showSuccessSnackbar() {
+  void showSuccessSnackbar() {
     Get.snackbar(
       'Success',
       'User signed in: ${currentUser.value}',

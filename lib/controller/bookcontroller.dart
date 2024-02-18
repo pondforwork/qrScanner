@@ -156,6 +156,7 @@ class BookController extends GetxController {
                   firstResult['COLLECTIONID'] ?? "",
                   "Y",
                   userController.currentUser.value,
+                    userController.currentUserEmail.value,
                   "",
                   checktime);
               scandbhelper.addData(
@@ -167,6 +168,7 @@ class BookController extends GetxController {
                   checkedbook.collectionId,
                   checkedbook.found,
                   checkedbook.recorder,
+                  checkedbook.recorderemail,
                   checkedbook.note,
                   checkedbook.checktime);
               scandbhelper.fetchToDo();
@@ -275,6 +277,7 @@ class BookController extends GetxController {
                   int.parse(collectionIdController.text),
                   "N",
                   userController.currentUser.value,
+                  userController.currentUserEmail.value,
                   noteController.text,
                   checktime,
                 );
@@ -287,6 +290,7 @@ class BookController extends GetxController {
                   checkedbook.collectionId,
                   checkedbook.found,
                   checkedbook.recorder,
+                  checkedbook.recorderemail,
                   checkedbook.note,
                   checkedbook.checktime,
                 );
