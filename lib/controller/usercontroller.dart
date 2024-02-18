@@ -15,7 +15,6 @@ class UserController extends GetxController {
       final GoogleSignIn googleSignIn = GoogleSignIn();
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        print("Google sign-in canceled");
         return null;
       }
       final GoogleSignInAuthentication? googleAuth =

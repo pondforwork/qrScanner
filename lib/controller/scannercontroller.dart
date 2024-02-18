@@ -1,7 +1,6 @@
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
-import 'package:qr_scan/controller/checkedbookcontroller.dart';
 
 class ScannerController extends GetxController {
   RxString barcodeResult = "No data yet. Please Scan QR or Barcode".obs;

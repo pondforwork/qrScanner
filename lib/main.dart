@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/screen/loginview.dart';
 // import 'package:qr_scan/screen/mainview.dart';
-import 'package:qr_scan/screen/scanview.dart';
 
 import 'controller/usercontroller.dart';
 
