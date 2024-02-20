@@ -34,7 +34,7 @@ class MyDrawer extends StatelessWidget {
                             return Column(
                               children: [
                                 const Text(
-                                  'You are not logged in.',
+                                  'คุณยังไม่ได้เข้าสู่ระบบ',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -52,7 +52,7 @@ class MyDrawer extends StatelessWidget {
                                     minimumSize: Size(150, 50),
                                   ),
                                   child: const Text(
-                                    "Login",
+                                    "เข้าสู่ระบบ",
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -64,7 +64,7 @@ class MyDrawer extends StatelessWidget {
                             return Column(
                               children: [
                                 const Text(
-                                  'Welcome',
+                                  'ยินดีต้อนรับ',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -73,7 +73,7 @@ class MyDrawer extends StatelessWidget {
                                 const SizedBox(height: 20),
                                 // Display additional user information if needed
                                 Text(
-                                  'Logged in as: ${userController.currentUser.value}',
+                                  'เข้าสู่ระบบแล้วโดย : ${userController.currentUser.value}',
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
@@ -88,13 +88,13 @@ class MyDrawer extends StatelessWidget {
                 ),
                 // Other list tile items
                 ListTile(
-                  title: const Text('Fetch DB'),
+                  title: const Text('ดึงข้อมูลหนังสือ'),
                   onTap: () {
                     Get.to(() => SelectDBview());
                   },
                 ),
                 ListTile(
-                  title: const Text('History and Export'),
+                  title: const Text('ประวัติการเช็คและการส่งออกข้อมูล'),
                   onTap: () {
                     Get.to(() => HistoryView());
                   },
@@ -104,7 +104,7 @@ class MyDrawer extends StatelessWidget {
                   // Use Obx to listen to changes in userController.currentUser
                   if (userController.currentUser.value != "Guest") {
                     return ListTile(
-                      title: Text('Logout'),
+                      title: Text('ออกจากระบบ'),
                       onTap: () {
                         userController.signOut();
                         Get.offAll(Scanview());

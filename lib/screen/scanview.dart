@@ -17,9 +17,9 @@ class Scanview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scanning Page'),
+        title: const Text('เช็คหนังสือ'),
       ),
-      drawer: MyDrawer(), // Add the drawer here
+      drawer: MyDrawer(),
       body: Container(
         child: Column(
           children: [
@@ -38,14 +38,13 @@ class Scanview extends StatelessWidget {
                         child: Column(
                           children: [
                             const Text(
-                              "Scan Result",
+                              "ผลการสแกน",
                               style: TextStyle(
                                   fontSize: 25, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
-                          
                             Obx(
                               () => bookController.isLoading.value
                                   ? const Row(
@@ -66,12 +65,11 @@ class Scanview extends StatelessWidget {
                               controller: textEditingController,
                               decoration: const InputDecoration(
                                   labelText:
-                                      'Scan Barcode or InsertBarcode NO. Here'),
+                                      'สแกนบาร์โค้ดหรือกรอกหมายเลขบาร์โค้ดที่นี่'),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
-                            
                             ElevatedButton(
                               onPressed: () {
                                 if (textEditingController.text.isNotEmpty &&
@@ -83,21 +81,31 @@ class Scanview extends StatelessWidget {
                                     bookController.checkdbAvial() == false) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("Please Add DB"),
+                                      content:
+                                          Text("กรุณาดึงข้อมูลหนังสือก่อน"),
                                       duration: Duration(seconds: 3),
                                     ),
                                   );
-                                } else if (textEditingController.text.isEmpty &&
+                                } else if (textEditingController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("กรุณากรอกหมายเลขบาร์โค้ด"),
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                } else if (textEditingController
+                                        .text.isNotEmpty &&
                                     bookController.checkdbAvial() == false) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("Please Add DB"),
+                                      content:
+                                          Text("กรุณาดึงข้อมูลหนังสือก่อน"),
                                       duration: Duration(seconds: 3),
                                     ),
                                   );
                                 }
                               },
-                              child: const Text('Search'),
+                              child: const Text('ค้นหา'),
                             ),
                           ],
                         ),
@@ -122,7 +130,7 @@ class Scanview extends StatelessWidget {
                   } else {
                     // Display the ListView.builder when there are books checked
                     return ListView.builder(
-                     itemCount: min(5, controller.todo.length),
+                      itemCount: min(5, controller.todo.length),
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
