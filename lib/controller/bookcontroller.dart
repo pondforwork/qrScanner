@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:downloadsfolder/downloadsfolder.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,29 +23,13 @@ class BookController extends GetxController {
   RxString loadingprogress = "0.0".obs;
   RxString downloadedPath = "".obs;
   RxBool unzippingstatus = false.obs;
+  String filePathZip = "/storage/emulated/0/Download/Books.zip";
 
   @override
   Future<void> onInit() async {
     await _openLocalDatabase();
     isDownloadingDB.value = false;
     super.onInit();
-  }
-
-  Future<void> openDatabaseConnection() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null && result.files.isNotEmpty) {
-      PlatformFile file = result.files.first;
-      scandbhelper.currentdb.value = file.name;
-      scandbhelper.setDBName(file.name);
-      var databasesPath = await getDatabasesPath();
-      var path = join(databasesPath, "localbooks.db");
-      try {
-        await Directory(dirname(path)).create(recursive: true);
-      } catch (_) {}
-      List<int> bytes = await File(file.path ?? "").readAsBytes();
-      await File(path).writeAsBytes(bytes, flush: true);
-      await _openLocalDatabase();
-    }
   }
 
   Future<void> openDatabaseConnectionWithPath(String downloadedfilepath) async {
@@ -63,6 +46,8 @@ class BookController extends GetxController {
     await File(path).writeAsBytes(bytes, flush: true);
     // Open the database
     await _openLocalDatabase();
+    clearTempFiles();
+
   }
 
   Future<void> _openLocalDatabase() async {
@@ -156,7 +141,7 @@ class BookController extends GetxController {
                   firstResult['COLLECTIONID'] ?? "",
                   "Y",
                   userController.currentUser.value,
-                    userController.currentUserEmail.value,
+                  userController.currentUserEmail.value,
                   "",
                   checktime);
               scandbhelper.addData(
@@ -247,7 +232,7 @@ class BookController extends GetxController {
 
               bool confirmAdd = await Get.defaultDialog(
                 title: "Add Missing Book?",
-                content: Text("Are you sure you want to add this book?"),
+                content: const Text("Are you sure you want to add this book?"),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -307,7 +292,6 @@ class BookController extends GetxController {
   downloadFile() async {
     await requestStoragePermission();
     isDownloadingDB.value = true;
-    String filePathZip = "/storage/emulated/0/Download/Books.zip";
     if (await File(filePathZip).exists()) {
       try {
         await File(filePathZip).delete();
@@ -361,7 +345,6 @@ class BookController extends GetxController {
         print(e);
       }
       isDownloadingDB.value = false;
-      print(isDownloadingDB.value);
     } else {
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
       final zipFile = File("/storage/emulated/0/Download/Books.zip");
@@ -389,5 +372,10 @@ class BookController extends GetxController {
   downloadandapplyDB() async {
     await downloadFile();
     await unzip();
+  }
+
+  clearTempFiles() async {
+    await File("/storage/emulated/0/Download/Books.db").delete();
+    await File(filePathZip).delete();
   }
 }
