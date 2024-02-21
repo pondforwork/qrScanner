@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/screen/historyview.dart';
 import 'package:qr_scan/screen/loginview.dart';
+import 'package:qr_scan/screen/managehistoryview.dart';
 import 'package:qr_scan/screen/scanview.dart';
 import 'package:qr_scan/screen/selectdbview.dart';
 
@@ -97,6 +98,12 @@ class MyDrawer extends StatelessWidget {
                   title: const Text('ประวัติการเช็คและการส่งออกข้อมูล'),
                   onTap: () {
                     Get.to(() => HistoryView());
+                  },
+                ),
+                ListTile(
+                  title: const Text('จัดการประวัติการบันทึก'),
+                  onTap: () {
+                    Get.to(() => ManageHistoryView());
                   },
                 ),
                 const Divider(),

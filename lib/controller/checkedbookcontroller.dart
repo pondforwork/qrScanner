@@ -119,6 +119,7 @@ class scanDBhelper extends GetxController {
       String note,
       DateTime checktime) async {
     var data = Hive.box('data');
+    // for (int i = 9999999999998999; i < 9999999999999999; i++) {}
     data.put(barcode, {
       'barcode': barcode,
       'callNo': callNo,
@@ -151,7 +152,7 @@ class scanDBhelper extends GetxController {
     await Hive.openBox('data');
     var data = Hive.box('data');
     await data.clear();
-    fetchToDo(); // Refresh the list after clearing data
+    fetchToDo();
     print("Clear Data SUccess");
   }
 
