@@ -11,6 +11,9 @@ class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
   var todo = <Checkedbook>[].obs;
   var finishedtodo = <Checkedbook>[].obs;
+  RxInt foundqtyobs = 0.obs;
+  RxInt notfoundqtyobs = 0.obs;
+
   @override
   Future<void> onInit() async {
     await initHive();
@@ -61,12 +64,28 @@ class scanDBhelper extends GetxController {
             value['note'],
             value['checktime']));
       }
-
       allData.sort((a, b) => b.checktime.compareTo(a.checktime));
       todo.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
     }
+  }
+
+  void countFoundItems() {
+    int foundqty = 0;
+    int notfoundqty = 0;
+    for (Checkedbook item in todo) {
+      if (item.found == "Y") {
+        foundqty++;
+      } else {
+        notfoundqty++;
+      }
+    }
+    foundqtyobs.value = foundqty;
+    notfoundqtyobs.value = notfoundqty;
+    print(foundqtyobs.value);
+
+    print(notfoundqtyobs.value);
   }
 
   Future<void> setDBName(String name) async {
@@ -157,9 +176,13 @@ class scanDBhelper extends GetxController {
   }
 
   Future<void> exportToCSV() async {
+    DateTime date = DateTime.now();
+    String dateformat = DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+
+    String filename = "Export ${dateformat}";
     try {
       final downloadsDirectory = await getDownloadsDirectory();
-      final file = File('${downloadsDirectory!.path}/TestExport.csv');
+      final file = File('${downloadsDirectory!.path}/${filename}.csv');
       final sink = file.openWrite();
       sink.writeln(
           'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Recorder-Email,Note,CheckTime');
@@ -174,7 +197,7 @@ class scanDBhelper extends GetxController {
       }
       await sink.flush();
       await sink.close();
-      Share.shareFiles(['${downloadsDirectory.path}/TestExport.csv'],
+      Share.shareFiles(['${downloadsDirectory.path}/${filename}.csv'],
           text: 'Check out the exported CSV file:');
     } catch (error) {
       print('Error exporting data to CSV: $error');

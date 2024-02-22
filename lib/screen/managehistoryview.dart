@@ -10,6 +10,9 @@ class ManageHistoryView extends StatelessWidget {
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
   final TextEditingController confirmTextController = TextEditingController();
+  onInit() {
+    checkedbookcontroller.countFoundItems();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +22,57 @@ class ManageHistoryView extends StatelessWidget {
         title: const Text("จัดการประวัติการบันทึก"),
       ),
       body: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        const Expanded(
+        Expanded(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("คุณบันทึกหนังสือไปแล้ว ")],
+                  children: [
+                    Obx(
+                      () {
+                        return Text(
+                          "คุณบันทึกหนังสือไปแล้ว " +
+                              (checkedbookcontroller.foundqtyobs.value +
+                                      checkedbookcontroller
+                                          .notfoundqtyobs.value)
+                                  .toString() +
+                              " เล่ม",
+                          style: TextStyle(fontSize: 20),
+                        );
+                      },
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("จำนวนหนังสือที่พบ ")],
+                  children: [
+                    Obx(
+                      () {
+                        return Text(
+                            "จำนวนหนังสือที่พบ " +
+                                checkedbookcontroller.foundqtyobs.value
+                                    .toString() +
+                                " เล่ม",
+                            style: TextStyle(fontSize: 20));
+                      },
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("จำนวนหนังสือที่เกิน ")],
+                  children: [
+                    Obx(
+                      () {
+                        return Text(
+                            "จำนวนหนังสือที่เกิน " +
+                                checkedbookcontroller.notfoundqtyobs.value
+                                    .toString() +
+                                " เล่ม",
+                            style: TextStyle(fontSize: 20));
+                      },
+                    )
+                  ],
                 )
               ]),
         ),
@@ -52,7 +91,9 @@ class ManageHistoryView extends StatelessWidget {
                       textStyle: const TextStyle(
                           fontSize: 15, fontStyle: FontStyle.normal),
                       backgroundColor: Colors.green),
-                  onPressed: () {},
+                  onPressed: () {
+                    checkedbookcontroller.exportToCSV();
+                  },
                 ),
               ],
             ),
