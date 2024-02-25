@@ -15,7 +15,7 @@ class SelectDBview extends StatelessWidget {
     Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Fetch Database"),
+        title: const Text("ดึงข้อมูลหนังสือ"),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -24,10 +24,10 @@ class SelectDBview extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               const Text(
-                "Database Status",
+                "สถานะฐานข้อมูลหนังสือ",
                 style: TextStyle(fontSize: 25),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 150),
               Obx(() {
                 if (bookController.isDownloadingDB.value == true) {
                   return Row(
@@ -51,12 +51,15 @@ class SelectDBview extends StatelessWidget {
                   }
                 }
               }),
+              SizedBox(
+                height: 150,
+              ),
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
                     await bookController.downloadandapplyDB();
                   },
-                  child: const Text("Fetch Database"),
+                  child: const Text("ดึงข้อมูลหนังสือ"),
                 ),
               ),
             ],

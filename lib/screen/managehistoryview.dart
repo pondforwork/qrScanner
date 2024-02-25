@@ -10,9 +10,6 @@ class ManageHistoryView extends StatelessWidget {
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
   final TextEditingController confirmTextController = TextEditingController();
-  onInit() {
-    checkedbookcontroller.countFoundItems();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +89,8 @@ class ManageHistoryView extends StatelessWidget {
                           fontSize: 15, fontStyle: FontStyle.normal),
                       backgroundColor: Colors.green),
                   onPressed: () {
-                    checkedbookcontroller.exportToCSV();
+                    // checkedbookcontroller.exportToCSV();
+                    checkedbookcontroller.countFoundItems();
                   },
                 ),
               ],

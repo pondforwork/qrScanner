@@ -19,6 +19,7 @@ class scanDBhelper extends GetxController {
     await initHive();
     await fetchToDo();
     await getDBName();
+    countFoundItems();
 
     super.onInit();
   }

@@ -14,7 +14,7 @@ class HistoryView extends StatelessWidget {
     Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("History and Export"),
+        title: const Text("ประวัติการเช็ค"),
         actions: [
           IconButton(
             icon: const Icon(
@@ -37,8 +37,45 @@ class HistoryView extends StatelessWidget {
                     itemCount: controller.todo.length,
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
-                        onTap: () {
-                          print("Click On ${controller.todo[index].title} ");
+                        onLongPress: () {
+                          print(controller.todo[index].barcode);
+                          Get.defaultDialog(
+                            title: 'ลบหนังสือเล่มนี้',
+                            content: Text(
+                                "ต้องการลบ ${controller.todo[index].title} หรือไม่"),
+                            confirm: ElevatedButton(
+                              child: Text(
+                                'ตกลง',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  // fixedSize: Size(200, 40),
+                                  textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      fontStyle: FontStyle.normal),
+                                  backgroundColor: Colors.red),
+                              onPressed: () {
+                                checkedbookcontroller
+                                    .deleteData(controller.todo[index].barcode);
+                              },
+                            ),
+                            cancel: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  // fixedSize: Size(200, 40),
+                                  textStyle: const TextStyle(
+                                    fontSize: 15,
+                                    fontStyle: FontStyle.normal,
+                                  ),
+                                  backgroundColor: Colors.green),
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text(
+                                'ยกเลิก',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -63,14 +100,14 @@ class HistoryView extends StatelessWidget {
                                 ),
                                 trailing: controller.todo[index].found == "Y"
                                     ? Image.asset(
-                                        'assets/images/correct.png', // Replace with the actual path to the check image
-                                        width: 50, // Set the width as needed
-                                        height: 50, // Set the height as needed
+                                        'assets/images/correct.png',
+                                        width: 50,
+                                        height: 50,
                                       )
                                     : Image.asset(
-                                        'assets/images/incorrect.png', // Replace with the actual path to the close image
-                                        width: 50, // Set the width as needed
-                                        height: 50, // Set the height as needed
+                                        'assets/images/incorrect.png',
+                                        width: 50,
+                                        height: 50,
                                       ),
                                 children: [
                                   ListTile(

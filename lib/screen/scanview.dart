@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
+import 'package:qr_scan/screen/historyview.dart';
 import 'package:qr_scan/screen/navbar.dart';
 
 class Scanview extends StatelessWidget {
@@ -132,24 +133,29 @@ class Scanview extends StatelessWidget {
                     return ListView.builder(
                       itemCount: min(5, controller.todo.length),
                       itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          title: Text(
-                            controller.todo[index].title.length <= 50
-                                ? controller.todo[index].title
-                                : '${controller.todo[index].title.substring(0, 50)}...',
+                        return GestureDetector(
+                          onDoubleTap: () {
+                            Get.to(HistoryView());
+                          },
+                          child: ListTile(
+                            title: Text(
+                              controller.todo[index].title.length <= 50
+                                  ? controller.todo[index].title
+                                  : '${controller.todo[index].title.substring(0, 50)}...',
+                            ),
+                            subtitle: Text(controller.todo[index].barcode),
+                            trailing: controller.todo[index].found == "Y"
+                                ? Image.asset(
+                                    'assets/images/correct.png',
+                                    width: 50,
+                                    height: 50,
+                                  )
+                                : Image.asset(
+                                    'assets/images/incorrect.png',
+                                    width: 50,
+                                    height: 50,
+                                  ),
                           ),
-                          subtitle: Text(controller.todo[index].barcode),
-                          trailing: controller.todo[index].found == "Y"
-                              ? Image.asset(
-                                  'assets/images/correct.png',
-                                  width: 50,
-                                  height: 50,
-                                )
-                              : Image.asset(
-                                  'assets/images/incorrect.png',
-                                  width: 50,
-                                  height: 50,
-                                ),
                         );
                       },
                     );
