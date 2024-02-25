@@ -95,7 +95,7 @@ class MyDrawer extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  title: const Text('ประวัติการเช็คและการส่งออกข้อมูล'),
+                  title: const Text('ประวัติการบันทึกละการส่งออกข้อมูล'),
                   onTap: () {
                     Get.to(() => HistoryView());
                   },

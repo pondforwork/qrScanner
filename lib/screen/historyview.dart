@@ -14,7 +14,7 @@ class HistoryView extends StatelessWidget {
     Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ประวัติการเช็ค"),
+        title: const Text("ประวัติการบันทึก"),
         actions: [
           IconButton(
             icon: const Icon(

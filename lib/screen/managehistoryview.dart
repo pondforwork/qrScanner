@@ -89,8 +89,8 @@ class ManageHistoryView extends StatelessWidget {
                           fontSize: 15, fontStyle: FontStyle.normal),
                       backgroundColor: Colors.green),
                   onPressed: () {
-                    // checkedbookcontroller.exportToCSV();
-                    checkedbookcontroller.countFoundItems();
+                    checkedbookcontroller.exportToCSV();
+                    // checkedbookcontroller.countFoundItems();
                   },
                 ),
               ],
