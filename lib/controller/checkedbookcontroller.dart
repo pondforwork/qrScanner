@@ -70,6 +70,7 @@ class scanDBhelper extends GetxController {
     } catch (error) {
       print("Error while accessing data: $error");
     }
+    countFoundItems();
   }
 
   void countFoundItems() {

@@ -47,7 +47,6 @@ class BookController extends GetxController {
     // Open the database
     await _openLocalDatabase();
     clearTempFiles();
-
   }
 
   Future<void> _openLocalDatabase() async {
@@ -115,7 +114,7 @@ class BookController extends GetxController {
               Get.back();
             },
             child: const Text(
-              "Cancel",
+              "ยกเลิก",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -160,7 +159,7 @@ class BookController extends GetxController {
               Get.back(); // Close the dialog
             },
             child: const Text(
-              "Add",
+              "บันทึก",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -176,20 +175,20 @@ class BookController extends GetxController {
     final _formKey = GlobalKey<FormState>();
 
     Get.defaultDialog(
-      title: "Book Not Found!!!",
+      title: "ไม่พบหนังสือ",
       content: Form(
         key: _formKey,
         child: Column(
           children: [
             Text("BARCODE : $barcode"),
             SizedBox(height: 10),
-            Text("Enter Book Information:"),
+            Text("ใส่ข้อมูลหนังสือด้านล่าง"),
             TextFormField(
               controller: titleController,
               decoration: InputDecoration(labelText: 'Title'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a title';
+                  return 'กรุณาใส่ชื่อหนังสือ';
                 }
                 return null;
               },
@@ -203,7 +202,7 @@ class BookController extends GetxController {
               ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a collection ID';
+                  return 'กรุณาใส่ collection ID';
                 }
                 return null;
               },
@@ -220,7 +219,7 @@ class BookController extends GetxController {
           onPressed: () async {
             Get.back(); // Close the dialog
           },
-          child: const Text("Cancel"),
+          child: const Text("ยกเลิก"),
         ),
         const SizedBox(width: 50),
         TextButton(
@@ -231,21 +230,21 @@ class BookController extends GetxController {
               Get.back(); // Close the current dialog
 
               bool confirmAdd = await Get.defaultDialog(
-                title: "Add Missing Book?",
-                content: const Text("Are you sure you want to add this book?"),
+                title: "เพิ่มหนังสือเกิน?",
+                content: const Text("คุณต้องการเพิ่มหนังสือเล่มนี้หรือไม่?"),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Get.back(result: false); // Cancel
                     },
-                    child: const Text("No"),
+                    child: const Text("ยกเลิก"),
                   ),
                   const SizedBox(width: 50),
                   TextButton(
                     onPressed: () {
                       Get.back(result: true); // Confirm
                     },
-                    child: const Text("Yes"),
+                    child: const Text("ตกลง"),
                   ),
                 ],
               );
@@ -283,7 +282,7 @@ class BookController extends GetxController {
               }
             }
           },
-          child: const Text("Add"),
+          child: const Text("ตกลง"),
         ),
       ],
     );
