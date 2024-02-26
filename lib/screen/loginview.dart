@@ -17,19 +17,33 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color(0xFF0AA877),
+      backgroundColor: Colors.green,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: SizedBox(
-              child: Text(
-                "เข้าสู่ระบบ",
-                style: TextStyle(fontSize: 35),
-              ),
+                child: Image.asset(
+              'assets/images/LoginLogo.png',
+              width: 300,
+              height: 300,
+            )),
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          const SizedBox(
+            child: Text(
+              "BUU LIBRARY",
+              style: TextStyle(
+                  fontSize: 50,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(
-            height: 100,
+          const SizedBox(
+            height: 70,
           ),
           Column(
             children: [
@@ -45,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
                         await usercontroller.signInWithGoogle();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.white,
                         minimumSize: const Size(150, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -63,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
                           const Text(
                             "เข้าสู่ระบบด้วย Google",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -72,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Center(
@@ -87,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
                         Get.offAll(() => Scanview());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.white,
                         minimumSize: const Size(150, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -100,7 +114,7 @@ class _LoginViewState extends State<LoginView> {
                           Text(
                             "เข้าสู่ระบบในฐานะ Guest",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         ],

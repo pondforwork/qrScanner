@@ -56,9 +56,11 @@ class SelectDBview extends StatelessWidget {
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: () async {
-                    await bookController.downloadandapplyDB();
-                  },
+                  onPressed: bookController.isDownloadingDB.value
+                      ? null
+                      : () async {
+                          await bookController.downloadandapplyDB();
+                        },
                   child: const Text("ดึงข้อมูลหนังสือ"),
                 ),
               ),
