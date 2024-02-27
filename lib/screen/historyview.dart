@@ -54,9 +54,10 @@ class HistoryView extends StatelessWidget {
                                       fontSize: 15,
                                       fontStyle: FontStyle.normal),
                                   backgroundColor: Colors.red),
-                              onPressed: () {
-                                checkedbookcontroller
+                              onPressed: () async {
+                                await checkedbookcontroller
                                     .deleteData(controller.todo[index].barcode);
+                                Get.back();
                               },
                             ),
                             cancel: ElevatedButton(

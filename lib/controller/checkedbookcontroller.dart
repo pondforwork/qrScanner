@@ -33,10 +33,8 @@ class scanDBhelper extends GetxController {
     final documentDirectory = await getApplicationDocumentsDirectory();
     try {
       await Hive.initFlutter(documentDirectory.path);
-      // Hive.registerAdapter(ColorAdapter());
       await Hive.openBox('checkedbook');
       await Hive.openBox('dbname');
-      // await clearData();
     } catch (error) {
       print("Hive initialization error: $error");
     }
