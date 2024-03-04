@@ -197,8 +197,21 @@ class scanDBhelper extends GetxController {
       }
       await sink.flush();
       await sink.close();
-      Share.shareFiles(['${downloadsDirectory.path}/${filename}.csv'],
-          text: 'Check out the exported CSV file:');
+     
+      try {
+        var shareResult = await Share.shareFilesWithResult(
+          ['${downloadsDirectory.path}/${filename}.csv'],
+          text: 'Share File Success:',
+        );
+        if (shareResult.status == ShareResultStatus.success) {
+          print('Thank you for sharing the picture!');
+        } else {
+          print("Share Fail");
+        }
+
+      } catch (error) {
+        print('Error exporting data to CSV: $error');
+      }
     } catch (error) {
       print('Error exporting data to CSV: $error');
     }
