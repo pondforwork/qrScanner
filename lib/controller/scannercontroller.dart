@@ -48,6 +48,13 @@ class ScannerController extends GetxController {
         ScanMode.DEFAULT,
       );
 
+      Get.snackbar(
+      'Success',
+      'fdssfd: ',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: Duration(seconds: 3),
+    );
+
       if (barcodeScanResult == "-1") {
         print("Cancel");
         barcodeResult.value = "No data yet. Please Scan QR or Barcode";

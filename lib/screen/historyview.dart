@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
+import 'package:intl/intl.dart';
+
+import '../models/chekedbook.dart';
 
 class HistoryView extends StatelessWidget {
   HistoryView({Key? key}) : super(key: key);
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
+
   @override
   Widget build(BuildContext context) {
     Get.put(BookController());
@@ -27,137 +32,138 @@ class HistoryView extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: GetX<scanDBhelper>(
-                builder: (controller) {
-                  return ListView.builder(
-                    itemCount: controller.todo.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onLongPress: () {
-                          print(controller.todo[index].barcode);
-                          Get.defaultDialog(
-                            title: 'ลบหนังสือเล่มนี้',
-                            content: Text(
-                                "ต้องการลบ ${controller.todo[index].title} หรือไม่"),
-                            confirm: ElevatedButton(
-                              child: Text(
-                                'ตกลง',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  // fixedSize: Size(200, 40),
-                                  textStyle: const TextStyle(
-                                      fontSize: 15,
-                                      fontStyle: FontStyle.normal),
-                                  backgroundColor: Colors.red),
-                              onPressed: () async {
-                                await checkedbookcontroller
-                                    .deleteData(controller.todo[index].barcode);
-                                Get.back();
-                              },
-                            ),
-                            cancel: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  // fixedSize: Size(200, 40),
-                                  textStyle: const TextStyle(
-                                    fontSize: 15,
-                                    fontStyle: FontStyle.normal,
-                                  ),
-                                  backgroundColor: Colors.green),
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                'ยกเลิก',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Column(
-                            children: [
-                              ExpansionTile(
-                                title: Text(
-                                  controller.todo[index].title.length <= 50
-                                      ? controller.todo[index].title
-                                      : '${controller.todo[index].title.substring(0, 50)}...',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '${controller.todo[index].barcode}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                trailing: controller.todo[index].found == "Y"
-                                    ? Image.asset(
-                                        'assets/images/correct.png',
-                                        width: 50,
-                                        height: 50,
-                                      )
-                                    : Image.asset(
-                                        'assets/images/incorrect.png',
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      'ชื่อหนังสือ : ${controller.todo[index].title}',
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      'รหัสหนังสือ : ${controller.todo[index].barcode}',
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      'ผู้บันทึก : ${controller.todo[index].recorder}',
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      'หมายเหตุ : ${controller.todo[index].note}',
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      'วันเวลาที่บันทึก : ${controller.todo[index].checktime.day.toString().padLeft(2, '0')}'
-                                      '/${controller.todo[index].checktime.month.toString().padLeft(2, '0')}'
-                                      '/${controller.todo[index].checktime.year} '
-                                      '${controller.todo[index].checktime.hour.toString().padLeft(2, '0')}'
-                                      ':${controller.todo[index].checktime.minute.toString().padLeft(2, '0')}'
-                                      ':${controller.todo[index].checktime.second.toString().padLeft(2, '0')}',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Icon(Icons.more_horiz),
-                              const SizedBox(
-                                height: 5,
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+      body: GroupedListView<dynamic, String>(
+        elements: checkedbookcontroller.todo,
+        groupBy: (element) =>
+            '${element.checktime.day}-${element.checktime.month}-${element.checktime.year}',
+        groupSeparatorBuilder: (String value) => buildGroupHeader(value),
+        itemBuilder: (context, dynamic element) {
+          final item = element as Checkedbook;
+          return buildListItem(item);
+        },
+        order: GroupedListOrder.DESC,
+      ),
+    );
+  }
+
+  Widget buildGroupHeader(String value) {
+    final DateTime date = DateFormat('dd-MM-yyyy').parse(value);
+    final formattedDate = DateFormat('dd/MM/yyyy').format(date);
+    return Container(
+      height: 40,
+      color: Colors.yellow,
+      padding: const EdgeInsets.all(8),
+      child: Text(
+        formattedDate,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+    );
+  }
+
+  Widget buildListItem(Checkedbook item) {
+    return GestureDetector(
+      onLongPress: () {
+        Get.defaultDialog(
+          title: 'Delete Book',
+          content: Text("Do you want to delete ${item.title}?"),
+          confirm: ElevatedButton(
+            onPressed: () async {
+              await checkedbookcontroller.deleteData(item.barcode);
+              Get.back();
+            },
+            style: ElevatedButton.styleFrom(
+              textStyle: const TextStyle(
+                fontSize: 15,
+                fontStyle: FontStyle.normal,
+              ),
+              backgroundColor: Colors.red,
+            ),
+            child: const Text(
+              'Confirm',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          cancel: ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            style: ElevatedButton.styleFrom(
+              textStyle: const TextStyle(
+                fontSize: 15,
+                fontStyle: FontStyle.normal,
+              ),
+              backgroundColor: Colors.green,
+            ),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ExpansionTile(
+              title: Text(
+                item.title.length <= 50
+                    ? item.title
+                    : '${item.title.substring(0, 50)}...',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text(
+                item.barcode,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              trailing: item.found == "Y"
+                  ? Image.asset(
+                      'assets/images/correct.png',
+                      width: 50,
+                      height: 50,
+                    )
+                  : Image.asset(
+                      'assets/images/incorrect.png',
+                      width: 50,
+                      height: 50,
+                    ),
+              children: [
+                ListTile(
+                  title: Text('Book Title: ${item.title}'),
+                ),
+                ListTile(
+                  title: Text('Barcode: ${item.barcode}'),
+                ),
+                ListTile(
+                  title: Text('Recorder: ${item.recorder}'),
+                ),
+                ListTile(
+                  title: Text('Note: ${item.note}'),
+                ),
+                ListTile(
+                  title: Text(
+                    'Recorded Time: ${item.checktime.day.toString().padLeft(2, '0')}'
+                    '/${item.checktime.month.toString().padLeft(2, '0')}'
+                    '/${item.checktime.year} '
+                    '${item.checktime.hour.toString().padLeft(2, '0')}'
+                    ':${item.checktime.minute.toString().padLeft(2, '0')}'
+                    ':${item.checktime.second.toString().padLeft(2, '0')}',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.more_horiz_outlined)
+        ],
       ),
     );
   }
