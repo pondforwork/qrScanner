@@ -42,6 +42,7 @@ class HistoryView extends StatelessWidget {
           return buildListItem(item);
         },
         order: GroupedListOrder.DESC,
+        sort: false,
       ),
     );
   }
