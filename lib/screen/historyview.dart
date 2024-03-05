@@ -126,17 +126,37 @@ class HistoryView extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
-              trailing: item.found == "Y"
-                  ? Image.asset(
-                      'assets/images/correct.png',
-                      width: 50,
-                      height: 50,
-                    )
-                  : Image.asset(
-                      'assets/images/incorrect.png',
-                      width: 50,
-                      height: 50,
+              trailing: FittedBox(
+                child: Row(
+                  children: [
+                    item.found == "Y"
+                        ? Image.asset(
+                            'assets/images/correct.png',
+                            width: 40,
+                            height: 40,
+                          )
+                        : Image.asset(
+                            'assets/images/incorrect.png',
+                            width: 40,
+                            height: 40,
+                          ),
+                    const SizedBox(
+                      width: 10,
                     ),
+                    item.exportstatus == false
+                        ? Image.asset(
+                            'assets/images/incorrect.png',
+                            width: 40,
+                            height: 40,
+                          )
+                        : Image.asset(
+                            'assets/images/correct.png',
+                            width: 40,
+                            height: 40,
+                          ),
+                  ],
+                ),
+              ),
               children: [
                 ListTile(
                   title: Text('Book Title: ${item.title}'),
@@ -159,6 +179,9 @@ class HistoryView extends StatelessWidget {
                     ':${item.checktime.minute.toString().padLeft(2, '0')}'
                     ':${item.checktime.second.toString().padLeft(2, '0')}',
                   ),
+                ),
+                ListTile(
+                  title: Text('ExportStatus: ${item.exportstatus}'),
                 ),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
@@ -31,11 +30,11 @@ class Scanview extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Card(
-                      color: Color.fromARGB(255, 255, 249, 171),
+                      color: const Color.fromARGB(255, 255, 249, 171),
                       child: Container(
                         width: 500,
                         height: 270,
-                        padding: EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
                             const Text(
@@ -120,16 +119,14 @@ class Scanview extends StatelessWidget {
             Expanded(
               child: GetX<scanDBhelper>(
                 builder: (controller) {
-                  if (controller.todo.length == 0) {
-                    // Display a message when no books are checked
-                    return Center(
+                  if (controller.todo.isEmpty) {
+                    return const Center(
                       child: Text(
                         'No books checked.',
                         style: TextStyle(fontSize: 18),
                       ),
                     );
                   } else {
-                    // Display the ListView.builder when there are books checked
                     return ListView.builder(
                       itemCount: min(5, controller.todo.length),
                       itemBuilder: (BuildContext context, int index) {
@@ -169,9 +166,9 @@ class Scanview extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await scannercontroller.scanandsearchFromDB();
-          print(scannercontroller.barcode.value);
+          // print(scannercontroller.barcode.value);
         },
-        child: Icon(Icons.qr_code_2_outlined),
+        child: const Icon(Icons.qr_code_2_outlined),
       ),
     );
   }

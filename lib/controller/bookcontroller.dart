@@ -142,7 +142,8 @@ class BookController extends GetxController {
                   userController.currentUser.value,
                   userController.currentUserEmail.value,
                   "",
-                  checktime);
+                  checktime,
+                  false);
               scandbhelper.addData(
                   checkedbook.barcode,
                   checkedbook.callNo,
@@ -154,7 +155,8 @@ class BookController extends GetxController {
                   checkedbook.recorder,
                   checkedbook.recorderemail,
                   checkedbook.note,
-                  checkedbook.checktime);
+                  checkedbook.checktime,
+                  checkedbook.exportstatus);
               scandbhelper.fetchToDo();
               Get.back(); // Close the dialog
             },
@@ -264,6 +266,7 @@ class BookController extends GetxController {
                   userController.currentUserEmail.value,
                   noteController.text,
                   checktime,
+                  false
                 );
                 scandbhelper.addData(
                   checkedbook.barcode,
@@ -277,6 +280,7 @@ class BookController extends GetxController {
                   checkedbook.recorderemail,
                   checkedbook.note,
                   checkedbook.checktime,
+                  checkedbook.exportstatus
                 );
                 scandbhelper.fetchToDo();
               }

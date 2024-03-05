@@ -10,6 +10,7 @@ class Checkedbook {
   late String note;
   late DateTime checktime;
   late String recorderemail;
+  late bool exportstatus;
   Checkedbook(this.barcode, this.callNo, this.title, this.collectionName,
-      this.itemStatusName, this.collectionId, this.found,this.recorder,this.recorderemail,this.note,this.checktime);
+      this.itemStatusName, this.collectionId, this.found,this.recorder,this.recorderemail,this.note,this.checktime,this.exportstatus);
 }

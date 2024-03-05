@@ -61,7 +61,8 @@ class scanDBhelper extends GetxController {
             value['recorder'],
             value['recorderemail'],
             value['note'],
-            value['checktime']));
+            value['checktime'],
+            value['exportstatus']));
       }
       allData.sort((a, b) => b.checktime.compareTo(a.checktime));
       todo.assignAll(allData);
@@ -83,9 +84,6 @@ class scanDBhelper extends GetxController {
     }
     foundqtyobs.value = foundqty;
     notfoundqtyobs.value = notfoundqty;
-    print(foundqtyobs.value);
-
-    print(notfoundqtyobs.value);
   }
 
   Future<void> setDBName(String name) async {
@@ -107,7 +105,6 @@ class scanDBhelper extends GetxController {
         allData.add(value['dbname']);
       }
       currentdb.value = allData[0];
-      print(allData);
       // Sort the list by the "order" property
     } catch (error) {
       print('Error getting database name: $error');
@@ -136,7 +133,8 @@ class scanDBhelper extends GetxController {
       String recorder,
       String recorderemail,
       String note,
-      DateTime checktime) async {
+      DateTime checktime,
+      bool exportstatus) async {
     var data = Hive.box('data');
     // for (int i = 9999999999998999; i < 9999999999999999; i++) {}
     data.put(barcode, {
@@ -150,7 +148,8 @@ class scanDBhelper extends GetxController {
       'recorder': recorder,
       'recorderemail': recorderemail,
       'note': note,
-      'checktime': checktime
+      'checktime': checktime,
+      'exportstatus':exportstatus
     });
     fetchToDo();
   }
