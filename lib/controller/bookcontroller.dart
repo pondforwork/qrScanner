@@ -171,6 +171,9 @@ class BookController extends GetxController {
   Future<void> showDialogNotFound(String barcode) async {
     TextEditingController titleController = TextEditingController();
     TextEditingController collectionIdController = TextEditingController();
+    TextEditingController callNocontroller = TextEditingController();
+    TextEditingController authorController = TextEditingController();
+
     TextEditingController noteController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
@@ -179,10 +182,15 @@ class BookController extends GetxController {
       content: Form(
         key: _formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("BARCODE : $barcode"),
-            SizedBox(height: 10),
-            Text("ใส่ข้อมูลหนังสือด้านล่าง"),
+            const SizedBox(height: 10),
+            const Text("ใส่ข้อมูลหนังสือด้านล่าง"),
+            const SizedBox(height: 20),
+            Text(
+              "BARCODE : $barcode",
+              style: TextStyle(fontSize: 17),
+            ),
             TextFormField(
               controller: titleController,
               decoration: InputDecoration(labelText: 'Title'),
@@ -194,15 +202,15 @@ class BookController extends GetxController {
               },
             ),
             TextFormField(
-              controller: collectionIdController,
-              decoration: InputDecoration(labelText: 'Collection ID'),
+              controller: callNocontroller,
+              decoration: InputDecoration(labelText: 'Call No.'),
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly,
               ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'กรุณาใส่ collection ID';
+                  return 'กรุณาใส่เลขเรียก';
                 }
                 return null;
               },

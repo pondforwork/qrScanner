@@ -5,6 +5,7 @@ import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 import 'package:intl/intl.dart';
 import '../models/chekedbook.dart';
+
 class HistoryView extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
@@ -41,25 +42,38 @@ class HistoryView extends StatelessWidget {
         ],
       ),
       body: Obx(
-        () => GroupedListView<dynamic, String>(
-          elements: selectedDate.value == null
+        () {
+          final filteredList = selectedDate.value == null
               ? checkedbookcontroller.todo
               : checkedbookcontroller.todo
                   .where((element) =>
                       element.checktime.day == selectedDate.value!.day &&
                       element.checktime.month == selectedDate.value!.month &&
                       element.checktime.year == selectedDate.value!.year)
-                  .toList(),
-          groupBy: (element) =>
-              '${element.checktime.day}-${element.checktime.month}-${element.checktime.year}',
-          groupSeparatorBuilder: (String value) => buildGroupHeader(value),
-          itemBuilder: (context, dynamic element) {
-            final item = element as Checkedbook;
-            return buildListItem(item);
-          },
-          order: GroupedListOrder.DESC,
-          sort: false,
-        ),
+                  .toList();
+
+          if (filteredList.isEmpty) {
+            return const Center(
+              child: Text(
+                'ไม่มีรายการในวันที่ท่านเลือก',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            );
+          } else {
+            return GroupedListView<dynamic, String>(
+              elements: filteredList,
+              groupBy: (element) =>
+                  '${element.checktime.day}-${element.checktime.month}-${element.checktime.year}',
+              groupSeparatorBuilder: (String value) => buildGroupHeader(value),
+              itemBuilder: (context, dynamic element) {
+                final item = element as Checkedbook;
+                return buildListItem(item);
+              },
+              order: GroupedListOrder.DESC,
+              sort: false,
+            );
+          }
+        },
       ),
     );
   }
@@ -69,11 +83,12 @@ class HistoryView extends StatelessWidget {
     final formattedDate = DateFormat('dd/MM/yyyy').format(date);
     return Container(
       height: 40,
-      color: Colors.yellow,
+      color: Colors.green[400],
       padding: const EdgeInsets.all(8),
       child: Text(
         formattedDate,
         style: const TextStyle(
+          color: Colors.white,
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
@@ -203,7 +218,7 @@ class HistoryView extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.more_horiz_outlined)
+          const Icon(Icons.more_horiz_outlined)
         ],
       ),
     );
