@@ -1,48 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 import 'package:intl/intl.dart';
-
 import '../models/chekedbook.dart';
-
 class HistoryView extends StatelessWidget {
-  HistoryView({Key? key}) : super(key: key);
   final ScannerController scannercontroller = Get.put(ScannerController());
-  final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
+  // late Rx<DateTime> selectedDate = Rx<DateTime>(DateTime.now());
+  // late Rx<DateTime> selectedDate = Rx<DateTime>(DateTime(2024, 3, 5));
+  late Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
 
+// 2024-03-05
   @override
   Widget build(BuildContext context) {
-    Get.put(BookController());
     return Scaffold(
       appBar: AppBar(
         title: const Text("ประวัติการบันทึก"),
         actions: [
           IconButton(
             icon: const Icon(
-              Icons.archive_rounded,
+              Icons.calendar_today,
               color: Colors.white,
             ),
-            onPressed: () {
-              checkedbookcontroller.exportToCSV();
+            onPressed: () async {
+              final DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+              if (pickedDate != null) {
+                selectedDate.value = pickedDate;
+              } else {
+                selectedDate.value = null;
+              }
             },
           ),
         ],
       ),
-      body: GroupedListView<dynamic, String>(
-        elements: checkedbookcontroller.todo,
-        groupBy: (element) =>
-            '${element.checktime.day}-${element.checktime.month}-${element.checktime.year}',
-        groupSeparatorBuilder: (String value) => buildGroupHeader(value),
-        itemBuilder: (context, dynamic element) {
-          final item = element as Checkedbook;
-          return buildListItem(item);
-        },
-        order: GroupedListOrder.DESC,
-        sort: false,
+      body: Obx(
+        () => GroupedListView<dynamic, String>(
+          elements: selectedDate.value == null
+              ? checkedbookcontroller.todo
+              : checkedbookcontroller.todo
+                  .where((element) =>
+                      element.checktime.day == selectedDate.value!.day &&
+                      element.checktime.month == selectedDate.value!.month &&
+                      element.checktime.year == selectedDate.value!.year)
+                  .toList(),
+          groupBy: (element) =>
+              '${element.checktime.day}-${element.checktime.month}-${element.checktime.year}',
+          groupSeparatorBuilder: (String value) => buildGroupHeader(value),
+          itemBuilder: (context, dynamic element) {
+            final item = element as Checkedbook;
+            return buildListItem(item);
+          },
+          order: GroupedListOrder.DESC,
+          sort: false,
+        ),
       ),
     );
   }

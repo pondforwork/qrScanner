@@ -76,6 +76,7 @@ class Scanview extends StatelessWidget {
                                     bookController.checkdbAvial() == true) {
                                   bookController.findFromBarcode(
                                       textEditingController.text);
+                                  textEditingController.text = "";
                                 } else if (textEditingController
                                         .text.isNotEmpty &&
                                     bookController.checkdbAvial() == false) {

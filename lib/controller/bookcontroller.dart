@@ -59,13 +59,11 @@ class BookController extends GetxController {
   Future<void> findFromBarcode(String barcode) async {
     if (checkdbAvial() == true) {
       await _openLocalDatabase();
-      isLoading.value = true; // Loading
-      //await Future.delayed(Duration(seconds: 3));
+      isLoading.value = true;
       List<Map<String, dynamic>> result = await _database!
           .rawQuery("SELECT * FROM books WHERE BARCODE = '$barcode' ");
       result.forEach((row) {});
-      isLoading.value = false; // Load Finish
-
+      isLoading.value = false;
       if (result.isNotEmpty) {
         Map<String, dynamic> firstResult = result.first;
         String firstValue = firstResult['TITLE'];
@@ -255,33 +253,31 @@ class BookController extends GetxController {
                 DateTime checktime = DateTime.now();
 
                 Checkedbook checkedbook = Checkedbook(
-                  barcode,
-                  "",
-                  titleController.text,
-                  "",
-                  "",
-                  int.parse(collectionIdController.text),
-                  "N",
-                  userController.currentUser.value,
-                  userController.currentUserEmail.value,
-                  noteController.text,
-                  checktime,
-                  false
-                );
+                    barcode,
+                    "",
+                    titleController.text,
+                    "",
+                    "",
+                    int.parse(collectionIdController.text),
+                    "N",
+                    userController.currentUser.value,
+                    userController.currentUserEmail.value,
+                    noteController.text,
+                    checktime,
+                    false);
                 scandbhelper.addData(
-                  checkedbook.barcode,
-                  checkedbook.callNo,
-                  checkedbook.title,
-                  checkedbook.collectionName,
-                  checkedbook.itemStatusName,
-                  checkedbook.collectionId,
-                  checkedbook.found,
-                  checkedbook.recorder,
-                  checkedbook.recorderemail,
-                  checkedbook.note,
-                  checkedbook.checktime,
-                  checkedbook.exportstatus
-                );
+                    checkedbook.barcode,
+                    checkedbook.callNo,
+                    checkedbook.title,
+                    checkedbook.collectionName,
+                    checkedbook.itemStatusName,
+                    checkedbook.collectionId,
+                    checkedbook.found,
+                    checkedbook.recorder,
+                    checkedbook.recorderemail,
+                    checkedbook.note,
+                    checkedbook.checktime,
+                    checkedbook.exportstatus);
                 scandbhelper.fetchToDo();
               }
             }
