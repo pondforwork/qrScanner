@@ -74,50 +74,59 @@ class ManageHistoryView extends StatelessWidget {
               ]),
         ),
         Expanded(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: Text(
-                    'ส่งออกข้อมูล',
-                    style: TextStyle(color: Colors.white),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(200, 40),
+                        textStyle: const TextStyle(
+                            fontSize: 15, fontStyle: FontStyle.normal),
+                        backgroundColor: Colors.green),
+                    onPressed: () {
+                      checkedbookcontroller.exportToCSV();
+                    },
+                    child: const Text(
+                      'ส่งออกข้อมูล',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: Size(200, 40),
-                      textStyle: const TextStyle(
-                          fontSize: 15, fontStyle: FontStyle.normal),
-                      backgroundColor: Colors.green),
-                  onPressed: () {
-                    checkedbookcontroller.exportToCSV();
-                    // checkedbookcontroller.countFoundItems();
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: Text(
-                    'ล้างข้อมูลการบันทึก',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: Size(200, 40),
-                      textStyle: const TextStyle(
-                          fontSize: 15, fontStyle: FontStyle.normal),
-                      backgroundColor: Colors.red),
-                  onPressed: () {
-                    showConfirmationDialog();
-                  },
-                ),
-              ],
-            )
-          ]),
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Obx(
+                () => checkedbookcontroller.exportStatus.value == true
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: Size(200, 40),
+                              textStyle: const TextStyle(
+                                fontSize: 15,
+                                fontStyle: FontStyle.normal,
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                            onPressed: () {
+                              showConfirmationDialog();
+                            },
+                            child: const Text(
+                              'ล้างข้อมูลการบันทึก',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
+              )
+            ],
+          ),
         ),
       ]),
     );

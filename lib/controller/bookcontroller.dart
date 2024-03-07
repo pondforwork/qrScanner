@@ -204,10 +204,7 @@ class BookController extends GetxController {
             TextFormField(
               controller: callNocontroller,
               decoration: InputDecoration(labelText: 'Call No.'),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-              ],
+              
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'กรุณาใส่เลขเรียก';
@@ -262,11 +259,11 @@ class BookController extends GetxController {
 
                 Checkedbook checkedbook = Checkedbook(
                     barcode,
-                    "",
+                    callNocontroller.text,
                     titleController.text,
                     "",
                     "",
-                    int.parse(collectionIdController.text),
+                    0,
                     "N",
                     userController.currentUser.value,
                     userController.currentUserEmail.value,

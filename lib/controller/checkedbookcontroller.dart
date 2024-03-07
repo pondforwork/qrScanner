@@ -13,13 +13,15 @@ class scanDBhelper extends GetxController {
   var finishedtodo = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
-
+  RxBool exportStatus = true.obs;
   @override
   Future<void> onInit() async {
     await initHive();
     await fetchToDo();
     await getDBName();
     countFoundItems();
+    checkExportStatus(todo);
+    print("Status" + '${exportStatus.value}');
 
     super.onInit();
   }
@@ -27,6 +29,7 @@ class scanDBhelper extends GetxController {
   addToDo(Checkedbook checkedbook) {
     todo.add(checkedbook);
     fetchToDo();
+    exportStatus.value = false;
   }
 
   Future<void> initHive() async {
@@ -149,8 +152,41 @@ class scanDBhelper extends GetxController {
       'recorderemail': recorderemail,
       'note': note,
       'checktime': checktime,
-      'exportstatus':exportstatus
+      'exportstatus': exportstatus
     });
+    fetchToDo();
+  }
+
+  bool checkExportStatus(List<Checkedbook> todo) {
+    for (var i = 0; i < todo.length; i++) {
+      if (todo[i].exportstatus == false) {
+        exportStatus.value = false;
+        return false;
+      }
+    }
+    exportStatus.value = true;
+    return true;
+  }
+
+  updateExportStatus() {
+    for (var i = 0; i < todo.length; i++) {
+      print(todo[i].barcode);
+      var data = Hive.box('data');
+      data.put(todo[i].barcode, {
+        'barcode': todo[i].barcode,
+        'callNo': todo[i].callNo,
+        'title': todo[i].title,
+        'collectionName': todo[i].collectionName,
+        'itemStatusName': todo[i].itemStatusName,
+        'collectionId': todo[i].collectionId,
+        'found': todo[i].found,
+        'recorder': todo[i].recorder,
+        'recorderemail': todo[i].recorderemail,
+        'note': todo[i].note,
+        'checktime': todo[i].checktime,
+        'exportstatus': true
+      });
+    }
     fetchToDo();
   }
 
@@ -196,18 +232,20 @@ class scanDBhelper extends GetxController {
       }
       await sink.flush();
       await sink.close();
-     
+
       try {
         var shareResult = await Share.shareFilesWithResult(
           ['${downloadsDirectory.path}/${filename}.csv'],
           text: 'Share File Success:',
         );
         if (shareResult.status == ShareResultStatus.success) {
+          updateExportStatus();
+          // checkExportStatus(todo);
+          exportStatus.value = true;
           print('Thank you for sharing the picture!');
         } else {
           print("Share Fail");
         }
-
       } catch (error) {
         print('Error exporting data to CSV: $error');
       }
