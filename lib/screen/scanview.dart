@@ -48,8 +48,7 @@ class Scanview extends StatelessWidget {
                           Obx(
                             () => bookController.isLoading.value
                                 ? const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       CircularProgressIndicator(),
                                       SizedBox(
@@ -87,12 +86,10 @@ class Scanview extends StatelessWidget {
                                       duration: Duration(seconds: 3),
                                     ),
                                   );
-                                } else if (textEditingController
-                                    .text.isEmpty) {
+                                } else if (textEditingController.text.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text("กรุณากรอกหมายเลขบาร์โค้ด"),
+                                      content: Text("กรุณากรอกหมายเลขบาร์โค้ด"),
                                       duration: Duration(seconds: 3),
                                     ),
                                   );
@@ -129,6 +126,9 @@ class Scanview extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          Row(
+            children: [Text("Hello"), Text("Hello2"), Text("Hello3")],
           ),
           Expanded(
             child: GetX<scanDBhelper>(

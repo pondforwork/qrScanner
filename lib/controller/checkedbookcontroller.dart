@@ -13,7 +13,7 @@ class scanDBhelper extends GetxController {
   var finishedtodo = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
-  RxBool exportStatus = true.obs;
+  RxBool exportStatus = false.obs;
   @override
   Future<void> onInit() async {
     await initHive();
@@ -22,15 +22,14 @@ class scanDBhelper extends GetxController {
     countFoundItems();
     checkExportStatus(todo);
     print("Status" + '${exportStatus.value}');
-
     super.onInit();
   }
 
-  addToDo(Checkedbook checkedbook) {
-    todo.add(checkedbook);
-    fetchToDo();
-    exportStatus.value = false;
-  }
+  // addToDo(Checkedbook checkedbook) async {
+  //   todo.add(checkedbook);
+  //   await fetchToDo();
+  //   checkExportStatus(todo);
+  // }
 
   Future<void> initHive() async {
     final documentDirectory = await getApplicationDocumentsDirectory();
@@ -155,11 +154,13 @@ class scanDBhelper extends GetxController {
       'exportstatus': exportstatus
     });
     fetchToDo();
+    exportStatus.value = false;
   }
 
   bool checkExportStatus(List<Checkedbook> todo) {
     for (var i = 0; i < todo.length; i++) {
       if (todo[i].exportstatus == false) {
+        print((todo[i].exportstatus));
         exportStatus.value = false;
         return false;
       }
