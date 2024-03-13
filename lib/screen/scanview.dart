@@ -13,6 +13,7 @@ class Scanview extends StatelessWidget {
   final TextEditingController textEditingController = TextEditingController();
   final BookController bookController = Get.put(BookController());
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
+  final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +128,62 @@ class Scanview extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            children: [Text("Hello"), Text("Hello2"), Text("Hello3")],
+          Obx(
+            () {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/icon/foundbooks.png',
+                        width: 35,
+                        height: 35,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(checkedbookcontroller.foundqtyobs.value.toString()),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/icon/additionbooks.png',
+                        width: 35,
+                        height: 35,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(checkedbookcontroller.notfoundqtyobs.value
+                          .toString()),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/icon/allBooks.png',
+                        width: 35,
+                        height: 35,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text((checkedbookcontroller.foundqtyobs.value +
+                              checkedbookcontroller.notfoundqtyobs.value)
+                          .toString()),
+                    ],
+                  ),
+                ],
+              );
+            },
           ),
           Expanded(
             child: GetX<scanDBhelper>(
@@ -165,7 +220,7 @@ class Scanview extends StatelessWidget {
                           ),
                           trailing: controller.todo[index].found == "Y"
                               ? Image.asset(
-                                  'assets/images/correct.png',
+                                  'assets/icon/foundbooks.png',
                                   width: 50,
                                   height: 50,
                                 )

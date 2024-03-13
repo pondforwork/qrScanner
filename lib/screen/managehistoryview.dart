@@ -29,13 +29,8 @@ class ManageHistoryView extends StatelessWidget {
                     Obx(
                       () {
                         return Text(
-                          "คุณบันทึกหนังสือไปแล้ว " +
-                              (checkedbookcontroller.foundqtyobs.value +
-                                      checkedbookcontroller
-                                          .notfoundqtyobs.value)
-                                  .toString() +
-                              " เล่ม",
-                          style: TextStyle(fontSize: 20),
+                          "คุณบันทึกหนังสือไปแล้ว ${checkedbookcontroller.foundqtyobs.value + checkedbookcontroller.notfoundqtyobs.value} เล่ม",
+                          style: const TextStyle(fontSize: 20),
                         );
                       },
                     )
@@ -89,9 +84,20 @@ class ManageHistoryView extends StatelessWidget {
                     onPressed: () {
                       checkedbookcontroller.exportToCSV();
                     },
-                    child: const Text(
-                      'ส่งออกข้อมูล',
-                      style: TextStyle(color: Colors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/icon/export.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                            const SizedBox(width: 20), // Adjust the width according to your spacing preference
+                        const Text(
+                          'ส่งออกข้อมูล',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ],

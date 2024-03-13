@@ -163,12 +163,12 @@ class HistoryView extends StatelessWidget {
                   children: [
                     item.found == "Y"
                         ? Image.asset(
-                            'assets/images/correct.png',
+                            'assets/icon/foundbooks.png',
                             width: 40,
                             height: 40,
                           )
                         : Image.asset(
-                            'assets/images/incorrect.png',
+                            'assets/icon/additionbooks.png',
                             width: 40,
                             height: 40,
                           ),
@@ -177,12 +177,12 @@ class HistoryView extends StatelessWidget {
                     ),
                     item.exportstatus == false
                         ? Image.asset(
-                            'assets/images/incorrect.png',
+                            'assets/icon/didntexported.png',
                             width: 40,
                             height: 40,
                           )
                         : Image.asset(
-                            'assets/images/correct.png',
+                            'assets/icon/exported.png',
                             width: 40,
                             height: 40,
                           ),
