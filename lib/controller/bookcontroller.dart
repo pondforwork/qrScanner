@@ -128,7 +128,7 @@ class BookController extends GetxController {
             ),
             onPressed: () async {
               DateTime checktime = DateTime.now();
-
+              // First Save
               Checkedbook checkedbook = Checkedbook(
                   firstResult['BARCODE'] ?? "",
                   firstResult['CALLNO'] ?? "",
@@ -141,6 +141,7 @@ class BookController extends GetxController {
                   userController.currentUserEmail.value,
                   "",
                   checktime,
+                  1,
                   false);
               scandbhelper.addData(
                   checkedbook.barcode,
@@ -154,6 +155,7 @@ class BookController extends GetxController {
                   checkedbook.recorderemail,
                   checkedbook.note,
                   checkedbook.checktime,
+                  checkedbook.count,
                   checkedbook.exportstatus);
               scandbhelper.fetchToDo();
               Get.back(); // Close the dialog
@@ -204,7 +206,6 @@ class BookController extends GetxController {
             TextFormField(
               controller: callNocontroller,
               decoration: InputDecoration(labelText: 'Call No.'),
-              
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'กรุณาใส่เลขเรียก';
@@ -256,7 +257,6 @@ class BookController extends GetxController {
 
               if (confirmAdd == true) {
                 DateTime checktime = DateTime.now();
-
                 Checkedbook checkedbook = Checkedbook(
                     barcode,
                     callNocontroller.text,
@@ -269,6 +269,7 @@ class BookController extends GetxController {
                     userController.currentUserEmail.value,
                     noteController.text,
                     checktime,
+                    1,
                     false);
                 scandbhelper.addData(
                     checkedbook.barcode,
@@ -282,6 +283,7 @@ class BookController extends GetxController {
                     checkedbook.recorderemail,
                     checkedbook.note,
                     checkedbook.checktime,
+                    checkedbook.count,
                     checkedbook.exportstatus);
                 scandbhelper.fetchToDo();
               }

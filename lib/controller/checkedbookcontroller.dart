@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
   var todo = <Checkedbook>[].obs;
-  var finishedtodo = <Checkedbook>[].obs;
+  // var finishedtodo = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
   RxBool exportStatus = false.obs;
@@ -55,6 +55,8 @@ class scanDBhelper extends GetxController {
       List<Checkedbook> allData = [];
 
       for (dynamic value in values) {
+        print(value['barcode']);
+        print(value['count']);
         allData.add(Checkedbook(
             value['barcode'],
             value['callNo'],
@@ -67,6 +69,7 @@ class scanDBhelper extends GetxController {
             value['recorderemail'],
             value['note'],
             value['checktime'],
+            value['count'],
             value['exportstatus']));
       }
       allData.sort((a, b) => b.checktime.compareTo(a.checktime));
@@ -139,9 +142,15 @@ class scanDBhelper extends GetxController {
       String recorderemail,
       String note,
       DateTime checktime,
+      int count,
       bool exportstatus) async {
     var data = Hive.box('data');
-    // for (int i = 9999999999998999; i < 9999999999999999; i++) {}
+    int countFromList = checkDuplicatecount(barcode);
+    if (countFromList >= 1) {
+      count = countFromList + 1;
+    } else {
+      count = 1;
+    }
     data.put(barcode, {
       'barcode': barcode,
       'callNo': callNo,
@@ -154,8 +163,10 @@ class scanDBhelper extends GetxController {
       'recorderemail': recorderemail,
       'note': note,
       'checktime': checktime,
+      'count': count,
       'exportstatus': exportstatus
     });
+
     fetchToDo();
     exportStatus.value = false;
   }
@@ -188,6 +199,7 @@ class scanDBhelper extends GetxController {
         'recorderemail': todo[i].recorderemail,
         'note': todo[i].note,
         'checktime': todo[i].checktime,
+        'count': todo[i].count,
         'exportstatus': true
       });
     }
@@ -224,14 +236,14 @@ class scanDBhelper extends GetxController {
       final file = File('${downloadsDirectory!.path}/${filename}.csv');
       final sink = file.openWrite();
       sink.writeln(
-          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Recorder,Recorder-Email,Note,CheckTime');
+          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Count,Recorder,Recorder-Email,Note,CheckTime');
 
       for (Checkedbook item in todo) {
         String formattedDate =
             DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
         String escapedTitle = item.title?.replaceAll('"', '""') ?? '';
         sink.writeln(
-          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.recorder ?? ''}","${item.recorderemail ?? ''}","${item.note}","$formattedDate"',
+          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.count}","${item.recorder ?? ''}","${item.recorderemail ?? ''}","${item.note}","$formattedDate"',
         );
       }
       await sink.flush();
@@ -312,6 +324,17 @@ class scanDBhelper extends GetxController {
       }
     } catch (error) {
       print('Error exporting data to CSV: $error');
+    }
+  }
+
+  int checkDuplicatecount(String inputbarcode) {
+    try {
+      var foundCheckedbook =
+          todo.firstWhere((checkedBook) => checkedBook.barcode == inputbarcode);
+      return foundCheckedbook.count;
+    } catch (e) {
+      print("Return 0");
+      return 0;
     }
   }
 }
