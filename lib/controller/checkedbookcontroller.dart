@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:http/http.dart' as http;
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
@@ -248,6 +251,69 @@ class scanDBhelper extends GetxController {
           print("Share Fail");
         }
       } catch (error) {
+        print('Error exporting data to CSV: $error');
+      }
+    } catch (error) {
+      print('Error exporting data to CSV: $error');
+    }
+  }
+
+  void sendPostRequest(String url, Map<String, dynamic> data) async {
+    try {
+      // Encode the JSON data
+      String jsonData = jsonEncode(data);
+
+      // Send POST request
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonData,
+      );
+
+      // Check if the request was successful (status code 200)
+      if (response.statusCode == 200) {
+        print('POST request successful');
+        print('Response: ${response.body}');
+      } else {
+        print('Failed to send POST request');
+        print('Response: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending POST request: $e');
+    }
+  }
+
+  Future<void> exportToApi() async {
+    try {
+      String url =
+          'http://pulinet2019.buu.ac.th/inventorybook/InsertInventorybook';
+      // JSON data to send in the POST request
+      Map<String, dynamic> postData = {
+        "_token": null,
+        "Barcode": null,
+        "CallNo": null,
+        "Title": "TestOnFlutter",
+        "Author": null,
+        "CollectionName": null,
+        "ItemStatusName": null,
+        "CollectionId": null,
+        "Status": null,
+        "Staff": null,
+        "StaffEmail": null,
+        "Note": null,
+        "CheckTime": null,
+        "Count": null
+      };
+
+      sendPostRequest(url, postData);
+
+      // for (Checkedbook item in todo) {
+
+      // }
+
+      try {} catch (error) {
         print('Error exporting data to CSV: $error');
       }
     } catch (error) {
