@@ -260,10 +260,7 @@ class scanDBhelper extends GetxController {
 
   void sendPostRequest(String url, Map<String, dynamic> data) async {
     try {
-      // Encode the JSON data
       String jsonData = jsonEncode(data);
-
-      // Send POST request
       http.Response response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
@@ -271,8 +268,6 @@ class scanDBhelper extends GetxController {
         },
         body: jsonData,
       );
-
-      // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
         print('POST request successful');
         print('Response: ${response.body}');
@@ -289,29 +284,28 @@ class scanDBhelper extends GetxController {
     try {
       String url =
           'http://pulinet2019.buu.ac.th/inventorybook/InsertInventorybook';
-      // JSON data to send in the POST request
-      Map<String, dynamic> postData = {
-        "_token": null,
-        "Barcode": null,
-        "CallNo": null,
-        "Title": "TestOnFlutter",
-        "Author": null,
-        "CollectionName": null,
-        "ItemStatusName": null,
-        "CollectionId": null,
-        "Status": null,
-        "Staff": null,
-        "StaffEmail": null,
-        "Note": null,
-        "CheckTime": null,
-        "Count": null
-      };
 
-      sendPostRequest(url, postData);
+      for (Checkedbook item in todo) {
+        String formattedDate =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
+        Map<String, dynamic> postData = {
+          "Barcode": item.barcode,
+          "CallNo": item.callNo,
+          "Title": item.title,
+          "Author": null,
+          "CollectionName": item.collectionName,
+          "ItemStatusName": item.itemStatusName,
+          "CollectionId": item.collectionId.toString(),
+          "Status": item.itemStatusName,
+          "Staff": item.recorder,
+          "StaffEmail": item.recorderemail,
+          "Note": item.note,
+          "CheckTime": formattedDate,
+          "Count": null
+        };
 
-      // for (Checkedbook item in todo) {
-
-      // }
+        sendPostRequest(url, postData);
+      }
 
       try {} catch (error) {
         print('Error exporting data to CSV: $error');
