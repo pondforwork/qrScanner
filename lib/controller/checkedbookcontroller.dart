@@ -24,7 +24,6 @@ class scanDBhelper extends GetxController {
     await getDBName();
     countFoundItems();
     checkExportStatus(todo);
-    print("Status" + '${exportStatus.value}');
     super.onInit();
   }
 
@@ -55,8 +54,6 @@ class scanDBhelper extends GetxController {
       List<Checkedbook> allData = [];
 
       for (dynamic value in values) {
-        print(value['barcode']);
-        print(value['count']);
         allData.add(Checkedbook(
             value['barcode'],
             value['callNo'],
@@ -206,6 +203,27 @@ class scanDBhelper extends GetxController {
     fetchToDo();
   }
 
+  updateExportStatusByOne(int i) {
+    var data = Hive.box('data');
+    data.put(todo[i].barcode, {
+      'barcode': todo[i].barcode,
+      'callNo': todo[i].callNo,
+      'title': todo[i].title,
+      'collectionName': todo[i].collectionName,
+      'itemStatusName': todo[i].itemStatusName,
+      'collectionId': todo[i].collectionId,
+      'found': todo[i].found,
+      'recorder': todo[i].recorder,
+      'recorderemail': todo[i].recorderemail,
+      'note': todo[i].note,
+      'checktime': todo[i].checktime,
+      'count': todo[i].count,
+      'exportstatus': true
+    });
+
+    fetchToDo();
+  }
+
   Future<void> deleteData(String id) async {
     var data = Hive.box('data');
     if (data.containsKey(id)) {
@@ -293,37 +311,48 @@ class scanDBhelper extends GetxController {
   }
 
   Future<void> exportToApi() async {
+    int allunexportedQty = 0;
+    for (Checkedbook item in todo) {
+      if (!item.exportstatus) {
+        allunexportedQty++;
+      }
+    }
+    print(allunexportedQty);
     try {
       String url =
           'http://pulinet2019.buu.ac.th/inventorybook/InsertInventorybook';
-
+      int index = 0;
       for (Checkedbook item in todo) {
         String formattedDate =
             DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
-        Map<String, dynamic> postData = {
-          "Barcode": item.barcode,
-          "CallNo": item.callNo,
-          "Title": item.title,
-          "Author": null,
-          "CollectionName": item.collectionName,
-          "ItemStatusName": item.itemStatusName,
-          "CollectionId": item.collectionId.toString(),
-          "Status": item.itemStatusName,
-          "Staff": item.recorder,
-          "StaffEmail": item.recorderemail,
-          "Note": item.note,
-          "CheckTime": formattedDate,
-          "Count": null
-        };
 
-        sendPostRequest(url, postData);
+        if (!item.exportstatus) {
+          Map<String, dynamic> postData = {
+            "Barcode": item.barcode,
+            "CallNo": item.callNo,
+            "Title": item.title,
+            "Author": null,
+            "CollectionName": item.collectionName,
+            "ItemStatusName": item.itemStatusName,
+            "CollectionId": item.collectionId.toString(),
+            "Status": item.itemStatusName,
+            "Staff": item.recorder,
+            "StaffEmail": item.recorderemail,
+            "Note": item.note,
+            "CheckTime": formattedDate,
+            "Count": item.count
+          };
+          // sendPostRequest(url, postData);
+          updateExportStatusByOne(index);
+        }
+        index++;
       }
 
       try {} catch (error) {
-        print('Error exporting data to CSV: $error');
+        print('Error exporting data to server API: $error');
       }
     } catch (error) {
-      print('Error exporting data to CSV: $error');
+      print('Error exporting data to server API: $error');
     }
   }
 

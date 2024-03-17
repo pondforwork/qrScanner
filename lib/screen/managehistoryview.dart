@@ -82,8 +82,8 @@ class ManageHistoryView extends StatelessWidget {
                             fontSize: 15, fontStyle: FontStyle.normal),
                         backgroundColor: Colors.green),
                     onPressed: () {
-                      checkedbookcontroller.exportToCSV();
-                      // checkedbookcontroller.exportToApi();
+                      // checkedbookcontroller.exportToCSV();
+                      checkedbookcontroller.exportToApi();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -98,6 +98,28 @@ class ManageHistoryView extends StatelessWidget {
                                 20), // Adjust the width according to your spacing preference
                         const Text(
                           'ส่งออกข้อมูล',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(200, 40),
+                        textStyle: const TextStyle(
+                            fontSize: 15, fontStyle: FontStyle.normal),
+                        backgroundColor: Colors.green),
+                    onPressed: () {
+                      checkedbookcontroller.exportToCSV();
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            width:
+                                20), // Adjust the width according to your spacing preference
+                        Text(
+                          'ส่งออกข้อมูล CSV',
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
