@@ -2,6 +2,7 @@ class Checkedbook {
   late String barcode;
   late String callNo;
   late String title;
+  late String author;
   late String collectionName;
   late String itemStatusName;
   late int collectionId;
@@ -16,6 +17,7 @@ class Checkedbook {
       this.barcode,
       this.callNo,
       this.title,
+      this.author,
       this.collectionName,
       this.itemStatusName,
       this.collectionId,

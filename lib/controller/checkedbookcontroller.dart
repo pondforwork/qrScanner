@@ -63,6 +63,7 @@ class scanDBhelper extends GetxController {
             value['barcode'],
             value['callNo'],
             value['title'],
+            value['author'],
             value['collectionName'],
             value['itemStatusName'],
             value['collectionId'],
@@ -136,6 +137,7 @@ class scanDBhelper extends GetxController {
       String barcode,
       String callNo,
       String title,
+      String author,
       String collectionName,
       String itemStatusName,
       int collectionId,
@@ -157,6 +159,7 @@ class scanDBhelper extends GetxController {
       'barcode': barcode,
       'callNo': callNo,
       'title': title,
+      'author': author,
       'collectionName': collectionName,
       'itemStatusName': itemStatusName,
       'collectionId': collectionId,
@@ -193,6 +196,7 @@ class scanDBhelper extends GetxController {
         'barcode': todo[i].barcode,
         'callNo': todo[i].callNo,
         'title': todo[i].title,
+        'author': todo[i].author,
         'collectionName': todo[i].collectionName,
         'itemStatusName': todo[i].itemStatusName,
         'collectionId': todo[i].collectionId,
@@ -215,6 +219,7 @@ class scanDBhelper extends GetxController {
       'barcode': todo[i].barcode,
       'callNo': todo[i].callNo,
       'title': todo[i].title,
+      'author': todo[i].author,
       'collectionName': todo[i].collectionName,
       'itemStatusName': todo[i].itemStatusName,
       'collectionId': todo[i].collectionId,
@@ -261,14 +266,14 @@ class scanDBhelper extends GetxController {
       final file = File('${downloadsDirectory!.path}/${filename}.csv');
       final sink = file.openWrite();
       sink.writeln(
-          'Barcode,CallNo,Title,CollectionName,ItemStatusName,CollectionId,Found,Count,Recorder,Recorder-Email,Note,CheckTime');
+          'Barcode,CallNo,Title,Author,CollectionName,ItemStatusName,CollectionId,Found,Count,Recorder,Recorder-Email,Note,CheckTime');
 
       for (Checkedbook item in todo) {
         String formattedDate =
             DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
         String escapedTitle = item.title?.replaceAll('"', '""') ?? '';
         sink.writeln(
-          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.count}","${item.recorder ?? ''}","${item.recorderemail ?? ''}","${item.note}","$formattedDate"',
+          '"${item.barcode ?? ''}","${item.callNo ?? ''}","$escapedTitle","${item.author ?? ''}","${item.collectionName ?? ''}","${item.itemStatusName ?? ''}","${item.collectionId ?? ''}","${item.found ?? ''}","${item.count}","${item.recorder ?? ''}","${item.recorderemail ?? ''}","${item.note}","$formattedDate"',
         );
       }
       await sink.flush();
@@ -429,7 +434,8 @@ class scanDBhelper extends GetxController {
       content: const SizedBox(
         width: 150,
         height: 150,
-        child: Row( mainAxisAlignment:  MainAxisAlignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("ไม่สามารถส่งออกข้อมูล"),
           ],
