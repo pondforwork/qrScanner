@@ -218,17 +218,37 @@ class Scanview extends StatelessWidget {
                               ),
                             ],
                           ),
-                          trailing: controller.todo[index].found == "Y"
-                              ? Image.asset(
-                                  'assets/icon/foundbooks.png',
-                                  width: 50,
-                                  height: 50,
-                                )
-                              : Image.asset(
-                                  'assets/images/incorrect.png',
-                                  width: 50,
-                                  height: 50,
+                          trailing: FittedBox(
+                            child: Row(
+                              children: [
+                                controller.todo[index].found == "Y"
+                                    ? Image.asset(
+                                        'assets/icon/foundbooks.png',
+                                        width: 40,
+                                        height: 40,
+                                      )
+                                    : Image.asset(
+                                        'assets/icon/additionbooks.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                const SizedBox(
+                                  width: 10,
                                 ),
+                                controller.todo[index].exportstatus == false
+                                    ? Image.asset(
+                                        'assets/icon/didntexported.png',
+                                        width: 40,
+                                        height: 40,
+                                      )
+                                    : Image.asset(
+                                        'assets/icon/exported.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     },

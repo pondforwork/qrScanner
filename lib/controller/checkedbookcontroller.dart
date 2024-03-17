@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,12 +9,12 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:share_plus/share_plus.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
   var todo = <Checkedbook>[].obs;
-  // var finishedtodo = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
   RxBool exportStatus = false.obs;
@@ -211,6 +210,7 @@ class scanDBhelper extends GetxController {
 
   updateExportStatusByOne(int i) {
     var data = Hive.box('data');
+
     data.put(todo[i].barcode, {
       'barcode': todo[i].barcode,
       'callNo': todo[i].callNo,
@@ -226,6 +226,7 @@ class scanDBhelper extends GetxController {
       'count': todo[i].count,
       'exportstatus': true
     });
+    print("Updating ${todo[i].title}");
 
     fetchToDo();
   }
@@ -279,7 +280,7 @@ class scanDBhelper extends GetxController {
           text: 'Share File Success:',
         );
         if (shareResult.status == ShareResultStatus.success) {
-          updateExportStatus();
+          // updateExportStatus();
           // checkExportStatus(todo);
           exportStatus.value = true;
           print('Thank you for sharing the picture!');
@@ -357,12 +358,29 @@ class scanDBhelper extends GetxController {
     Get.defaultDialog(
       title: "กำลังส่งข้อมูล...",
       content: Obx(() => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(),
-              Text("${exportProgress.value} จาก ${allunexportedQty.value}")
+              const CircularProgressIndicator(),
+              const SizedBox(width: 15), // Add space between items
+              Text("${exportProgress.value} จาก ${allunexportedQty.value} ")
             ],
           )),
     );
+    if (exportProgress.value == allunexportedQty.value) {
+      Get.back();
+      Get.defaultDialog(
+        title: "ส่งออกข้อมูลสำเร็จ",
+        middleText: "ส่งออกข้อมูลเรียบร้อยแล้ว",
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text("ตกลง"),
+          ),
+        ],
+      );
+    }
   }
 
   exportToApi() async {
@@ -394,14 +412,38 @@ class scanDBhelper extends GetxController {
         //if Error Get Back and break loop.
         if (await sendPostRequest(url, postData)) {
           Get.back();
+          showerrorDialog();
           // break;
         } else {
+          print("Posting ${item.title}");
           updateExportStatusByOne(indexCount.value);
         }
       }
-      print(item.title);
       indexCount.value++;
     }
+  }
+
+  void showerrorDialog() {
+    Get.defaultDialog(
+      title: "เกิดข้อผิดพลาด",
+      content: const SizedBox(
+        width: 150,
+        height: 150,
+        child: Row( mainAxisAlignment:  MainAxisAlignment.center,
+          children: [
+            Text("ไม่สามารถส่งออกข้อมูล"),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text("ตกลง"),
+        ),
+      ],
+    );
   }
 
   int checkDuplicatecount(String inputbarcode) {
