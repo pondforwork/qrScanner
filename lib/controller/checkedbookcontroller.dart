@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,6 +19,10 @@ class scanDBhelper extends GetxController {
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
   RxBool exportStatus = false.obs;
+  RxInt allunexportedQty = 0.obs;
+  RxInt indexCount = 0.obs;
+  RxInt exportProgress = 0.obs;
+
   @override
   Future<void> onInit() async {
     await initHive();
@@ -288,7 +294,7 @@ class scanDBhelper extends GetxController {
     }
   }
 
-  void sendPostRequest(String url, Map<String, dynamic> data) async {
+  Future<bool> sendPostRequest(String url, Map<String, dynamic> data) async {
     try {
       String jsonData = jsonEncode(data);
       http.Response response = await http.post(
@@ -305,54 +311,96 @@ class scanDBhelper extends GetxController {
         print('Failed to send POST request');
         print('Response: ${response.body}');
       }
+      return false;
     } catch (e) {
       print('Error sending POST request: $e');
+      return true;
     }
   }
 
-  Future<void> exportToApi() async {
-    int allunexportedQty = 0;
+  int checkunexportQty() {
+    allunexportedQty.value = 0;
     for (Checkedbook item in todo) {
       if (!item.exportstatus) {
-        allunexportedQty++;
+        allunexportedQty.value++;
       }
     }
-    print(allunexportedQty);
-    try {
-      String url =
-          'http://pulinet2019.buu.ac.th/inventorybook/InsertInventorybook';
-      int index = 0;
-      for (Checkedbook item in todo) {
-        String formattedDate =
-            DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
+    return allunexportedQty.value;
+  }
 
-        if (!item.exportstatus) {
-          Map<String, dynamic> postData = {
-            "Barcode": item.barcode,
-            "CallNo": item.callNo,
-            "Title": item.title,
-            "Author": null,
-            "CollectionName": item.collectionName,
-            "ItemStatusName": item.itemStatusName,
-            "CollectionId": item.collectionId.toString(),
-            "Status": item.itemStatusName,
-            "Staff": item.recorder,
-            "StaffEmail": item.recorderemail,
-            "Note": item.note,
-            "CheckTime": formattedDate,
-            "Count": item.count
-          };
-          // sendPostRequest(url, postData);
-          updateExportStatusByOne(index);
+  Future<void> showDialogExport() async {
+    checkunexportQty();
+    Get.defaultDialog(
+      title: "ต้องการส่งออกข้อมูลหรือไม่?",
+      content: Obx(() => Text(allunexportedQty.value.toString())),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text("ยกเลิก"),
+        ),
+        const SizedBox(width: 50),
+        TextButton(
+          onPressed: () {
+            Get.back();
+            showProgressDialog();
+            exportToApi();
+          },
+          child: const Text("ตกลง"),
+        ),
+      ],
+    );
+  }
+
+  showProgressDialog() async {
+    Get.defaultDialog(
+      title: "กำลังส่งข้อมูล...",
+      content: Obx(() => Row(
+            children: [
+              CircularProgressIndicator(),
+              Text("${exportProgress.value} จาก ${allunexportedQty.value}")
+            ],
+          )),
+    );
+  }
+
+  exportToApi() async {
+    String url =
+        'http://pulinet2019.buu.ac.th/inventorybook/InsertInventorybook';
+
+    indexCount.value = 0;
+    exportProgress.value = 0;
+    for (Checkedbook item in todo) {
+      String formattedDate =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
+      if (!item.exportstatus) {
+        Map<String, dynamic> postData = {
+          "Barcode": item.barcode,
+          "CallNo": item.callNo,
+          "Title": item.title,
+          "Author": null,
+          "CollectionName": item.collectionName,
+          "ItemStatusName": item.itemStatusName,
+          "CollectionId": item.collectionId.toString(),
+          "Status": item.found,
+          "Staff": item.recorder,
+          "StaffEmail": item.recorderemail,
+          "Note": item.note,
+          "CheckTime": formattedDate,
+          "Count": item.count
+        };
+        exportProgress.value++;
+        //if Error Get Back and break loop.
+        if (await sendPostRequest(url, postData)) {
+          Get.back();
+          // break;
+        } else {
+          updateExportStatusByOne(indexCount.value);
         }
-        index++;
       }
-
-      try {} catch (error) {
-        print('Error exporting data to server API: $error');
-      }
-    } catch (error) {
-      print('Error exporting data to server API: $error');
+      print(item.title);
+      indexCount.value++;
     }
   }
 

@@ -83,7 +83,7 @@ class ManageHistoryView extends StatelessWidget {
                         backgroundColor: Colors.green),
                     onPressed: () {
                       // checkedbookcontroller.exportToCSV();
-                      checkedbookcontroller.exportToApi();
+                      checkedbookcontroller.showDialogExport();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -193,14 +193,14 @@ class ManageHistoryView extends StatelessWidget {
             clearTextField();
           }
         },
-        child: Text('ยืนยัน'),
+        child: const Text('ยืนยัน'),
       ),
       cancel: ElevatedButton(
         onPressed: () {
           Get.back();
           clearTextField();
         },
-        child: Text('ยกเลิก'),
+        child: const Text('ยกเลิก'),
       ),
     );
   }
