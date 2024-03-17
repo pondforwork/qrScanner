@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
+import 'package:qr_scan/controller/internetcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class ManageHistoryView extends StatelessWidget {
@@ -10,6 +11,7 @@ class ManageHistoryView extends StatelessWidget {
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
   final TextEditingController confirmTextController = TextEditingController();
+  final InternetContoller internetContoller = InternetContoller();
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +83,13 @@ class ManageHistoryView extends StatelessWidget {
                         textStyle: const TextStyle(
                             fontSize: 15, fontStyle: FontStyle.normal),
                         backgroundColor: Colors.green),
-                    onPressed: () {
+                    onPressed: () async {
                       // checkedbookcontroller.exportToCSV();
-                      checkedbookcontroller.showDialogExport();
+                      if (await internetContoller.checkInternetConnection()) {
+                        checkedbookcontroller.showDialogExport();
+                      } else {
+                        checkedbookcontroller.shownoInternetDialog();
+                      }
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -93,9 +99,7 @@ class ManageHistoryView extends StatelessWidget {
                           width: 35,
                           height: 35,
                         ),
-                        const SizedBox(
-                            width:
-                                20), // Adjust the width according to your spacing preference
+                        const SizedBox(width: 20),
                         const Text(
                           'ส่งออกข้อมูล',
                           style: TextStyle(color: Colors.white),

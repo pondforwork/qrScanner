@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -338,7 +337,8 @@ class scanDBhelper extends GetxController {
     checkunexportQty();
     Get.defaultDialog(
       title: "ต้องการส่งออกข้อมูลหรือไม่?",
-      content: Obx(() => Text(allunexportedQty.value.toString())),
+      content: Obx(
+          () => Text("จำนวนทั้งหมด ${allunexportedQty.value.toString()} เล่ม")),
       actions: [
         TextButton(
           onPressed: () {
@@ -351,7 +351,6 @@ class scanDBhelper extends GetxController {
           onPressed: () {
             Get.back();
             showProgressDialog();
-            exportToApi();
           },
           child: const Text("ตกลง"),
         ),
@@ -371,21 +370,22 @@ class scanDBhelper extends GetxController {
             ],
           )),
     );
-    if (exportProgress.value == allunexportedQty.value) {
-      Get.back();
-      Get.defaultDialog(
-        title: "ส่งออกข้อมูลสำเร็จ",
-        middleText: "ส่งออกข้อมูลเรียบร้อยแล้ว",
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: const Text("ตกลง"),
-          ),
-        ],
-      );
-    }
+    exportToApi();
+    // if (exportProgress.value == allunexportedQty.value) {
+    //   Get.back();
+    //   Get.defaultDialog(
+    //     title: "ส่งออกข้อมูลสำเร็จ",
+    //     middleText: "ส่งออกข้อมูลเรียบร้อยแล้ว",
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () {
+    //           Get.back();
+    //         },
+    //         child: const Text("ตกลง"),
+    //       ),
+    //     ],
+    //   );
+    // }
   }
 
   exportToApi() async {
@@ -426,6 +426,7 @@ class scanDBhelper extends GetxController {
       }
       indexCount.value++;
     }
+    Get.back();
   }
 
   void showerrorDialog() {
@@ -438,6 +439,30 @@ class scanDBhelper extends GetxController {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("ไม่สามารถส่งออกข้อมูล"),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text("ตกลง"),
+        ),
+      ],
+    );
+  }
+
+  void shownoInternetDialog() {
+    Get.defaultDialog(
+      title: "ไม่มีการเชื่อมต่อ",
+      content: const SizedBox(
+        width: 200,
+        height: 200,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("กรุณาเชื่อมต่ออินเทอร์เน็ต"),
           ],
         ),
       ),
