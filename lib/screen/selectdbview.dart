@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
+import 'package:qr_scan/controller/internetcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
 class SelectDBview extends StatelessWidget {
@@ -9,6 +10,7 @@ class SelectDBview extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
   final scanDBhelper scandbController = Get.put(scanDBhelper());
+  final InternetContoller internetContoller = InternetContoller();
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +53,26 @@ class SelectDBview extends StatelessWidget {
                   }
                 }
               }),
+              // ignore: prefer_const_constructors
               SizedBox(
                 height: 150,
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: bookController.isDownloadingDB.value
-                      ? null
+                  onPressed: bookController.isDownloadingDB
+                          .value // Check if downloading is in progress
+                      ? null // If downloading is in progress, disable the button
                       : () async {
-                          await bookController.downloadandapplyDB();
+                          // If not downloading, initiate the download and apply process
+                          if (await internetContoller
+                              .checkInternetConnection()) {
+                            await bookController.downloadandapplyDB();
+                          } else {
+                            internetContoller.shownoInternetDialog();
+                          }
                         },
-                  child: const Text("ดึงข้อมูลหนังสือ"),
+                  child: const Text(
+                      "ดึงข้อมูลหนังสือ"), // Displayed text on the button
                 ),
               ),
             ],

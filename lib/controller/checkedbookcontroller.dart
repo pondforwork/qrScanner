@@ -418,7 +418,7 @@ class scanDBhelper extends GetxController {
         if (await sendPostRequest(url, postData)) {
           Get.back();
           showerrorDialog();
-          // break;
+          break;
         } else {
           print("Posting ${item.title}");
           updateExportStatusByOne(indexCount.value);
@@ -439,30 +439,6 @@ class scanDBhelper extends GetxController {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("ไม่สามารถส่งออกข้อมูล"),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text("ตกลง"),
-        ),
-      ],
-    );
-  }
-
-  void shownoInternetDialog() {
-    Get.defaultDialog(
-      title: "ไม่มีการเชื่อมต่อ",
-      content: const SizedBox(
-        width: 200,
-        height: 200,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("กรุณาเชื่อมต่ออินเทอร์เน็ต"),
           ],
         ),
       ),

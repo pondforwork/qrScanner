@@ -88,7 +88,7 @@ class ManageHistoryView extends StatelessWidget {
                       if (await internetContoller.checkInternetConnection()) {
                         checkedbookcontroller.showDialogExport();
                       } else {
-                        checkedbookcontroller.shownoInternetDialog();
+                        internetContoller.shownoInternetDialog();
                       }
                     },
                     child: Row(
