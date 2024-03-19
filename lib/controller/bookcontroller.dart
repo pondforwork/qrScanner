@@ -11,7 +11,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 
-
 class BookController extends GetxController {
   Database? _database;
   RxString resultSearch = 'No Result'.obs;
@@ -20,6 +19,7 @@ class BookController extends GetxController {
   RxBool isDownloadingDB = false.obs;
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
   final UserController userController = Get.put(UserController());
+  // final ScannerController scannercontroller = Get.put(ScannerController());
   RxString loadingprogress = "0.0".obs;
   RxString downloadedPath = "".obs;
   RxBool unzippingstatus = false.obs;
@@ -69,7 +69,6 @@ class BookController extends GetxController {
         // showDialogForResult(firstValue, firstResult['TITLE'], firstResult);
         savefoundbook(firstValue, firstResult['TITLE'], firstResult);
       } else {
-        // scannercontroller.scan.value = false;
         resultSearch.value = "No result";
         showDialogNotFound(barcode);
       }

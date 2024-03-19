@@ -9,6 +9,7 @@ class ScannerController extends GetxController {
   // final BookController bookcontroller = Get.put(BookController());
   // final BookController bookController = Get.put(BookController());
   final BookController bookController = Get.put(BookController());
+  RxBool scan = false.obs;
 
   RxBool scan = false.obs;
 
@@ -67,4 +68,35 @@ class ScannerController extends GetxController {
       BookController().isLoading.value = false;
     }
   }
+<<<<<<< HEAD
+=======
+
+  // Future<void> scanContinuous() async {
+  //   scan.value = true;
+  //   try {
+  //     BookController().isLoading.value = true;
+  //     FlutterBarcodeScanner.getBarcodeStreamReceiver(
+  //             "#ff6666", "Cancel", false, ScanMode.DEFAULT)
+  //         ?.listen((barcodeScanResult) async {
+  //       if (barcodeScanResult == "-1") {
+  //         print("Cancel");
+  //         barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+  //         scan.value = false;
+  //       } else {
+  //         barcode.value = barcodeScanResult;
+  //         print(barcode.value);
+  //         // await bookController.findFromBarcode(barcode.value);
+  //         Get.snackbar(
+  //           'บันทึกสำเร็จ',
+  //           'ชื่อหนังสือ : ',
+  //           snackPosition: SnackPosition.TOP,
+  //           duration: const Duration(seconds: 3),
+  //         );
+  //       }
+  //     });
+  //   } finally {
+  //     BookController().isLoading.value = false;
+  //   }
+  // }
+>>>>>>> 534f9e94f6df52fed6fc3eecabba95a5d7863fe8
 }
