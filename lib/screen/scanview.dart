@@ -261,9 +261,14 @@ class Scanview extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          print("Working");
           await scannercontroller.scanandsearchFromDB();
-          // await scannercontroller.scanContinuous();
-          // print(scannercontroller.barcode.value);
+          while (scannercontroller.scan.value == true) {
+            print("Delaying");
+            await Future.delayed(Duration(seconds: 3));
+            print("Running");
+            await scannercontroller.scanandsearchFromDB();
+          }
         },
         child: const Icon(Icons.qr_code_2_outlined),
       ),
