@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,6 +10,7 @@ import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_archive/flutter_archive.dart';
+
 
 class BookController extends GetxController {
   Database? _database;
@@ -69,6 +69,7 @@ class BookController extends GetxController {
         // showDialogForResult(firstValue, firstResult['TITLE'], firstResult);
         savefoundbook(firstValue, firstResult['TITLE'], firstResult);
       } else {
+        // scannercontroller.scan.value = false;
         resultSearch.value = "No result";
         showDialogNotFound(barcode);
       }

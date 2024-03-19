@@ -6,8 +6,11 @@ class ScannerController extends GetxController {
   RxString barcodeResult = "No data yet. Please Scan QR or Barcode".obs;
   RxString barcode = ''.obs;
   List<String> list = ['One', 'Two', 'Three', 'Four'];
-  final BookController bookcontroller = Get.put(BookController());
+  // final BookController bookcontroller = Get.put(BookController());
+  // final BookController bookController = Get.put(BookController());
   final BookController bookController = Get.put(BookController());
+
+  RxBool scan = false.obs;
 
   Future<void> scanBarcode() async {
     String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
@@ -22,23 +25,27 @@ class ScannerController extends GetxController {
     }
   }
 
-  Future<void> scanBarcodeAndSearchDB(value) async {
-    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-      "#ff6666",
-      "Cancel",
-      true,
-      ScanMode.DEFAULT,
-    );
-    barcodeResult.value = barcodeScanResult;
-    if (barcodeResult.value == "-1") {
-      barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-    } else {
-      BookController().findFromBarcode(barcodeScanResult);
-    }
-    BookController().findFromBarcode(value);
-  }
+  // Future<void> scanBarcodeAndSearchDB(value) async {
+  //   scan.value = true;
+  //   String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
+  //     "#ff6666",
+  //     "Cancel",
+  //     true,
+  //     ScanMode.DEFAULT,
+  //   );
+  //   barcodeResult.value = barcodeScanResult;
+  //   if (barcodeResult.value == "-1") {
+  //     barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+  //     scan.value = false;
+  //   } else {
+  //     BookController().findFromBarcode(barcodeScanResult);
+  //   }
+  //   BookController().findFromBarcode(value);
+  // }
 
   Future<void> scanandsearchFromDB() async {
+    scan.value = true;
+
     try {
       BookController().isLoading.value = true;
       String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
@@ -51,36 +58,11 @@ class ScannerController extends GetxController {
       if (barcodeScanResult == "-1") {
         print("Cancel");
         barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+        scan.value = false;
       } else {
         barcode.value = barcodeScanResult;
         await bookController.findFromBarcode(barcode.value);
       }
-    } finally {
-      BookController().isLoading.value = false;
-    }
-  }
-
-  Future<void> scanContinuous() async {
-    try {
-      BookController().isLoading.value = true;
-      FlutterBarcodeScanner.getBarcodeStreamReceiver(
-              "#ff6666", "Cancel", false, ScanMode.DEFAULT)
-          ?.listen((barcodeScanResult) async {
-        if (barcodeScanResult == "-1") {
-          print("Cancel");
-          barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-        } else {
-          barcode.value = barcodeScanResult;
-          print(barcode.value);
-          // await bookController.findFromBarcode(barcode.value);
-          Get.snackbar(
-            'บันทึกสำเร็จ',
-            'ชื่อหนังสือ : ',
-            snackPosition: SnackPosition.TOP,
-            duration: const Duration(seconds: 3),
-          );
-        }
-      });
     } finally {
       BookController().isLoading.value = false;
     }
