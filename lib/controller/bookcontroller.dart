@@ -55,7 +55,6 @@ class BookController extends GetxController {
     _database = await openDatabase(path, readOnly: false);
   }
 
-  //THIS IS FIND FROM CLICK SEARCH
   Future<void> findFromBarcode(String barcode) async {
     if (checkdbAvial() == true) {
       await _openLocalDatabase();
@@ -67,7 +66,8 @@ class BookController extends GetxController {
       if (result.isNotEmpty) {
         Map<String, dynamic> firstResult = result.first;
         String firstValue = firstResult['TITLE'];
-        showDialogForResult(firstValue, firstResult['TITLE'], firstResult);
+        // showDialogForResult(firstValue, firstResult['TITLE'], firstResult);
+        savefoundbook(firstValue, firstResult['TITLE'], firstResult);
       } else {
         resultSearch.value = "No result";
         showDialogNotFound(barcode);
@@ -86,91 +86,134 @@ class BookController extends GetxController {
     }
   }
 
-  Future<void> showDialogForResult(
-      String bookName, String barcode, Map<String, dynamic> firstResult) async {
-    String colId = firstResult['COLLECTIONID'].toString();
-    Get.defaultDialog(
-      title: "Book Found!!!",
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Book Name : $bookName"),
-          const SizedBox(
-            height: 20,
-          ),
-          Text("Collection Id :  $colId")
-        ],
-      ),
-      actions: [
-        SizedBox(
-          width: 100,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-            ),
-            onPressed: () async {
-              Get.back();
-            },
-            child: const Text(
-              "ยกเลิก",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 50,
-        ),
-        SizedBox(
-          width: 100,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-            ),
-            onPressed: () async {
-              DateTime checktime = DateTime.now();
-              // First Save
-              Checkedbook checkedbook = Checkedbook(
-                  firstResult['BARCODE'] ?? "",
-                  firstResult['CALLNO'] ?? "",
-                  firstResult['TITLE'] ?? "",
-                  firstResult['AUTHOR'] ?? "",
-                  firstResult['COLLECTIONNAME'] ?? "",
-                  firstResult['ITEMSTATUSNAME'] ?? "",
-                  firstResult['COLLECTIONID'] ?? "",
-                  "Y",
-                  userController.currentUser.value,
-                  userController.currentUserEmail.value,
-                  "",
-                  checktime,
-                  1,
-                  false);
-              scandbhelper.addData(
-                  checkedbook.barcode,
-                  checkedbook.callNo,
-                  checkedbook.title,
-                  checkedbook.author,
-                  checkedbook.collectionName,
-                  checkedbook.itemStatusName,
-                  checkedbook.collectionId,
-                  checkedbook.found,
-                  checkedbook.recorder,
-                  checkedbook.recorderemail,
-                  checkedbook.note,
-                  checkedbook.checktime,
-                  checkedbook.count,
-                  checkedbook.exportstatus);
-              scandbhelper.fetchToDo();
-              Get.back(); // Close the dialog
-            },
-            child: const Text(
-              "บันทึก",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ],
+  void savefoundbook(
+      String bookName, String barcode, Map<String, dynamic> firstResult) {
+    DateTime checktime = DateTime.now();
+    // First Save
+    Checkedbook checkedbook = Checkedbook(
+        firstResult['BARCODE'] ?? "",
+        firstResult['CALLNO'] ?? "",
+        firstResult['TITLE'] ?? "",
+        firstResult['AUTHOR'] ?? "",
+        firstResult['COLLECTIONNAME'] ?? "",
+        firstResult['ITEMSTATUSNAME'] ?? "",
+        firstResult['COLLECTIONID'] ?? "",
+        "Y",
+        userController.currentUser.value,
+        userController.currentUserEmail.value,
+        "",
+        checktime,
+        1,
+        false);
+    scandbhelper.addData(
+        checkedbook.barcode,
+        checkedbook.callNo,
+        checkedbook.title,
+        checkedbook.author,
+        checkedbook.collectionName,
+        checkedbook.itemStatusName,
+        checkedbook.collectionId,
+        checkedbook.found,
+        checkedbook.recorder,
+        checkedbook.recorderemail,
+        checkedbook.note,
+        checkedbook.checktime,
+        checkedbook.count,
+        checkedbook.exportstatus);
+    scandbhelper.fetchToDo();
+    Get.snackbar(
+      'บันทึกสำเร็จ',
+      'ชื่อหนังสือ : ${checkedbook.title}',
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 3),
     );
   }
+
+  // Future<void> showDialogForResult(
+  //     String bookName, String barcode, Map<String, dynamic> firstResult) async {
+  //   String colId = firstResult['COLLECTIONID'].toString();
+  //   Get.defaultDialog(
+  //     title: "Book Found!!!",
+  //     content: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text("Book Name : $bookName"),
+  //         const SizedBox(
+  //           height: 20,
+  //         ),
+  //         Text("Collection Id :  $colId")
+  //       ],
+  //     ),
+  //     actions: [
+  //       SizedBox(
+  //         width: 100,
+  //         child: ElevatedButton(
+  //           style: ButtonStyle(
+  //             backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+  //           ),
+  //           onPressed: () async {
+  //             Get.back();
+  //           },
+  //           child: const Text(
+  //             "ยกเลิก",
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ),
+  //       ),
+  //       const SizedBox(
+  //         width: 50,
+  //       ),
+  //       SizedBox(
+  //         width: 100,
+  //         child: ElevatedButton(
+  //           style: ButtonStyle(
+  //             backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+  //           ),
+  //           onPressed: () async {
+  //             DateTime checktime = DateTime.now();
+  //             // First Save
+  //             Checkedbook checkedbook = Checkedbook(
+  //                 firstResult['BARCODE'] ?? "",
+  //                 firstResult['CALLNO'] ?? "",
+  //                 firstResult['TITLE'] ?? "",
+  //                 firstResult['AUTHOR'] ?? "",
+  //                 firstResult['COLLECTIONNAME'] ?? "",
+  //                 firstResult['ITEMSTATUSNAME'] ?? "",
+  //                 firstResult['COLLECTIONID'] ?? "",
+  //                 "Y",
+  //                 userController.currentUser.value,
+  //                 userController.currentUserEmail.value,
+  //                 "",
+  //                 checktime,
+  //                 1,
+  //                 false);
+  //             scandbhelper.addData(
+  //                 checkedbook.barcode,
+  //                 checkedbook.callNo,
+  //                 checkedbook.title,
+  //                 checkedbook.author,
+  //                 checkedbook.collectionName,
+  //                 checkedbook.itemStatusName,
+  //                 checkedbook.collectionId,
+  //                 checkedbook.found,
+  //                 checkedbook.recorder,
+  //                 checkedbook.recorderemail,
+  //                 checkedbook.note,
+  //                 checkedbook.checktime,
+  //                 checkedbook.count,
+  //                 checkedbook.exportstatus);
+  //             scandbhelper.fetchToDo();
+  //             Get.back(); // Close the dialog
+  //           },
+  //           child: const Text(
+  //             "บันทึก",
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Future<void> showDialogNotFound(String barcode) async {
     TextEditingController titleController = TextEditingController();
@@ -277,7 +320,8 @@ class BookController extends GetxController {
                 scandbhelper.addData(
                     checkedbook.barcode,
                     checkedbook.callNo,
-                    checkedbook.title,checkedbook.author,
+                    checkedbook.title,
+                    checkedbook.author,
                     checkedbook.collectionName,
                     checkedbook.itemStatusName,
                     checkedbook.collectionId,

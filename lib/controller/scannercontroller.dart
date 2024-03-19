@@ -48,13 +48,6 @@ class ScannerController extends GetxController {
         ScanMode.DEFAULT,
       );
 
-      Get.snackbar(
-      'Success',
-      'fdssfd: ',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: Duration(seconds: 3),
-    );
-
       if (barcodeScanResult == "-1") {
         print("Cancel");
         barcodeResult.value = "No data yet. Please Scan QR or Barcode";
@@ -62,6 +55,32 @@ class ScannerController extends GetxController {
         barcode.value = barcodeScanResult;
         await bookController.findFromBarcode(barcode.value);
       }
+    } finally {
+      BookController().isLoading.value = false;
+    }
+  }
+
+  Future<void> scanContinuous() async {
+    try {
+      BookController().isLoading.value = true;
+      FlutterBarcodeScanner.getBarcodeStreamReceiver(
+              "#ff6666", "Cancel", false, ScanMode.DEFAULT)
+          ?.listen((barcodeScanResult) async {
+        if (barcodeScanResult == "-1") {
+          print("Cancel");
+          barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+        } else {
+          barcode.value = barcodeScanResult;
+          print(barcode.value);
+          // await bookController.findFromBarcode(barcode.value);
+          Get.snackbar(
+            'บันทึกสำเร็จ',
+            'ชื่อหนังสือ : ',
+            snackPosition: SnackPosition.TOP,
+            duration: const Duration(seconds: 3),
+          );
+        }
+      });
     } finally {
       BookController().isLoading.value = false;
     }
