@@ -19,11 +19,11 @@ class BookController extends GetxController {
   RxBool isDownloadingDB = false.obs;
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
   final UserController userController = Get.put(UserController());
-  // final ScannerController scannercontroller = Get.put(ScannerController());
   RxString loadingprogress = "0.0".obs;
   RxString downloadedPath = "".obs;
   RxBool unzippingstatus = false.obs;
   String filePathZip = "/storage/emulated/0/Download/Books.zip";
+  RxBool continuousScan = false.obs;
 
   @override
   Future<void> onInit() async {
@@ -129,95 +129,8 @@ class BookController extends GetxController {
     );
   }
 
-  // Future<void> showDialogForResult(
-  //     String bookName, String barcode, Map<String, dynamic> firstResult) async {
-  //   String colId = firstResult['COLLECTIONID'].toString();
-  //   Get.defaultDialog(
-  //     title: "Book Found!!!",
-  //     content: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text("Book Name : $bookName"),
-  //         const SizedBox(
-  //           height: 20,
-  //         ),
-  //         Text("Collection Id :  $colId")
-  //       ],
-  //     ),
-  //     actions: [
-  //       SizedBox(
-  //         width: 100,
-  //         child: ElevatedButton(
-  //           style: ButtonStyle(
-  //             backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-  //           ),
-  //           onPressed: () async {
-  //             Get.back();
-  //           },
-  //           child: const Text(
-  //             "ยกเลิก",
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(
-  //         width: 50,
-  //       ),
-  //       SizedBox(
-  //         width: 100,
-  //         child: ElevatedButton(
-  //           style: ButtonStyle(
-  //             backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-  //           ),
-  //           onPressed: () async {
-  //             DateTime checktime = DateTime.now();
-  //             // First Save
-  //             Checkedbook checkedbook = Checkedbook(
-  //                 firstResult['BARCODE'] ?? "",
-  //                 firstResult['CALLNO'] ?? "",
-  //                 firstResult['TITLE'] ?? "",
-  //                 firstResult['AUTHOR'] ?? "",
-  //                 firstResult['COLLECTIONNAME'] ?? "",
-  //                 firstResult['ITEMSTATUSNAME'] ?? "",
-  //                 firstResult['COLLECTIONID'] ?? "",
-  //                 "Y",
-  //                 userController.currentUser.value,
-  //                 userController.currentUserEmail.value,
-  //                 "",
-  //                 checktime,
-  //                 1,
-  //                 false);
-  //             scandbhelper.addData(
-  //                 checkedbook.barcode,
-  //                 checkedbook.callNo,
-  //                 checkedbook.title,
-  //                 checkedbook.author,
-  //                 checkedbook.collectionName,
-  //                 checkedbook.itemStatusName,
-  //                 checkedbook.collectionId,
-  //                 checkedbook.found,
-  //                 checkedbook.recorder,
-  //                 checkedbook.recorderemail,
-  //                 checkedbook.note,
-  //                 checkedbook.checktime,
-  //                 checkedbook.count,
-  //                 checkedbook.exportstatus);
-  //             scandbhelper.fetchToDo();
-  //             Get.back(); // Close the dialog
-  //           },
-  //           child: const Text(
-  //             "บันทึก",
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Future<void> showDialogNotFound(String barcode) async {
+  showDialogNotFound(String barcode) async {
     TextEditingController titleController = TextEditingController();
-    TextEditingController collectionIdController = TextEditingController();
     TextEditingController callNocontroller = TextEditingController();
     TextEditingController authorController = TextEditingController();
 
@@ -277,9 +190,7 @@ class BookController extends GetxController {
           onPressed: () async {
             if (_formKey.currentState?.validate() ?? false) {
               // Form is valid, proceed with the action
-
               Get.back(); // Close the current dialog
-
               bool confirmAdd = await Get.defaultDialog(
                 title: "เพิ่มหนังสือเกิน?",
                 content: const Text("คุณต้องการเพิ่มหนังสือเล่มนี้หรือไม่?"),
@@ -340,6 +251,7 @@ class BookController extends GetxController {
         ),
       ],
     );
+    continuousScan.value = false;
   }
 
   downloadFile() async {

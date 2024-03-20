@@ -394,6 +394,7 @@ class scanDBhelper extends GetxController {
 
     indexCount.value = 0;
     exportProgress.value = 0;
+
     for (Checkedbook item in todo) {
       String formattedDate =
           DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
@@ -420,13 +421,18 @@ class scanDBhelper extends GetxController {
           showerrorDialog();
           break;
         } else {
-          print("Posting ${item.title}");
           updateExportStatusByOne(indexCount.value);
+          print("Index");
+          print(indexCount.value);
+          print("Progress");
+          print(exportProgress.value);
         }
       }
       indexCount.value++;
     }
-    Get.back();
+    if (exportProgress.value == allunexportedQty.value) {
+      Get.back();
+    }
   }
 
   void showerrorDialog() {

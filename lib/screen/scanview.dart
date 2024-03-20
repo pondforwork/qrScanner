@@ -123,7 +123,7 @@ class Scanview extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -131,20 +131,26 @@ class Scanview extends StatelessWidget {
           Obx(
             () {
               return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/icon/foundbooks.png',
-                        width: 35,
-                        height: 35,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(checkedbookcontroller.foundqtyobs.value.toString()),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/icon/foundbooks.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          checkedbookcontroller.foundqtyobs.value.toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     width: 20,
@@ -159,27 +165,33 @@ class Scanview extends StatelessWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      Text(checkedbookcontroller.notfoundqtyobs.value
-                          .toString()),
+                      Text(
+                          checkedbookcontroller.notfoundqtyobs.value.toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   const SizedBox(
                     width: 20,
                   ),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/icon/allBooks.png',
-                        width: 35,
-                        height: 35,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text((checkedbookcontroller.foundqtyobs.value +
-                              checkedbookcontroller.notfoundqtyobs.value)
-                          .toString()),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/icon/allBooks.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                            (checkedbookcontroller.foundqtyobs.value +
+                                    checkedbookcontroller.notfoundqtyobs.value)
+                                .toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
                   ),
                 ],
               );
@@ -262,7 +274,7 @@ class Scanview extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await scannercontroller.scanandsearchFromDB();
-          while (scannercontroller.scan.value == true) {
+          while (bookController.continuousScan.value == true) {
             await Future.delayed(Duration(seconds: 3));
 
             await scannercontroller.scanandsearchFromDB();

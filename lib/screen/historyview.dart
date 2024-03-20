@@ -191,29 +191,26 @@ class HistoryView extends StatelessWidget {
               ),
               children: [
                 ListTile(
-                  title: Text('Book Title: ${item.title}'),
+                  title: Text('ชื่อหนังสือ: ${item.title}'),
                 ),
                 ListTile(
-                  title: Text('Barcode: ${item.barcode}'),
+                  title: Text('บาร์โค้ด: ${item.barcode}'),
                 ),
                 ListTile(
-                  title: Text('Recorder: ${item.recorder}'),
+                  title: Text('ผู้บันทึก: ${item.recorder}'),
                 ),
                 ListTile(
-                  title: Text('Note: ${item.note}'),
+                  title: Text('โน๊ต: ${item.note}'),
                 ),
                 ListTile(
                   title: Text(
-                    'Recorded Time: ${item.checktime.day.toString().padLeft(2, '0')}'
+                    'เวลาที่บันทึก: ${item.checktime.day.toString().padLeft(2, '0')}'
                     '/${item.checktime.month.toString().padLeft(2, '0')}'
                     '/${item.checktime.year} '
                     '${item.checktime.hour.toString().padLeft(2, '0')}'
                     ':${item.checktime.minute.toString().padLeft(2, '0')}'
                     ':${item.checktime.second.toString().padLeft(2, '0')}',
                   ),
-                ),
-                ListTile(
-                  title: Text('ExportStatus: ${item.exportstatus}'),
                 ),
               ],
             ),
