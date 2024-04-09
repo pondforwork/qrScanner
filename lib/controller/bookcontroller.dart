@@ -143,11 +143,14 @@ class BookController extends GetxController {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
-            const Text("ใส่ข้อมูลหนังสือด้านล่าง"),
+            const Text(
+              "กรุณาใส่ข้อมูลหนังสือด้านล่าง",
+              style: TextStyle(fontSize: 17),
+            ),
             const SizedBox(height: 20),
             Text(
               "BARCODE : $barcode",
-              style: TextStyle(fontSize: 17),
+              style: TextStyle(fontSize: 16),
             ),
             TextFormField(
               controller: titleController,

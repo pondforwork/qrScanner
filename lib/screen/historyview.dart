@@ -100,8 +100,8 @@ class HistoryView extends StatelessWidget {
     return GestureDetector(
       onLongPress: () {
         Get.defaultDialog(
-          title: 'Delete Book',
-          content: Text("Do you want to delete ${item.title}?"),
+          title: 'ลบหนังสือเล่มนี้',
+          content: Text("ต้องการลบ ${item.title} หรือไม่ ?"),
           confirm: ElevatedButton(
             onPressed: () async {
               await checkedbookcontroller.deleteData(item.barcode);
@@ -114,9 +114,14 @@ class HistoryView extends StatelessWidget {
               ),
               backgroundColor: Colors.red,
             ),
-            child: const Text(
-              'Confirm',
-              style: TextStyle(color: Colors.white),
+            child: const SizedBox(
+              width: 50,
+              child: Center(
+                child: Text(
+                  'ลบ',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ),
           cancel: ElevatedButton(
@@ -130,9 +135,14 @@ class HistoryView extends StatelessWidget {
               ),
               backgroundColor: Colors.green,
             ),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white),
+            child: const SizedBox(
+              width: 50,
+              child: Center(
+                child: Text(
+                  'ยกเลิก',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ),
         );

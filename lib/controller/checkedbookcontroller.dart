@@ -345,27 +345,42 @@ class scanDBhelper extends GetxController {
 
   Future<void> showDialogExport() async {
     checkunexportQty();
-    Get.defaultDialog(
-      title: "ต้องการส่งออกข้อมูลหรือไม่?",
-      content: Obx(
-          () => Text("จำนวนทั้งหมด ${allunexportedQty.value.toString()} เล่ม")),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text("ยกเลิก"),
-        ),
-        const SizedBox(width: 50),
-        TextButton(
-          onPressed: () {
-            Get.back();
-            showProgressDialog();
-          },
-          child: const Text("ตกลง"),
-        ),
-      ],
-    );
+    if (allunexportedQty.value == 0) {
+      Get.defaultDialog(
+        title: "ไม่มีข้อมูล",
+        content: const Text("ไม่สามารถส่งออกได้โดยที่ยังไม่มีข้อมูล"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text("ตกลง"),
+          ),
+        ],
+      );
+    } else {
+      Get.defaultDialog(
+        title: "ต้องการส่งออกข้อมูลหรือไม่?",
+        content: Obx(() =>
+            Text("จำนวนทั้งหมด ${allunexportedQty.value.toString()} เล่ม")),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text("ยกเลิก"),
+          ),
+          const SizedBox(width: 50),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              showProgressDialog();
+            },
+            child: const Text("ตกลง"),
+          ),
+        ],
+      );
+    }
   }
 
   showProgressDialog() async {
@@ -442,6 +457,7 @@ class scanDBhelper extends GetxController {
     }
     if (exportProgress.value == allunexportedQty.value) {
       Get.back();
+      showFinishExportDialog();
     }
   }
 
@@ -466,6 +482,15 @@ class scanDBhelper extends GetxController {
           child: const Text("ตกลง"),
         ),
       ],
+    );
+  }
+
+  void showFinishExportDialog() {
+    Get.snackbar(
+      'ส่งออกข้อมูลเรียบร้อยแล้ว', // Title
+      '', // Message
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 3),
     );
   }
 

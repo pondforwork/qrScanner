@@ -22,64 +22,93 @@ class ManageHistoryView extends StatelessWidget {
       ),
       body: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Expanded(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () {
-                        return Text(
-                          "คุณบันทึกหนังสือไปแล้ว ${checkedbookcontroller.foundqtyobs.value + checkedbookcontroller.notfoundqtyobs.value} เล่ม",
+                Obx(
+                  () {
+                    return Row(
+                      children: [
+                        Image.asset(
+                          'assets/icon/allBooks.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "${checkedbookcontroller.foundqtyobs.value + checkedbookcontroller.notfoundqtyobs.value} ",
                           style: const TextStyle(fontSize: 20),
-                        );
-                      },
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () {
-                        return Text(
-                            "จำนวนหนังสือที่พบ " +
-                                checkedbookcontroller.foundqtyobs.value
-                                    .toString() +
-                                " เล่ม",
-                            style: TextStyle(fontSize: 20));
-                      },
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () {
-                        return Text(
-                            "จำนวนหนังสือที่เกิน " +
-                                checkedbookcontroller.notfoundqtyobs.value
-                                    .toString() +
-                                " เล่ม",
-                            style: TextStyle(fontSize: 20));
-                      },
-                    )
-                  ],
+                        ),
+                      ],
+                    );
+                  },
                 )
-              ]),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Obx(
+                  () {
+                    return Row(
+                      children: [
+                        Image.asset(
+                          'assets/icon/foundbooks.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(checkedbookcontroller.foundqtyobs.value.toString(),
+                            style: const TextStyle(fontSize: 20)),
+                      ],
+                    );
+                  },
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Obx(
+                  () {
+                    return Row(
+                      children: [
+                        Image.asset(
+                          'assets/icon/additionbooks.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                            checkedbookcontroller.notfoundqtyobs.value
+                                .toString(),
+                            style: const TextStyle(fontSize: 20)),
+                      ],
+                    );
+                  },
+                )
+              ],
+            )
+          ]),
         ),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        fixedSize: Size(200, 40),
+                        fixedSize: const Size(200, 40),
                         textStyle: const TextStyle(
                             fontSize: 15, fontStyle: FontStyle.normal),
                         backgroundColor: Colors.green),
@@ -109,7 +138,7 @@ class ManageHistoryView extends StatelessWidget {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        fixedSize: Size(200, 40),
+                        fixedSize: const Size(200, 40),
                         textStyle: const TextStyle(
                             fontSize: 15, fontStyle: FontStyle.normal),
                         backgroundColor: Colors.green),
@@ -134,32 +163,32 @@ class ManageHistoryView extends StatelessWidget {
               const SizedBox(
                 height: 40,
               ),
-              Obx(
-                () => checkedbookcontroller.exportStatus.value == true
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: Size(200, 40),
-                              textStyle: const TextStyle(
-                                fontSize: 15,
-                                fontStyle: FontStyle.normal,
-                              ),
-                              backgroundColor: Colors.red,
-                            ),
-                            onPressed: () {
-                              showConfirmationDialog();
-                            },
-                            child: const Text(
-                              'ล้างข้อมูลการบันทึก',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container(),
-              )
+              // Obx(
+              //   () => checkedbookcontroller.exportStatus.value == true
+              //       ? Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             ElevatedButton(
+              //               style: ElevatedButton.styleFrom(
+              //                 fixedSize: const Size(200, 40),
+              //                 textStyle: const TextStyle(
+              //                   fontSize: 15,
+              //                   fontStyle: FontStyle.normal,
+              //                 ),
+              //                 backgroundColor: Colors.red,
+              //               ),
+              //               onPressed: () {
+              //                 showConfirmationDialog();
+              //               },
+              //               child: const Text(
+              //                 'ล้างข้อมูลการบันทึก',
+              //                 style: TextStyle(color: Colors.white),
+              //               ),
+              //             ),
+              //           ],
+              //         )
+              //       : Container(),
+              // )
             ],
           ),
         ),
