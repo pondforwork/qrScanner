@@ -74,9 +74,15 @@ class Scanview extends StatelessWidget {
                               onPressed: () {
                                 if (textEditingController.text.isNotEmpty &&
                                     bookController.checkdbAvial() == true) {
-                                  bookController.findFromBarcode(
-                                      textEditingController.text);
-                                  textEditingController.text = "";
+                                  if (checkedbookcontroller.checkDuplicateBook(
+                                      textEditingController.text)) {
+                                    bookController.showDuplicateSnackbar();
+                                    textEditingController.text = "";
+                                  } else {
+                                    bookController.findFromBarcode(
+                                        textEditingController.text);
+                                    textEditingController.text = "";
+                                  }
                                 } else if (textEditingController
                                         .text.isNotEmpty &&
                                     bookController.checkdbAvial() == false) {

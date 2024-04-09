@@ -148,12 +148,13 @@ class scanDBhelper extends GetxController {
       int count,
       bool exportstatus) async {
     var data = Hive.box('data');
-    int countFromList = checkDuplicatecount(barcode);
+    int countFromList = countDuplicate(barcode);
     if (countFromList >= 1) {
       count = countFromList + 1;
     } else {
       count = 1;
     }
+
     data.put(barcode, {
       'barcode': barcode,
       'callNo': callNo,
@@ -170,9 +171,18 @@ class scanDBhelper extends GetxController {
       'count': count,
       'exportstatus': exportstatus
     });
-
+    showSavedBookSnackbar(title);
     fetchToDo();
     exportStatus.value = false;
+  }
+
+  showSavedBookSnackbar(String title) {
+    Get.snackbar(
+      'บันทึกสำเร็จ',
+      'ชื่อหนังสือ : $title',
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 3),
+    );
   }
 
   bool checkExportStatus(List<Checkedbook> todo) {
@@ -459,14 +469,49 @@ class scanDBhelper extends GetxController {
     );
   }
 
-  int checkDuplicatecount(String inputbarcode) {
+  int countDuplicate(String inputbarcode) {
     try {
       var foundCheckedbook =
           todo.firstWhere((checkedBook) => checkedBook.barcode == inputbarcode);
       return foundCheckedbook.count;
     } catch (e) {
-      print("Return 0");
       return 0;
     }
   }
+
+  bool checkDuplicateBook(String barcode) {
+    for (Checkedbook checkedBook in todo) {
+      print("1");
+      if (checkedBook.barcode == barcode) {
+        print(checkedBook.title);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ใช้ตัวนี้ในการรับค่ามาอัพเดท
+  // updateDuplicatebook(String barcode) {
+  //   for (Checkedbook checkedBook in todo) {
+  //     if (checkedBook.barcode == barcode) {
+  //       checkedBook.count = checkedBook.count++;
+  //       addData(
+  //           barcode,
+  //           checkedBook.callNo,
+  //           checkedBook.title,
+  //           checkedBook.author,
+  //           checkedBook.collectionName,
+  //           checkedBook.itemStatusName,
+  //           checkedBook.collectionId,
+  //           checkedBook.found,
+  //           checkedBook.recorder,
+  //           checkedBook.recorderemail,
+  //           checkedBook.note,
+  //           checkedBook.checktime,
+  //           checkedBook.count,
+  //           checkedBook.exportstatus);
+  //     }
+  //   }
+  //   print("Updated");
+  // }
 }

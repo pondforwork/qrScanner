@@ -66,7 +66,11 @@ class BookController extends GetxController {
       if (result.isNotEmpty) {
         Map<String, dynamic> firstResult = result.first;
         String firstValue = firstResult['TITLE'];
-        // showDialogForResult(firstValue, firstResult['TITLE'], firstResult);
+        if (scandbhelper.checkDuplicateBook(barcode)) {
+          //showDialogDuplicate
+          showDuplicateSnackbar();
+          //Need To add update Data
+        }
         savefoundbook(firstValue, firstResult['TITLE'], firstResult);
       } else {
         resultSearch.value = "No result";
@@ -121,12 +125,6 @@ class BookController extends GetxController {
         checkedbook.count,
         checkedbook.exportstatus);
     scandbhelper.fetchToDo();
-    Get.snackbar(
-      'บันทึกสำเร็จ',
-      'ชื่อหนังสือ : ${checkedbook.title}',
-      snackPosition: SnackPosition.TOP,
-      duration: const Duration(seconds: 3),
-    );
   }
 
   showDialogNotFound(String barcode) async {
@@ -212,6 +210,13 @@ class BookController extends GetxController {
               );
 
               if (confirmAdd == true) {
+                // if (scandbhelper.checkDuplicateBook(barcode)) {
+                //   //ShowDialog
+                //   scandbhelper.updateDuplicatebook(barcode);
+                //   showDuplicateSnackbar();
+                // }else{
+                //   // showSavedBookSnackbar(title);
+                // }
                 DateTime checktime = DateTime.now();
                 Checkedbook checkedbook = Checkedbook(
                     barcode,
@@ -342,5 +347,16 @@ class BookController extends GetxController {
   clearTempFiles() async {
     await File("/storage/emulated/0/Download/Books.db").delete();
     await File(filePathZip).delete();
+  }
+
+  showDuplicateSnackbar() {
+    Get.snackbar(
+      'คำเตือน', // Title
+      'คุณเคยบันทึกหนังสือเล่มนี้แล้ว', // Message
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 3),
+      backgroundColor: Colors.red, // Custom1ize the background color here
+      colorText: Colors.white, // Customize the text color here
+    );
   }
 }
