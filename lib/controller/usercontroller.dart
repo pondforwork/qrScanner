@@ -36,7 +36,7 @@ class UserController extends GetxController {
       if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
         currentUser.value = userCredential.user!.displayName!;
         currentUserEmail.value = userCredential.user!.email!;
-        setUsernameOnHive(currentUser.value);
+        setUsernameOnHive(currentUser.value, currentUserEmail.value);
         showSuccessSnackbar();
         Get.offAll(() => Scanview());
         return userCredential.user;
@@ -64,7 +64,7 @@ class UserController extends GetxController {
       await FirebaseAuth.instance.signOut();
       currentUser.value = "Guest";
       currentUserEmail.value = "No-Email";
-      setUsernameOnHive(currentUser.value);
+      setUsernameOnHive(currentUser.value, currentUserEmail.value);
     } catch (e) {
       print("Error signing out: $e");
     }
@@ -74,22 +74,21 @@ class UserController extends GetxController {
     await initHive();
     await getUsernameFromHive();
     if (currentUser.value == "" || currentUser.value == "Guest") {
-      print(currentUser.value);
-      print("False");
       hasUserLoggedin.value = false;
       return false;
     } else {
-      print(currentUser.value);
       hasUserLoggedin.value = true;
-      print("True");
+
       return true;
     }
   }
 
-  Future<void> setUsernameOnHive(String username) async {
+  Future<void> setUsernameOnHive(String username, String email) async {
     try {
-      var box = await Hive.openBox('username');
-      await box.put(1, username);
+      var usernamebox = await Hive.openBox('username');
+      var emailbox = await Hive.openBox('email');
+      await usernamebox.put(1, username);
+      await emailbox.put(1, email);
       print("Success Set Username");
     } catch (error) {
       print('Error while setting username: $error');
@@ -98,9 +97,12 @@ class UserController extends GetxController {
 
   Future<void> getUsernameFromHive() async {
     try {
-      var box = await Hive.openBox('username');
-      String username = box.get(1);
+      var usernamebox = await Hive.openBox('username');
+      var emailbox = await Hive.openBox('email');
+      String username = usernamebox.get(1);
+      String email = emailbox.get(1);
       currentUser.value = username;
+      currentUserEmail.value = email;
       print("Retrieved Username: $username");
     } catch (error) {
       print('Error while getting username: $error');
@@ -109,9 +111,9 @@ class UserController extends GetxController {
 
   void showSuccessSnackbar() {
     Get.snackbar(
-      'Success',
-      'User signed in: ${currentUser.value}',
-      snackPosition: SnackPosition.BOTTOM,
+      'เข้าสู่ระบบสำเร็จ',
+      'เข้าสู่ระบบด้วยชื่อผู้ใข้:  ${currentUser.value}',
+      snackPosition: SnackPosition.TOP,
       duration: Duration(seconds: 3),
     );
   }
