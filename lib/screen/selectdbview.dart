@@ -39,7 +39,7 @@ class SelectDBview extends StatelessWidget {
                       const SizedBox(
                         width: 20,
                       ),
-                      const Text("Downloading "),
+                      const Text("กำลังดาวน์โหลด "),
                       Text(bookController.loadingprogress.value + " %"),
                     ],
                   );
@@ -55,15 +55,16 @@ class SelectDBview extends StatelessWidget {
               }),
               // ignore: prefer_const_constructors
               SizedBox(
-                height: 150,
+                height: 50,
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: bookController.isDownloadingDB
-                          .value // Check if downloading is in progress
-                      ? null // If downloading is in progress, disable the button
+                  onPressed: bookController.isDownloadingDB.value ||
+                          scandbController.currentdb.value !=
+                              "No Database Selected"
+                      ? null // If downloading is in progress or a database is selected, disable the button
                       : () async {
-                          // If not downloading, initiate the download and apply process
+                          // If not downloading and no database selected, initiate the download and apply process
                           if (await internetContoller
                               .checkInternetConnection()) {
                             await bookController.downloadandapplyDB();
@@ -72,19 +73,31 @@ class SelectDBview extends StatelessWidget {
                           }
                         },
                   child: const Text(
-                      "ดึงข้อมูลหนังสือ"), // Displayed text on the button
+                    "ดึงข้อมูลหนังสือ", // Displayed text on the button
+                  ),
                 ),
               ),
+              const SizedBox(
+                height: 250,
+              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     children: [
                       ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                        ),
                         onPressed: () async {
-                          bookController.resetBookDB();
-                          print("Test");
+                          bookController.showDialog();
+                          // bookController.resetBookDB();
                         },
-                        child: const Text("รีเซ็ตฐานข้อมูลหนังสือ"),
+                        child: const Text(
+                          "รีเซ็ตฐานข้อมูลหนังสือ",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   )

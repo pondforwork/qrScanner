@@ -386,6 +386,36 @@ class BookController extends GetxController {
     );
   }
 
+  showDialog() {
+    Get.defaultDialog(
+      title: "รีเซ็ตฐานข้อมูลหนังสือหรือไม่",
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text("จะไม่สามารถสแกนหนังสือได้จนกว่าจะดึงข้อมูลใหม่อีกครั้ง"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  resetBookDB();
+                  Get.back();
+                },
+                child: const Text("ตกลง"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("ยกเลิก"),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   resetBookDB() {
     isDownloadingDB.value = false;
     scandbhelper.currentdb.value = "No Database Selected";
