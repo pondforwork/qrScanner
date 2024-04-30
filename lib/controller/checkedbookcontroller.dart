@@ -105,6 +105,15 @@ class scanDBhelper extends GetxController {
     }
   }
 
+  Future<void> resetDBName() async {
+    try {
+      var dbstatus = Hive.box('dbname');
+      await dbstatus.put('DatabaseName', {'dbname': "No Database Selected"});
+    } catch (error) {
+      print('Error setting database name: $error');
+    }
+  }
+
   Future<void> getDBName() async {
     try {
       var dbstatus = Hive.box('dbname');
@@ -348,7 +357,7 @@ class scanDBhelper extends GetxController {
     if (allunexportedQty.value == 0) {
       Get.defaultDialog(
         title: "ไม่มีข้อมูล",
-        content: const Text("ไม่สามารถส่งออกได้โดยที่ยังไม่มีข้อมูล"),
+        content: const Text("ไม่สามารถส่งออกได้โดยที่ยังไม่ได้บันทึกข้อมูล"),
         actions: [
           TextButton(
             onPressed: () {

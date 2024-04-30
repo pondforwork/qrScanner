@@ -44,12 +44,12 @@ class SelectDBview extends StatelessWidget {
                     ],
                   );
                 } else if (bookController.checkdbAvial() == false) {
-                  return const Text("No DB Selected");
+                  return const Text("ยังไม่ได้ดึงข้อมูลหนังสือ");
                 } else {
                   if (bookController.unzippingstatus.value == true) {
-                    return const Text("Unziping");
+                    return const Text("กำลังแตกไฟล์");
                   } else {
-                    return const Text("Fetch DB Success");
+                    return const Text("ดึงข้อมูลหนังสือแล้ว");
                   }
                 }
               }),
@@ -75,6 +75,21 @@ class SelectDBview extends StatelessWidget {
                       "ดึงข้อมูลหนังสือ"), // Displayed text on the button
                 ),
               ),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          bookController.resetBookDB();
+                          print("Test");
+                        },
+                        child: const Text("รีเซ็ตฐานข้อมูลหนังสือ"),
+                      ),
+                    ],
+                  )
+                ],
+              )
             ],
           ),
         ),

@@ -303,8 +303,8 @@ class BookController extends GetxController {
   }
 
   unzip() async {
-    await requestStoragePermission();
     unzippingstatus.value = true;
+    await requestStoragePermission();
     if (await File("/storage/emulated/0/Download/Books.db").exists()) {
       File("/storage/emulated/0/Download/Books.db").delete();
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
@@ -348,8 +348,31 @@ class BookController extends GetxController {
   }
 
   clearTempFiles() async {
-    await File("/storage/emulated/0/Download/Books.db").delete();
-    await File(filePathZip).delete();
+    // await File("/storage/emulated/0/Download/Books.db").delete();
+    // await File("/storage/emulated/0/Download/Books.zip").delete();
+
+    // await File(filePathZip).delete();
+    try {
+      // Delete Books.zip
+      var zipFile = File("/storage/emulated/0/Download/Books.zip");
+      if (zipFile.existsSync()) {
+        await zipFile.delete();
+        print("Deleted Zip");
+      } else {
+        print("Books.zip does not exist.");
+      }
+
+      // Delete Books.db
+      var dbFile = File("/storage/emulated/0/Download/Books.db");
+      if (dbFile.existsSync()) {
+        await dbFile.delete();
+        print("Deleted DB");
+      } else {
+        print("Books.db does not exist.");
+      }
+    } catch (e) {
+      print("Error while deleting files: $e");
+    }
   }
 
   showDuplicateSnackbar() {
@@ -361,5 +384,39 @@ class BookController extends GetxController {
       backgroundColor: Colors.red, // Custom1ize the background color here
       colorText: Colors.white, // Customize the text color here
     );
+  }
+
+  resetBookDB() {
+    isDownloadingDB.value = false;
+    scandbhelper.currentdb.value = "No Database Selected";
+    scandbhelper.resetDBName();
+    scandbhelper.clearDBNameBox();
+    try {
+      deleteDBinDevice();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteDBinDevice() async {
+    try {
+      // Delete Books.zip
+      var zipFile = File("/storage/emulated/0/Download/Books.zip");
+      if (zipFile.existsSync()) {
+        await zipFile.delete();
+      } else {
+        print("Books.zip does not exist.");
+      }
+
+      // Delete Books.db
+      var dbFile = File("/storage/emulated/0/Download/Books.db");
+      if (dbFile.existsSync()) {
+        await dbFile.delete();
+      } else {
+        print("Books.db does not exist.");
+      }
+    } catch (e) {
+      print("Error while deleting files: $e");
+    }
   }
 }
