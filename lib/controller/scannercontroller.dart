@@ -10,18 +10,18 @@ class ScannerController extends GetxController {
   final BookController bookController = Get.put(BookController());
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
 
-  Future<void> scanBarcode() async {
-    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-      "#ff6666",
-      "Cancel",
-      true,
-      ScanMode.DEFAULT,
-    );
-    barcodeResult.value = barcodeScanResult;
-    if (barcodeResult.value == "-1") {
-      barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-    }
-  }
+  // Future<void> scanBarcode() async {
+  //   String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
+  //     "#ff6666",
+  //     "Cancel",
+  //     true,
+  //     ScanMode.DEFAULT,
+  //   );
+  //   barcodeResult.value = barcodeScanResult;
+  //   if (barcodeResult.value == "-1") {
+  //     barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+  //   }
+  // }
 
   Future<void> scanandsearchFromDB() async {
     bookController.continuousScan.value = true;
@@ -33,11 +33,18 @@ class ScannerController extends GetxController {
         true, // Show flash icon
         ScanMode.DEFAULT,
       );
+
       if (barcodeScanResult == "-1") {
         print("Cancel");
         barcodeResult.value = "No data yet. Please Scan QR or Barcode";
         bookController.continuousScan.value = false;
       } else {
+        // Check ว่า มี A นำหน้า และ ต่อท้ายไหม ถ้ามี ให้ตัดออก
+        if (barcodeScanResult.startsWith('A') &&
+            barcodeScanResult.endsWith('A')) {
+          barcodeScanResult =
+              barcodeScanResult.substring(1, barcodeScanResult.length - 1);
+        }
         if (scandbhelper.checkDuplicateBook(barcodeScanResult)) {
           // scandbhelper.updateDuplicatebook(barcodeScanResult);
           bookController.showDuplicateSnackbar();
