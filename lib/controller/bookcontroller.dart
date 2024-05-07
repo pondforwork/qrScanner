@@ -82,7 +82,7 @@ class BookController extends GetxController {
   }
 
   bool checkdbAvial() {
-    if (scandbhelper.currentdb.value != "No Database Selected") {
+    if (scandbhelper.currentdb.value == "ดึงข้อมูลหนังสือแล้ว") {
       //Database Selected
       return true;
     } else {

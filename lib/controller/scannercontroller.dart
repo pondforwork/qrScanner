@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
+import 'package:qr_scan/screen/cameraview.dart';
 import 'checkedbookcontroller.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:native_barcode_scanner/barcode_scanner.dart';
@@ -26,7 +29,17 @@ class ScannerController extends GetxController {
   // }
 
   Future<void> scanNew() async {
-    var res = await Get.to(SimpleBarcodeScannerPage());
+    if (bookController.checkdbAvial() == false) {
+      Get.snackbar(
+        'ยังไม่ได้ดึงโหลดข้อมูลหนังสือ', // Title
+        'กรุณาดึงข้อมูลหนังสือก่อนทำการสแกน', // Message
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.yellow,
+        duration: const Duration(seconds: 3),
+      );
+    } else {
+      var res = await Get.to(CameraView());
+    }
   }
 
   Future<void> searchFromDB(String barcode_value) async {}

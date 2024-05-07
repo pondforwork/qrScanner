@@ -101,12 +101,12 @@ class Scanview extends StatelessWidget {
                                 } else if (textEditingController
                                         .text.isNotEmpty &&
                                     bookController.checkdbAvial() == false) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text("กรุณาดึงข้อมูลหนังสือก่อน"),
-                                      duration: Duration(seconds: 3),
-                                    ),
+                                  Get.snackbar(
+                                    'ยังไม่ได้ดึงโหลดข้อมูลหนังสือ', // Title
+                                    'กรุณาดึงข้อมูลหนังสือก่อนทำการสแกน', // Message
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.yellow,
+                                    duration: const Duration(seconds: 3),
                                   );
                                 } else if (textEditingController.text.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -295,7 +295,7 @@ class Scanview extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // await scannercontroller.scanNew();
-          Get.to(CameraView());
+          scannercontroller.scanNew();
           // if (!bookController.continuousScan.value) {
           //   await scannercontroller.scanNew();
           // while (bookController.continuousScan.value == true) {
