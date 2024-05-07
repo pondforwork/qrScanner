@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
+import 'package:qr_scan/screen/cameraview.dart';
 import 'package:qr_scan/screen/historyview.dart';
 import 'package:qr_scan/screen/navbar.dart';
+import 'package:native_barcode_scanner/barcode_scanner.dart';
 
 class Scanview extends StatelessWidget {
   final ScannerController scannercontroller = Get.put(ScannerController());
@@ -70,6 +72,19 @@ class Scanview extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
+                          // SizedBox(
+                          //   width: 200,
+                          //   height: 200,
+                          //   child: BarcodeScannerWidget(
+                          //     onBarcodeDetected: (barcode) {
+                          //       // Handle the detected barcode here
+                          //       textEditingController.text = barcode.value;
+                          //     },
+                          //     onError: (error) {
+                          //       // Handle any errors that occur during scanning
+                          //     },
+                          //   ),
+                          // ),
                           ElevatedButton(
                               onPressed: () {
                                 if (textEditingController.text.isNotEmpty &&
@@ -279,13 +294,15 @@ class Scanview extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (!bookController.continuousScan.value) {
-            await scannercontroller.scanandsearchFromDB();
-            while (bookController.continuousScan.value == true) {
-              await Future.delayed(const Duration(seconds: 3));
-              await scannercontroller.scanandsearchFromDB();
-            }
-          }
+          // await scannercontroller.scanNew();
+          Get.to(CameraView());
+          // if (!bookController.continuousScan.value) {
+          //   await scannercontroller.scanNew();
+          // while (bookController.continuousScan.value == true) {
+          //   await Future.delayed(const Duration(seconds: 3));
+          //   await scannercontroller.scanandsearchFromDB();
+          // }
+          //}
         },
         child: const Icon(Icons.qr_code_2_outlined),
       ),

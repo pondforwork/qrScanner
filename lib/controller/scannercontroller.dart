@@ -1,8 +1,10 @@
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
-
 import 'checkedbookcontroller.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:native_barcode_scanner/barcode_scanner.dart';
+import 'package:native_barcode_scanner/barcode_scanner.widget.dart';
 
 class ScannerController extends GetxController {
   RxString barcodeResult = "No data yet. Please Scan QR or Barcode".obs;
@@ -22,6 +24,12 @@ class ScannerController extends GetxController {
   //     barcodeResult.value = "No data yet. Please Scan QR or Barcode";
   //   }
   // }
+
+  Future<void> scanNew() async {
+    var res = await Get.to(SimpleBarcodeScannerPage());
+  }
+
+  Future<void> searchFromDB(String barcode_value) async {}
 
   Future<void> scanandsearchFromDB() async {
     bookController.continuousScan.value = true;
@@ -46,7 +54,6 @@ class ScannerController extends GetxController {
               barcodeScanResult.substring(1, barcodeScanResult.length - 1);
         }
         if (scandbhelper.checkDuplicateBook(barcodeScanResult)) {
-          // scandbhelper.updateDuplicatebook(barcodeScanResult);
           bookController.showDuplicateSnackbar();
         } else {
           barcode.value = barcodeScanResult;
