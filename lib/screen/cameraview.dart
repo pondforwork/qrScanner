@@ -42,7 +42,7 @@ class CameraView extends StatelessWidget {
                       } else {
                         await bookController.findFromBarcode(myscan);
                       }
-                      await Future.delayed(const Duration(seconds: 2));
+                      await Future.delayed(const Duration(seconds: 3));
                       BarcodeScanner.startScanner();
                     },
                     onError: (error) {
