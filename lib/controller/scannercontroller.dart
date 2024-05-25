@@ -29,7 +29,9 @@ class ScannerController extends GetxController {
   // }
 
   Future<void> scanNew() async {
-    if (bookController.checkdbAvial() == false) {
+    if (scandbhelper.currentdb.value != "No Database Selected") {
+      var res = await Get.to(CameraView());
+    } else {
       Get.snackbar(
         'ยังไม่ได้ดึงโหลดข้อมูลหนังสือ', // Title
         'กรุณาดึงข้อมูลหนังสือก่อนทำการสแกน', // Message
@@ -37,8 +39,6 @@ class ScannerController extends GetxController {
         backgroundColor: Colors.yellow,
         duration: const Duration(seconds: 3),
       );
-    } else {
-      var res = await Get.to(CameraView());
     }
   }
 
