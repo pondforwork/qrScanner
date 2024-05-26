@@ -10,6 +10,7 @@ import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_archive/flutter_archive.dart';
+import 'package:http/http.dart' as http;
 
 class BookController extends GetxController {
   Database? _database;
@@ -81,6 +82,34 @@ class BookController extends GetxController {
     }
   }
 
+  // testInsert() async {
+  //   if (checkdbAvial() == true) {
+  //     await _openLocalDatabase();
+  //     List<Map<String, dynamic>> result = await _database!
+  //         .rawQuery("SELECT * FROM books WHERE BARCODE LIMIT 500");
+  //     print(result.length);
+  //     for (Map<String, dynamic> item in result) {
+  //       testsavefoundbook(item['TITLE'], item['BARCODE'], item);
+  //       print(item);
+  //     }
+  //     print(result);
+  //   }
+  // }
+
+  Future<void> testInsert(int limit) async {
+    if (checkdbAvial()) {
+      await _openLocalDatabase();
+      List<Map<String, dynamic>> result =
+          await _database!.rawQuery("SELECT * FROM books LIMIT $limit");
+      print(result.length);
+      for (Map<String, dynamic> item in result) {
+        testsavefoundbook(item['TITLE'], item['BARCODE'], item);
+        print(item);
+      }
+      print(result);
+    }
+  }
+
   bool checkdbAvial() {
     if (scandbhelper.currentdb.value != "No Database Selected") {
       //Database Selected
@@ -124,7 +153,44 @@ class BookController extends GetxController {
         checkedbook.checktime,
         checkedbook.count,
         checkedbook.exportstatus);
-    scandbhelper.fetchToDo();
+    // scandbhelper.fetchToDo();
+  }
+
+  void testsavefoundbook(
+      String bookName, String barcode, Map<String, dynamic> firstResult) {
+    DateTime checktime = DateTime.now();
+    // First Save
+    Checkedbook checkedbook = Checkedbook(
+        firstResult['BARCODE'] ?? "",
+        firstResult['CALLNO'] ?? "",
+        firstResult['TITLE'] ?? "",
+        firstResult['AUTHOR'] ?? "",
+        firstResult['COLLECTIONNAME'] ?? "",
+        firstResult['ITEMSTATUSNAME'] ?? "",
+        firstResult['COLLECTIONID'] ?? "",
+        "Y",
+        userController.currentUser.value,
+        userController.currentUserEmail.value,
+        "",
+        checktime,
+        1,
+        false);
+    scandbhelper.testaddData(
+        checkedbook.barcode,
+        checkedbook.callNo,
+        checkedbook.title,
+        checkedbook.author,
+        checkedbook.collectionName,
+        checkedbook.itemStatusName,
+        checkedbook.collectionId,
+        checkedbook.found,
+        checkedbook.recorder,
+        checkedbook.recorderemail,
+        checkedbook.note,
+        checkedbook.checktime,
+        checkedbook.count,
+        checkedbook.exportstatus);
+    // scandbhelper.fetchToDo();
   }
 
   showDialogNotFound(String barcode) async {
@@ -448,5 +514,41 @@ class BookController extends GetxController {
     } catch (e) {
       print("Error while deleting files: $e");
     }
+  }
+
+  fetchBooksFromApi() {}
+
+  void showMockDataDialog() {
+    TextEditingController controller = TextEditingController();
+
+    Get.defaultDialog(
+      title: 'Enter Number of Mock Data',
+      content: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(labelText: 'Number of Data'),
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            // Close the dialog and return the input value
+
+            testInsert(int.parse(controller.text));
+            Get.back(result: int.tryParse(controller.text));
+          },
+          child: Text('OK'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Close the dialog without returning a value
+            Get.back();
+          },
+          child: Text('Cancel'),
+        ),
+      ],
+    );
   }
 }
