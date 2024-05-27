@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:downloadsfolder/downloadsfolder.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -154,6 +156,10 @@ class BookController extends GetxController {
         checkedbook.count,
         checkedbook.exportstatus);
     // scandbhelper.fetchToDo();
+
+    scandbhelper.latestcheckedbook.add(checkedbook);
+    print("Add to temp length is ");
+    print(scandbhelper.latestcheckedbook.length);
   }
 
   void testsavefoundbook(
@@ -317,7 +323,8 @@ class BookController extends GetxController {
                     checkedbook.checktime,
                     checkedbook.count,
                     checkedbook.exportstatus);
-                scandbhelper.fetchToDo();
+
+                // scandbhelper.fetchToDo();
               }
             }
           },
@@ -396,6 +403,16 @@ class BookController extends GetxController {
       }
     }
     unzippingstatus.value = false;
+  }
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null && result.files.single.path != null) {
+      // Return the selected file path
+      openDatabaseConnectionWithPath(result.files.single.path!);
+
+      // return result.files.single.path;
+    }
   }
 
   Future<void> requestStoragePermission() async {

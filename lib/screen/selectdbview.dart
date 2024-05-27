@@ -18,6 +18,16 @@ class SelectDBview extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ดึงข้อมูลหนังสือ"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            onPressed: () {
+              // bookController.testInsert();
+              bookController.pickFile();
+              print("Test");
+            },
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),

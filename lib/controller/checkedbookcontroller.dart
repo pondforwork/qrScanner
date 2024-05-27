@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
   var todo = <Checkedbook>[].obs;
+  var latestcheckedbook = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
   RxBool exportStatus = false.obs;
@@ -441,6 +442,7 @@ class scanDBhelper extends GetxController {
   showProgressDialog() async {
     Get.defaultDialog(
       title: "กำลังส่งข้อมูล...",
+      barrierDismissible: false,
       content: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
