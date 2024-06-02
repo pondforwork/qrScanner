@@ -33,6 +33,7 @@ class UserController extends GetxController {
       );
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      print(userCredential.user);
       if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
         currentUser.value = userCredential.user!.displayName!;
         currentUserEmail.value = userCredential.user!.email!;
