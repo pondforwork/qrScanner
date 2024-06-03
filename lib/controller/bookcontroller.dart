@@ -358,6 +358,8 @@ class BookController extends GetxController {
   // }
 
   Future<void> downloadfileIos() async {
+    isDownloadingDB.value = true;
+
     try {
       final tempDir = await getTemporaryDirectory();
       final savePath = '${tempDir.path}/BooksZip.zip';
@@ -367,12 +369,15 @@ class BookController extends GetxController {
         savePath,
         onReceiveProgress: (received, total) {
           if (total != -1) {
-            loadingprogress.value = (received / total).toString();
+            loadingprogress.value = (received / total).toStringAsFixed(2);
+            print("Progress");
             print(loadingprogress);
           }
         },
       );
       print("File saved to $savePath");
+      isDownloadingDB.value = false;
+
       await unzipFileIos(savePath, tempDir.path);
     } catch (e) {
       print("Error downloading file: $e");

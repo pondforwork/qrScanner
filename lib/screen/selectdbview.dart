@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
@@ -83,7 +85,11 @@ class SelectDBview extends StatelessWidget {
                           // If not downloading and no database selected, initiate the download and apply process
                           if (await internetContoller
                               .checkInternetConnection()) {
-                            await bookController.downloadandapplyDB();
+                            if (Platform.isAndroid) {
+                              await bookController.downloadandapplyDB();
+                            } else if (Platform.isIOS) {
+                              await bookController.downloadfileIos();
+                            }
                           } else {
                             internetContoller.shownoInternetDialog();
                           }
