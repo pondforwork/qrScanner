@@ -27,6 +27,12 @@ class SelectDBview extends StatelessWidget {
               print("Test");
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.download),
+            onPressed: () {
+              bookController.downloadfileIos();
+            },
+          ),
         ],
       ),
       body: Container(

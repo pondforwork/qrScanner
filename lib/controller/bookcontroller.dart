@@ -1,18 +1,21 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'package:archive/archive.dart';
 import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
-import 'package:flutter_archive/flutter_archive.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_archive/flutter_archive.dart' as flutter_archive;
+// import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as diolib;
 
 class BookController extends GetxController {
   Database? _database;
@@ -27,6 +30,7 @@ class BookController extends GetxController {
   RxBool unzippingstatus = false.obs;
   String filePathZip = "/storage/emulated/0/Download/Books.zip";
   RxBool continuousScan = false.obs;
+  final dio = diolib.Dio();
 
   @override
   Future<void> onInit() async {
@@ -335,6 +339,71 @@ class BookController extends GetxController {
     continuousScan.value = false;
   }
 
+  // Future<void> downloadfileIos() async {
+  //   try {
+  //     // Get the temporary directory
+  //     final tempDir = await getTemporaryDirectory();
+  //     final savePath = '${tempDir.path}/BooksZip.zip';
+
+  //     // Download the file
+  //     await diolib.Dio().download(
+  //       'http://blackareauwu.xyz:5000/file/fa5bf957-d04a-4725-8b9a-efa5dab29c8a.zip',
+  //       savePath,
+  //     );
+
+  //     print("File saved to $savePath");
+  //   } catch (e) {
+  //     print("Error downloading file: $e");
+  //   }
+  // }
+
+  Future<void> downloadfileIos() async {
+    try {
+      final tempDir = await getTemporaryDirectory();
+      final savePath = '${tempDir.path}/BooksZip.zip';
+      print("Start Download");
+      await diolib.Dio().download(
+        'http://blackareauwu.xyz:5000/file/fa5bf957-d04a-4725-8b9a-efa5dab29c8a.zip',
+        savePath,
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            loadingprogress.value = (received / total).toString();
+            print(loadingprogress);
+          }
+        },
+      );
+      print("File saved to $savePath");
+      await unzipFileIos(savePath, tempDir.path);
+    } catch (e) {
+      print("Error downloading file: $e");
+    }
+  }
+
+  Future<void> unzipFileIos(String zipFilePath, String destinationDir) async {
+    try {
+      final bytes = File(zipFilePath).readAsBytesSync();
+      final archive = ZipDecoder().decodeBytes(bytes);
+
+      for (var file in archive) {
+        final fileName = '$destinationDir/${file.name}';
+        if (file.isFile) {
+          final outFile = File(fileName);
+          print('File:: ' + outFile.path);
+          await outFile.create(recursive: true);
+          await outFile.writeAsBytes(file.content as List<int>);
+          if (fileName.endsWith('.db')) {
+            await openDatabaseConnectionWithPath(fileName);
+          }
+        } else {
+          await Directory(fileName).create(recursive: true);
+        }
+      }
+      print("File unzipped to $destinationDir");
+    } catch (e) {
+      print("Error unzipping file: $e");
+    }
+  }
+
   downloadFile() async {
     await requestStoragePermission();
     isDownloadingDB.value = true;
@@ -383,7 +452,7 @@ class BookController extends GetxController {
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
       final zipFile = File("/storage/emulated/0/Download/Books.zip");
       try {
-        await ZipFile.extractToDirectory(
+        await flutter_archive.ZipFile.extractToDirectory(
             zipFile: zipFile, destinationDir: destinationDir);
         openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
       } catch (e) {
@@ -395,7 +464,7 @@ class BookController extends GetxController {
       Directory destinationDir = Directory("/storage/emulated/0/Download/");
       final zipFile = File("/storage/emulated/0/Download/Books.zip");
       try {
-        await ZipFile.extractToDirectory(
+        await flutter_archive.ZipFile.extractToDirectory(
             zipFile: zipFile, destinationDir: destinationDir);
         openDatabaseConnectionWithPath("/storage/emulated/0/Download/Books.db");
       } catch (e) {

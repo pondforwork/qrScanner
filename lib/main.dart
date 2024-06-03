@@ -1,26 +1,29 @@
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/screen/loginview.dart';
 import 'package:qr_scan/screen/scanview.dart';
-
 import 'controller/usercontroller.dart';
 
 Future<void> main() async {
   UserController userController = Get.put(UserController());
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      appId: '1:730815591680:ios:efd7f0eda7818f87902fe5',
-      apiKey: 'AIzaSyCXW6gUGmokO1gP3d2FdXJLAgWSW9kMKzs',
-      projectId: 'bookchecker-91b3d',
-      messagingSenderId: '730815591680',
-      databaseURL: 'https://bookchecker-91b3d.firebaseio.com',
-      storageBucket: 'bookchecker-91b3d.appspot.com',
-      authDomain: 'bookchecker-91b3d.firebaseapp.com',
-    ),
-  );
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp();
+  } else if (Platform.isIOS) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        appId: '1:730815591680:ios:efd7f0eda7818f87902fe5',
+        apiKey: 'AIzaSyCXW6gUGmokO1gP3d2FdXJLAgWSW9kMKzs',
+        projectId: 'bookchecker-91b3d',
+        messagingSenderId: '730815591680',
+        databaseURL: 'https://bookchecker-91b3d.firebaseio.com',
+        storageBucket: 'bookchecker-91b3d.appspot.com',
+        authDomain: 'bookchecker-91b3d.firebaseapp.com',
+      ),
+    );
+  }
 
   await userController.userloggedIn();
   runApp(MainApp());
