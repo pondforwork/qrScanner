@@ -20,6 +20,16 @@ class Scanview extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('เช็คหนังสือ'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            onPressed: () {
+              // bookController.testInsert();
+              bookController.showMockDataDialog();
+              print("Test");
+            },
+          ),
+        ],
       ),
       drawer: MyDrawer(),
       body: Column(
@@ -86,12 +96,12 @@ class Scanview extends StatelessWidget {
                                 } else if (textEditingController
                                         .text.isNotEmpty &&
                                     bookController.checkdbAvial() == false) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text("กรุณาดึงข้อมูลหนังสือก่อน"),
-                                      duration: Duration(seconds: 3),
-                                    ),
+                                  Get.snackbar(
+                                    'ยังไม่ได้ดึงโหลดข้อมูลหนังสือ', // Title
+                                    'กรุณาดึงข้อมูลหนังสือก่อนทำการสแกน', // Message
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.yellow,
+                                    duration: const Duration(seconds: 3),
                                   );
                                 } else if (textEditingController.text.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -279,12 +289,7 @@ class Scanview extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await scannercontroller.scanandsearchFromDB();
-          while (bookController.continuousScan.value == true) {
-            await Future.delayed(Duration(seconds: 3));
-
-            await scannercontroller.scanandsearchFromDB();
-          }
+          scannercontroller.scanNew();
         },
         child: const Icon(Icons.qr_code_2_outlined),
       ),

@@ -1,10 +1,10 @@
 name: qr_scan
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
+  sdk: ">=3.1.5 <4.0.0"
 
 dependencies:
   flutter:
@@ -36,13 +36,10 @@ dependencies:
   downloadsfolder: ^0.1.1
   grouped_list: ^5.1.2
   connectivity_plus: ^5.0.2
- 
-
-  
-
-  
-
-
+  simple_barcode_scanner: ^0.1.1
+  native_barcode_scanner: ^1.0.10
+  dio: ^5.4.3+1
+  archive: ^3.6.1
 
 dev_dependencies:
   flutter_test:
@@ -52,8 +49,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-  - assets/images/correct.png
-  - assets/images/incorrect.png
-  - assets/images/Google_Icon.png
-  - assets/images/LoginLogo.png
-  - assets/icon/
+    - assets/images/correct.png
+    - assets/images/incorrect.png
+    - assets/images/Google_Icon.png
+    - assets/images/LoginLogo.png
+    - assets/icon/

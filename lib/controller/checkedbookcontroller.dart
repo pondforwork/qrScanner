@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
   var todo = <Checkedbook>[].obs;
+  var latestcheckedbook = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
   RxBool exportStatus = false.obs;
@@ -105,6 +106,15 @@ class scanDBhelper extends GetxController {
     }
   }
 
+  Future<void> resetDBName() async {
+    try {
+      var dbstatus = Hive.box('dbname');
+      await dbstatus.put('DatabaseName', {'dbname': "No Database Selected"});
+    } catch (error) {
+      print('Error setting database name: $error');
+    }
+  }
+
   Future<void> getDBName() async {
     try {
       var dbstatus = Hive.box('dbname');
@@ -172,7 +182,51 @@ class scanDBhelper extends GetxController {
       'exportstatus': exportstatus
     });
     showSavedBookSnackbar(title);
-    fetchToDo();
+    // fetchToDo();
+    exportStatus.value = false;
+  }
+
+  Future<void> testaddData(
+      String barcode,
+      String callNo,
+      String title,
+      String author,
+      String collectionName,
+      String itemStatusName,
+      int collectionId,
+      String found,
+      String recorder,
+      String recorderemail,
+      String note,
+      DateTime checktime,
+      int count,
+      bool exportstatus) async {
+    var data = Hive.box('data');
+    int countFromList = countDuplicate(barcode);
+    if (countFromList >= 1) {
+      count = countFromList + 1;
+    } else {
+      count = 1;
+    }
+
+    data.put(barcode, {
+      'barcode': barcode,
+      'callNo': callNo,
+      'title': title,
+      'author': author,
+      'collectionName': collectionName,
+      'itemStatusName': itemStatusName,
+      'collectionId': collectionId,
+      'found': found,
+      'recorder': recorder,
+      'recorderemail': recorderemail,
+      'note': note,
+      'checktime': checktime,
+      'count': count,
+      'exportstatus': exportstatus
+    });
+    // showSavedBookSnackbar(title);
+    // fetchToDo();
     exportStatus.value = false;
   }
 
@@ -181,7 +235,9 @@ class scanDBhelper extends GetxController {
       'บันทึกสำเร็จ',
       'ชื่อหนังสือ : $title',
       snackPosition: SnackPosition.TOP,
-      duration: const Duration(seconds: 3),
+      backgroundColor: const Color.fromARGB(
+          255, 255, 249, 171), // Custom1ize the background color here
+      duration: const Duration(seconds: 2),
     );
   }
 
@@ -348,7 +404,7 @@ class scanDBhelper extends GetxController {
     if (allunexportedQty.value == 0) {
       Get.defaultDialog(
         title: "ไม่มีข้อมูล",
-        content: const Text("ไม่สามารถส่งออกได้โดยที่ยังไม่มีข้อมูล"),
+        content: const Text("ไม่สามารถส่งออกได้โดยที่ยังไม่ได้บันทึกข้อมูล"),
         actions: [
           TextButton(
             onPressed: () {
@@ -386,6 +442,7 @@ class scanDBhelper extends GetxController {
   showProgressDialog() async {
     Get.defaultDialog(
       title: "กำลังส่งข้อมูล...",
+      barrierDismissible: false,
       content: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -396,21 +453,6 @@ class scanDBhelper extends GetxController {
           )),
     );
     exportToApi();
-    // if (exportProgress.value == allunexportedQty.value) {
-    //   Get.back();
-    //   Get.defaultDialog(
-    //     title: "ส่งออกข้อมูลสำเร็จ",
-    //     middleText: "ส่งออกข้อมูลเรียบร้อยแล้ว",
-    //     actions: [
-    //       TextButton(
-    //         onPressed: () {
-    //           Get.back();
-    //         },
-    //         child: const Text("ตกลง"),
-    //       ),
-    //     ],
-    //   );
-    // }
   }
 
   exportToApi() async {

@@ -1,7 +1,7 @@
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
-
+import 'package:qr_scan/screen/cameraview.dart';
 import 'checkedbookcontroller.dart';
 
 class ScannerController extends GetxController {
@@ -10,44 +10,19 @@ class ScannerController extends GetxController {
   final BookController bookController = Get.put(BookController());
   final scanDBhelper scandbhelper = Get.put(scanDBhelper());
 
-  Future<void> scanBarcode() async {
-    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-      "#ff6666",
-      "Cancel",
-      true,
-      ScanMode.DEFAULT,
-    );
-    barcodeResult.value = barcodeScanResult;
-    if (barcodeResult.value == "-1") {
-      barcodeResult.value = "No data yet. Please Scan QR or Barcode";
+  Future<void> scanNew() async {
+    if (scandbhelper.currentdb.value != "No Database Selected") {
+      var res = await Get.to(CameraView());
+    } else {
+      Get.snackbar(
+        'ยังไม่ได้ดึงโหลดข้อมูลหนังสือ', // Title
+        'กรุณาดึงข้อมูลหนังสือก่อนทำการสแกน', // Message
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.yellow,
+        duration: const Duration(seconds: 3),
+      );
     }
   }
 
-  Future<void> scanandsearchFromDB() async {
-    bookController.continuousScan.value = true;
-    try {
-      BookController().isLoading.value = true;
-      String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666",
-        "Cancel",
-        true, // Show flash icon
-        ScanMode.DEFAULT,
-      );
-      if (barcodeScanResult == "-1") {
-        print("Cancel");
-        barcodeResult.value = "No data yet. Please Scan QR or Barcode";
-        bookController.continuousScan.value = false;
-      } else {
-        if (scandbhelper.checkDuplicateBook(barcodeScanResult)) {
-          // scandbhelper.updateDuplicatebook(barcodeScanResult);
-          bookController.showDuplicateSnackbar();
-        } else {
-          barcode.value = barcodeScanResult;
-          await bookController.findFromBarcode(barcode.value);
-        }
-      }
-    } finally {
-      BookController().isLoading.value = false;
-    }
-  }
+  Future<void> searchFromDB(String barcode_value) async {}
 }

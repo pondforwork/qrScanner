@@ -6,12 +6,26 @@ import 'package:qr_scan/controller/scannercontroller.dart';
 import 'package:intl/intl.dart';
 import '../models/chekedbook.dart';
 
-class HistoryView extends StatelessWidget {
+class HistoryView extends StatefulWidget {
+  @override
+  _HistoryViewState createState() => _HistoryViewState();
+}
+
+class _HistoryViewState extends State<HistoryView> {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
-  // late Rx<DateTime> selectedDate = Rx<DateTime>(DateTime.now());
-  // late Rx<DateTime> selectedDate = Rx<DateTime>(DateTime(2024, 3, 5));
   late Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
+
+  @override
+  void initState() {
+    super.initState();
+    print("Hello");
+    _fetchAllBooks();
+  }
+
+  Future<void> _fetchAllBooks() async {
+    await checkedbookcontroller.fetchToDo();
+  }
 
 // 2024-03-05
   @override

@@ -5,13 +5,30 @@ import 'package:qr_scan/controller/checkedbookcontroller.dart';
 import 'package:qr_scan/controller/internetcontroller.dart';
 import 'package:qr_scan/controller/scannercontroller.dart';
 
-class ManageHistoryView extends StatelessWidget {
+class ManageHistoryView extends StatefulWidget {
   ManageHistoryView({Key? key}) : super(key: key);
+
+  @override
+  _ManageHistoryViewState createState() => _ManageHistoryViewState();
+}
+
+class _ManageHistoryViewState extends State<ManageHistoryView> {
   final ScannerController scannercontroller = Get.put(ScannerController());
   final BookController bookController = Get.put(BookController());
   final scanDBhelper checkedbookcontroller = Get.put(scanDBhelper());
   final TextEditingController confirmTextController = TextEditingController();
   final InternetContoller internetContoller = InternetContoller();
+
+  @override
+  void initState() {
+    super.initState();
+    print("Hello");
+    _fetchAllBooks();
+  }
+
+  Future<void> _fetchAllBooks() async {
+    await checkedbookcontroller.fetchToDo();
+  }
 
   @override
   Widget build(BuildContext context) {

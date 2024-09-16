@@ -86,43 +86,43 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Center(
-                child: SizedBox(
-                  width: 350,
-                  child: Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        // signInWithGoogle();
-                        // await loginEmailAndPassword();
-                        Get.offAll(() => Scanview());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        minimumSize: const Size(150, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 8),
-                          Text(
-                            "เข้าสู่ระบบในฐานะ Guest",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // const SizedBox(
+              //   height: 30,
+              // ),
+              // Center(
+              //   child: SizedBox(
+              //     width: 350,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(0),
+              //       child: ElevatedButton(
+              //         onPressed: () async {
+              //           // signInWithGoogle();
+              //           // await loginEmailAndPassword();
+              //           Get.offAll(() => Scanview());
+              //         },
+              //         style: ElevatedButton.styleFrom(
+              //           backgroundColor: Colors.white,
+              //           minimumSize: const Size(150, 50),
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(50),
+              //           ),
+              //         ),
+              //         child: const Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             SizedBox(width: 8),
+              //             Text(
+              //               "เข้าสู่ระบบในฐานะ Guest",
+              //               style: TextStyle(
+              //                 color: Colors.black,
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           )
         ],

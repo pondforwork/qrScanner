@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_scan/controller/bookcontroller.dart';
@@ -18,6 +20,22 @@ class SelectDBview extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ดึงข้อมูลหนังสือ"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            onPressed: () {
+              // bookController.testInsert();
+              bookController.pickFile();
+              print("Test");
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.download),
+            onPressed: () {
+              bookController.downloadfileIos();
+            },
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -39,42 +57,74 @@ class SelectDBview extends StatelessWidget {
                       const SizedBox(
                         width: 20,
                       ),
-                      const Text("Downloading "),
+                      const Text("กำลังดาวน์โหลด "),
                       Text(bookController.loadingprogress.value + " %"),
                     ],
                   );
                 } else if (bookController.checkdbAvial() == false) {
-                  return const Text("No DB Selected");
+                  return const Text("ยังไม่ได้ดึงข้อมูลหนังสือ");
                 } else {
                   if (bookController.unzippingstatus.value == true) {
-                    return const Text("Unziping");
+                    return const Text("กำลังแตกไฟล์");
                   } else {
-                    return const Text("Fetch DB Success");
+                    return const Text("ดึงข้อมูลหนังสือแล้ว");
                   }
                 }
               }),
               // ignore: prefer_const_constructors
               SizedBox(
-                height: 150,
+                height: 50,
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: bookController.isDownloadingDB
-                          .value // Check if downloading is in progress
-                      ? null // If downloading is in progress, disable the button
+                  onPressed: bookController.isDownloadingDB.value ||
+                          scandbController.currentdb.value !=
+                              "No Database Selected"
+                      ? null // If downloading is in progress or a database is selected, disable the button
                       : () async {
-                          // If not downloading, initiate the download and apply process
+                          // If not downloading and no database selected, initiate the download and apply process
                           if (await internetContoller
                               .checkInternetConnection()) {
-                            await bookController.downloadandapplyDB();
+                            if (Platform.isAndroid) {
+                              await bookController.downloadandapplyDB();
+                            } else if (Platform.isIOS) {
+                              await bookController.downloadfileIos();
+                            }
                           } else {
                             internetContoller.shownoInternetDialog();
                           }
                         },
                   child: const Text(
-                      "ดึงข้อมูลหนังสือ"), // Displayed text on the button
+                    "ดึงข้อมูลหนังสือ", // Displayed text on the button
+                  ),
                 ),
               ),
+              const SizedBox(
+                height: 250,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                        ),
+                        onPressed: () async {
+                          bookController.showDialog();
+                          // bookController.resetBookDB();
+                        },
+                        child: const Text(
+                          "รีเซ็ตฐานข้อมูลหนังสือ",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
             ],
           ),
         ),
