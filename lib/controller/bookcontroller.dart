@@ -365,7 +365,7 @@ class BookController extends GetxController {
       final savePath = '${tempDir.path}/BooksZip.zip';
       print("Start Download");
       await diolib.Dio().download(
-        'http://blackareauwu.xyz:5000/file/fa5bf957-d04a-4725-8b9a-efa5dab29c8a.zip',
+        'https://platform.buu.in.th/downloads/Books.zip',
         savePath,
         onReceiveProgress: (received, total) {
           if (total != -1) {
@@ -416,7 +416,7 @@ class BookController extends GetxController {
       try {
         await File(filePathZip).delete();
         await FileDownloader.downloadFile(
-          url: "https://platform.buu.in.th/downloads/BooksZip.zip",
+          url: "https://platform.buu.in.th/downloads/Books.zip",
           name: "Books",
           downloadDestination: DownloadDestinations.publicDownloads,
           onProgress: (String? name, double progress) {
@@ -433,7 +433,7 @@ class BookController extends GetxController {
       }
     } else {
       await FileDownloader.downloadFile(
-        url: "https://platform.buu.in.th/downloads/BooksZip.zip",
+        url: "https://platform.buu.in.th/downloads/Books.zip",
         name: "Books",
         downloadDestination: DownloadDestinations.publicDownloads,
         onProgress: (String? name, double progress) {
@@ -505,10 +505,6 @@ class BookController extends GetxController {
   }
 
   clearTempFiles() async {
-    // await File("/storage/emulated/0/Download/Books.db").delete();
-    // await File("/storage/emulated/0/Download/Books.zip").delete();
-
-    // await File(filePathZip).delete();
     try {
       // Delete Books.zip
       var zipFile = File("/storage/emulated/0/Download/Books.zip");
