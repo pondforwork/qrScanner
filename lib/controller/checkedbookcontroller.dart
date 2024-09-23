@@ -556,29 +556,4 @@ class scanDBhelper extends GetxController {
     }
     return false;
   }
-
-  // ใช้ตัวนี้ในการรับค่ามาอัพเดท
-  // updateDuplicatebook(String barcode) {
-  //   for (Checkedbook checkedBook in todo) {
-  //     if (checkedBook.barcode == barcode) {
-  //       checkedBook.count = checkedBook.count++;
-  //       addData(
-  //           barcode,
-  //           checkedBook.callNo,
-  //           checkedBook.title,
-  //           checkedBook.author,
-  //           checkedBook.collectionName,
-  //           checkedBook.itemStatusName,
-  //           checkedBook.collectionId,
-  //           checkedBook.found,
-  //           checkedBook.recorder,
-  //           checkedBook.recorderemail,
-  //           checkedBook.note,
-  //           checkedBook.checktime,
-  //           checkedBook.count,
-  //           checkedBook.exportstatus);
-  //     }
-  //   }
-  //   print("Updated");
-  // }
 }

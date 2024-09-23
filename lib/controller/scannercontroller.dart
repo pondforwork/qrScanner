@@ -12,7 +12,7 @@ class ScannerController extends GetxController {
 
   Future<void> scanNew() async {
     if (scandbhelper.currentdb.value != "No Database Selected") {
-      var res = await Get.to(CameraView());
+      Get.to(CameraView());
     } else {
       Get.snackbar(
         'ยังไม่ได้ดึงโหลดข้อมูลหนังสือ', // Title

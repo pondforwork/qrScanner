@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:downloadsfolder/downloadsfolder.dart';
@@ -14,7 +13,6 @@ import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_archive/flutter_archive.dart' as flutter_archive;
-// import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart' as diolib;
 
 class BookController extends GetxController {
@@ -87,20 +85,6 @@ class BookController extends GetxController {
       print("Select DB First");
     }
   }
-
-  // testInsert() async {
-  //   if (checkdbAvial() == true) {
-  //     await _openLocalDatabase();
-  //     List<Map<String, dynamic>> result = await _database!
-  //         .rawQuery("SELECT * FROM books WHERE BARCODE LIMIT 500");
-  //     print(result.length);
-  //     for (Map<String, dynamic> item in result) {
-  //       testsavefoundbook(item['TITLE'], item['BARCODE'], item);
-  //       print(item);
-  //     }
-  //     print(result);
-  //   }
-  // }
 
   Future<void> testInsert(int limit) async {
     if (checkdbAvial()) {
@@ -338,24 +322,6 @@ class BookController extends GetxController {
     );
     continuousScan.value = false;
   }
-
-  // Future<void> downloadfileIos() async {
-  //   try {
-  //     // Get the temporary directory
-  //     final tempDir = await getTemporaryDirectory();
-  //     final savePath = '${tempDir.path}/BooksZip.zip';
-
-  //     // Download the file
-  //     await diolib.Dio().download(
-  //       'http://blackareauwu.xyz:5000/file/fa5bf957-d04a-4725-8b9a-efa5dab29c8a.zip',
-  //       savePath,
-  //     );
-
-  //     print("File saved to $savePath");
-  //   } catch (e) {
-  //     print("Error downloading file: $e");
-  //   }
-  // }
 
   Future<void> downloadfileIos() async {
     isDownloadingDB.value = true;
