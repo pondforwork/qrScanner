@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_scan/controller/checkedbookcontroller.dart';
+import 'package:qr_scan/controller/internetcontroller.dart';
 import 'package:qr_scan/controller/usercontroller.dart';
 import 'package:qr_scan/models/chekedbook.dart';
 import 'package:sqflite/sqflite.dart';
@@ -29,6 +30,8 @@ class BookController extends GetxController {
   String filePathZip = "/storage/emulated/0/Download/Books.zip";
   RxBool continuousScan = false.obs;
   final dio = diolib.Dio();
+  final TextEditingController passwordTextController = TextEditingController();
+  final InternetContoller internetContoller = InternetContoller();
 
   @override
   Future<void> onInit() async {
@@ -569,7 +572,53 @@ class BookController extends GetxController {
     }
   }
 
-  fetchBooksFromApi() {}
+  showPasswordDialog() {
+    Get.defaultDialog(
+      title: "รหัสผ่าน",
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextField(
+            controller: passwordTextController,
+            decoration: const InputDecoration(labelText: 'ใส่รหัสผ่านที่นี่'),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  checkPasswordAndDownload(passwordTextController.text);
+                  print(passwordTextController.text);
+                },
+                child: const Text("ตกลง"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("ยกเลิก"),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> checkPasswordAndDownload(String password) async {
+    if (password == '1234') {
+      if (await internetContoller.checkInternetConnection()) {
+        if (Platform.isAndroid) {
+          await downloadandapplyDB();
+        } else if (Platform.isIOS) {
+          await downloadfileIos();
+        }
+      } else {
+        Get.back();
+        internetContoller.shownoInternetDialog();
+      }
+    }
+  }
 
   void showMockDataDialog() {
     TextEditingController controller = TextEditingController();

@@ -82,17 +82,20 @@ class SelectDBview extends StatelessWidget {
                               "No Database Selected"
                       ? null // If downloading is in progress or a database is selected, disable the button
                       : () async {
+                          bookController.showPasswordDialog();
+
                           // If not downloading and no database selected, initiate the download and apply process
-                          if (await internetContoller
-                              .checkInternetConnection()) {
-                            if (Platform.isAndroid) {
-                              await bookController.downloadandapplyDB();
-                            } else if (Platform.isIOS) {
-                              await bookController.downloadfileIos();
-                            }
-                          } else {
-                            internetContoller.shownoInternetDialog();
-                          }
+                          // if (await internetContoller
+                          //     .checkInternetConnection()) {
+                          //   // แทนที่ด้วย Dialog Password
+                          //   if (Platform.isAndroid) {
+                          //     await bookController.downloadandapplyDB();
+                          //   } else if (Platform.isIOS) {
+                          //     await bookController.downloadfileIos();
+                          //   }
+                          // } else {
+                          //   internetContoller.shownoInternetDialog();
+                          // }
                         },
                   child: const Text(
                     "ดึงข้อมูลหนังสือ", // Displayed text on the button
