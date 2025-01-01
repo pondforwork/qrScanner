@@ -77,11 +77,11 @@ class BookController extends GetxController {
         Map<String, dynamic> firstResult = result.first;
         String firstValue = firstResult['TITLE'];
         if (scandbhelper.checkDuplicateBook(barcode)) {
-          //showDialogDuplicate
           showDuplicateSnackbar();
-          //Need To add update Data
         }
+        // บันทึกปกติ
         savefoundbook(firstValue, firstResult['TITLE'], firstResult);
+        scandbhelper.fetchToDo();
       } else {
         resultSearch.value = "No result";
         showDialogNotFound(barcode);
