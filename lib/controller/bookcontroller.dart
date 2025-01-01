@@ -564,7 +564,7 @@ class BookController extends GetxController {
       'คำเตือน', // Title
       'คุณเคยบันทึกหนังสือเล่มนี้แล้ว', // Message
       snackPosition: SnackPosition.TOP,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
       backgroundColor: Colors.red, // Custom1ize the background color here
       colorText: Colors.white, // Customize the text color here
     );
@@ -649,16 +649,23 @@ class BookController extends GetxController {
             children: [
               TextButton(
                 onPressed: () {
-                  checkPasswordAndDownload(passwordTextController.text);
-                  print(passwordTextController.text);
+                  Get.back();
                 },
-                child: const Text("ตกลง"),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black, // Text color
+                  backgroundColor: Colors.grey, // Button background color
+                ),
+                child: const Text("ยกเลิก"),
               ),
               TextButton(
                 onPressed: () {
-                  Get.back();
+                  // Add your action here
                 },
-                child: const Text("ยกเลิก"),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text("ตกลง"),
               ),
             ],
           )

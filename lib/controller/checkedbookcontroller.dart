@@ -237,7 +237,7 @@ class scanDBhelper extends GetxController {
       snackPosition: SnackPosition.TOP,
       backgroundColor: const Color.fromARGB(
           255, 255, 249, 171), // Custom1ize the background color here
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
     );
   }
 
