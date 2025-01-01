@@ -20,16 +20,16 @@ class Scanview extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('เช็คหนังสือ'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bug_report),
-            onPressed: () {
-              // bookController.testInsert();
-              bookController.showMockDataDialog();
-              print("Test");
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.bug_report),
+        //     onPressed: () {
+        //       // bookController.testInsert();
+        //       bookController.showMockDataDialog();
+        //       print("Test");
+        //     },
+        //   ),
+        // ],
       ),
       drawer: MyDrawer(),
       body: Column(

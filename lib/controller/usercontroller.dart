@@ -31,18 +31,18 @@ class UserController extends GetxController {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       print(userCredential.user);
-      if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
-        currentUser.value = userCredential.user!.displayName!;
-        currentUserEmail.value = userCredential.user!.email!;
-        setUsernameOnHive(currentUser.value, currentUserEmail.value);
-        showSuccessSnackbar();
-        Get.offAll(() => Scanview());
-        return userCredential.user;
-      } else {
-        print("Invalid email domain. Sign-in not allowed.");
-        await googleSignIn.signOut();
-        return null;
-      }
+      // if (userCredential.user?.email?.endsWith("@go.buu.ac.th") ?? false) {
+      currentUser.value = userCredential.user!.displayName!;
+      currentUserEmail.value = userCredential.user!.email!;
+      setUsernameOnHive(currentUser.value, currentUserEmail.value);
+      showSuccessSnackbar();
+      Get.offAll(() => Scanview());
+      return userCredential.user;
+      // } else {
+      //   print("Invalid email domain. Sign-in not allowed.");
+      //   await googleSignIn.signOut();
+      //   return null;
+      //}
     } catch (error) {
       print("Error signing in with Google: $error");
       if (error is FirebaseAuthException) {

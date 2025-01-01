@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:file_picker/file_picker.dart';
@@ -15,6 +17,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_archive/flutter_archive.dart' as flutter_archive;
 import 'package:dio/dio.dart' as diolib;
+import 'package:http/http.dart' as http;
 
 class BookController extends GetxController {
   Database? _database;
@@ -54,7 +57,6 @@ class BookController extends GetxController {
     await File(path).writeAsBytes(bytes, flush: true);
     // Open the database
     await _openLocalDatabase();
-    clearTempFiles();
   }
 
   Future<void> _openLocalDatabase() async {
@@ -381,41 +383,101 @@ class BookController extends GetxController {
   downloadFile() async {
     await requestStoragePermission();
     isDownloadingDB.value = true;
-    if (await File(filePathZip).exists()) {
-      try {
-        await File(filePathZip).delete();
-        await FileDownloader.downloadFile(
-          url: "https://platform.buu.in.th/downloads/Books.zip",
-          name: "Books",
-          downloadDestination: DownloadDestinations.publicDownloads,
-          onProgress: (String? name, double progress) {
-            loadingprogress.value = progress.toString();
-            print('FILE fileName HAS PROGRESS $progress');
+    try {
+      var request = http.Request(
+          'GET', Uri.parse('https://platform.buu.in.th/downloads/Books.zip'));
+      var response = await request.send();
+
+      // ตรวจสอบสถานะการตอบกลับ
+      if (response.statusCode == 200) {
+        final directory = await getApplicationDocumentsDirectory();
+        final path = directory.path;
+
+        // สร้างไฟล์ใหม่ใน directory ที่ได้
+        final file = File('$path/Book.zip');
+
+        // หา size ของไฟล์ทั้งหมด
+        final totalBytes = response.contentLength ?? 0;
+        int receivedBytes = 0;
+
+        // อ่านข้อมูลจาก response และเขียนลงในไฟล์
+        var byteStream =
+            response.stream.transform<Uint8List>(StreamTransformer.fromHandlers(
+          handleData: (List<int> data, sink) {
+            sink.add(Uint8List.fromList(data));
+            receivedBytes += data.length;
+
+            // คำนวณความคืบหน้าแล้วส่งไปยัง UI
+            if (totalBytes > 0) {
+              double progress = receivedBytes / totalBytes;
+              loadingprogress.value = (progress * 100).toStringAsFixed(2);
+              // onProgress(progress);
+              // downloadBloc.add(Downloading(progress));
+              print(progress);
+              // ถ้า Download เสร็จ
+              // if (progress == 1.0) {
+              //   updateDatabaseStatus();
+              // }
+            }
           },
-          onDownloadCompleted: (String path) {
-            downloadedPath.value = path;
-          },
-          onDownloadError: (String error) {},
-        );
-      } catch (e) {
-        print(e);
+        ));
+
+        // เขียนข้อมูลที่ได้รับจาก byteStream ลงในไฟล์
+        await file.writeAsBytes(
+            await byteStream.expand((byte) => byte).toList(),
+            flush: true);
+        // print('File saved at: ${file.path}');
+
+        await unzipFile(file.path, path);
+      } else {
+        // print('Failed to download file: ${response.statusCode}');
       }
-    } else {
-      await FileDownloader.downloadFile(
-        url: "https://platform.buu.in.th/downloads/Books.zip",
-        name: "Books",
-        downloadDestination: DownloadDestinations.publicDownloads,
-        onProgress: (String? name, double progress) {
-          loadingprogress.value = progress.toString();
-          print('FILE fileName HAS PROGRESS $progress');
-        },
-        onDownloadCompleted: (String path) {
-          downloadedPath.value = path;
-        },
-        onDownloadError: (String error) {},
-      );
+    } catch (e) {
+      // print('Error during file download: $e');
     }
+
     isDownloadingDB.value = false;
+  }
+
+  Future<void> unzipFile(String zipFilePath, String destinationPath) async {
+    try {
+      // Read the zip file
+      final bytes = File(zipFilePath).readAsBytesSync();
+      final archive = ZipDecoder().decodeBytes(bytes);
+
+      String? databaseFilePath;
+
+      // Extract the contents to the destination folder
+      for (final file in archive) {
+        final filePath = '$destinationPath/${file.name}';
+        if (file.isFile) {
+          // Write the file
+          final outputFile = File(filePath);
+          await outputFile.create(recursive: true);
+          await outputFile.writeAsBytes(file.content as List<int>);
+
+          // Check if this is the database file
+          if (filePath.endsWith('.db')) {
+            databaseFilePath = filePath;
+          }
+        } else {
+          // Create the directory
+          await Directory(filePath).create(recursive: true);
+        }
+      }
+
+      // Open the database connection if a database file was found
+      if (databaseFilePath != null) {
+        await openDatabaseConnectionWithPath(databaseFilePath);
+        // print('Database connection opened for: $databaseFilePath');
+      } else {
+        // print('No database file found in the archive.');
+      }
+
+      // print('Unzipped successfully to $destinationPath');
+    } catch (e) {
+      // print('Error unzipping file: $e');
+    }
   }
 
   unzip() async {
@@ -606,9 +668,10 @@ class BookController extends GetxController {
   }
 
   Future<void> checkPasswordAndDownload(String password) async {
-    if (password == '1234') {
+    if (password == 'inventory2024buu') {
       if (await internetContoller.checkInternetConnection()) {
         if (Platform.isAndroid) {
+          Get.back();
           await downloadandapplyDB();
         } else if (Platform.isIOS) {
           await downloadfileIos();
