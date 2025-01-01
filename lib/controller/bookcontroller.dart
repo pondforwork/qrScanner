@@ -153,7 +153,7 @@ class BookController extends GetxController {
 
     scandbhelper.latestcheckedbook.add(checkedbook);
     scandbhelper.checkedbook.add(checkedbook);
-
+    scandbhelper.foundqtyobs.value++;
     print("Add to temp length is ");
     print(scandbhelper.latestcheckedbook.length);
   }
@@ -281,13 +281,6 @@ class BookController extends GetxController {
               );
 
               if (confirmAdd == true) {
-                // if (scandbhelper.checkDuplicateBook(barcode)) {
-                //   //ShowDialog
-                //   scandbhelper.updateDuplicatebook(barcode);
-                //   showDuplicateSnackbar();
-                // }else{
-                //   // showSavedBookSnackbar(title);
-                // }
                 DateTime checktime = DateTime.now();
                 Checkedbook checkedbook = Checkedbook(
                     barcode,
@@ -320,7 +313,8 @@ class BookController extends GetxController {
                     checkedbook.count,
                     checkedbook.exportstatus);
 
-                // scandbhelper.fetchToDo();
+                scandbhelper.checkedbook.add(checkedbook);
+                scandbhelper.notfoundqtyobs.value++;
               }
             }
           },
