@@ -24,7 +24,7 @@ class _HistoryViewState extends State<HistoryView> {
   }
 
   Future<void> _fetchAllBooks() async {
-    await checkedbookcontroller.fetchToDo();
+    await checkedbookcontroller.fetchAllBooks();
   }
 
 // 2024-03-05

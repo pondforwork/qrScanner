@@ -27,7 +27,7 @@ class _ManageHistoryViewState extends State<ManageHistoryView> {
   }
 
   Future<void> _fetchAllBooks() async {
-    await checkedbookcontroller.fetchToDo();
+    await checkedbookcontroller.fetchAllBooks();
   }
 
   @override
