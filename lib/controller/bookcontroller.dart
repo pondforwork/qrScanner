@@ -81,7 +81,7 @@ class BookController extends GetxController {
         }
         // บันทึกปกติ
         savefoundbook(firstValue, firstResult['TITLE'], firstResult);
-        scandbhelper.fetchToDo();
+        scandbhelper.fetchAllBooks();
       } else {
         resultSearch.value = "No result";
         showDialogNotFound(barcode);

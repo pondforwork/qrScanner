@@ -25,7 +25,7 @@ class scanDBhelper extends GetxController {
   @override
   Future<void> onInit() async {
     await initHive();
-    await fetchToDo();
+    await fetchAllBooks();
     await getDBName();
     countFoundItems();
     checkExportStatus(todo);
@@ -49,7 +49,7 @@ class scanDBhelper extends GetxController {
     }
   }
 
-  Future<void> fetchToDo() async {
+  Future<void> fetchAllBooks() async {
     try {
       final documentDirectory = await getApplicationDocumentsDirectory();
       await Hive.initFlutter(documentDirectory.path);
@@ -274,7 +274,7 @@ class scanDBhelper extends GetxController {
         'exportstatus': true
       });
     }
-    fetchToDo();
+    fetchAllBooks();
   }
 
   updateExportStatusByOne(int i) {
@@ -298,14 +298,14 @@ class scanDBhelper extends GetxController {
     });
     print("Updating ${todo[i].title}");
 
-    fetchToDo();
+    fetchAllBooks();
   }
 
   Future<void> deleteData(String id) async {
     var data = Hive.box('data');
     if (data.containsKey(id)) {
       await data.delete(id);
-      fetchToDo();
+      fetchAllBooks();
     } else {
       print('Data with ID $id not found.');
     }
@@ -317,7 +317,7 @@ class scanDBhelper extends GetxController {
     await Hive.openBox('data');
     var data = Hive.box('data');
     await data.clear();
-    fetchToDo();
+    fetchAllBooks();
     print("Clear Data SUccess");
   }
 
