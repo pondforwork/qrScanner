@@ -88,7 +88,6 @@ class SelectDBview extends StatelessWidget {
                         ),
                         onPressed: () async {
                           bookController.showDialog();
-                          // bookController.resetBookDB();
                         },
                         child: const Text(
                           "รีเซ็ตฐานข้อมูลหนังสือ",

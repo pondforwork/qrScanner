@@ -577,17 +577,40 @@ class BookController extends GetxController {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // TextButton(
+              //   onPressed: () {
+              //     resetBookDB();
+              //     Get.back();
+              //   },
+              //   child: const Text("ตกลง"),
+              // ),
+              // TextButton(
+              //   onPressed: () {
+              //     Get.back();
+              //   },
+              //   child: const Text("ยกเลิก"),
+              // ),
+
               TextButton(
                 onPressed: () {
                   resetBookDB();
                   Get.back();
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white, // Text color
+                  backgroundColor: Colors.red, // Button background color
+                ),
                 child: const Text("ตกลง"),
               ),
               TextButton(
                 onPressed: () {
                   Get.back();
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black, // Text color
+                  backgroundColor: Colors
+                      .grey[300], // Light grey for cancel button background
+                ),
                 child: const Text("ยกเลิก"),
               ),
             ],
