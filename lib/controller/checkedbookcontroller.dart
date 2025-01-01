@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 
 class scanDBhelper extends GetxController {
   RxString currentdb = 'No Database Selected'.obs;
-  var todo = <Checkedbook>[].obs;
+  var checkedbook = <Checkedbook>[].obs;
   var latestcheckedbook = <Checkedbook>[].obs;
   RxInt foundqtyobs = 0.obs;
   RxInt notfoundqtyobs = 0.obs;
@@ -28,7 +28,7 @@ class scanDBhelper extends GetxController {
     await fetchAllBooks();
     await getDBName();
     countFoundItems();
-    checkExportStatus(todo);
+    checkExportStatus(checkedbook);
     super.onInit();
   }
 
@@ -76,7 +76,7 @@ class scanDBhelper extends GetxController {
             value['exportstatus']));
       }
       allData.sort((a, b) => b.checktime.compareTo(a.checktime));
-      todo.assignAll(allData);
+      checkedbook.assignAll(allData);
     } catch (error) {
       print("Error while accessing data: $error");
     }
@@ -86,7 +86,7 @@ class scanDBhelper extends GetxController {
   void countFoundItems() {
     int foundqty = 0;
     int notfoundqty = 0;
-    for (Checkedbook item in todo) {
+    for (Checkedbook item in checkedbook) {
       if (item.found == "Y") {
         foundqty++;
       } else {
@@ -254,23 +254,23 @@ class scanDBhelper extends GetxController {
   }
 
   updateExportStatus() {
-    for (var i = 0; i < todo.length; i++) {
-      print(todo[i].barcode);
+    for (var i = 0; i < checkedbook.length; i++) {
+      print(checkedbook[i].barcode);
       var data = Hive.box('data');
-      data.put(todo[i].barcode, {
-        'barcode': todo[i].barcode,
-        'callNo': todo[i].callNo,
-        'title': todo[i].title,
-        'author': todo[i].author,
-        'collectionName': todo[i].collectionName,
-        'itemStatusName': todo[i].itemStatusName,
-        'collectionId': todo[i].collectionId,
-        'found': todo[i].found,
-        'recorder': todo[i].recorder,
-        'recorderemail': todo[i].recorderemail,
-        'note': todo[i].note,
-        'checktime': todo[i].checktime,
-        'count': todo[i].count,
+      data.put(checkedbook[i].barcode, {
+        'barcode': checkedbook[i].barcode,
+        'callNo': checkedbook[i].callNo,
+        'title': checkedbook[i].title,
+        'author': checkedbook[i].author,
+        'collectionName': checkedbook[i].collectionName,
+        'itemStatusName': checkedbook[i].itemStatusName,
+        'collectionId': checkedbook[i].collectionId,
+        'found': checkedbook[i].found,
+        'recorder': checkedbook[i].recorder,
+        'recorderemail': checkedbook[i].recorderemail,
+        'note': checkedbook[i].note,
+        'checktime': checkedbook[i].checktime,
+        'count': checkedbook[i].count,
         'exportstatus': true
       });
     }
@@ -280,23 +280,23 @@ class scanDBhelper extends GetxController {
   updateExportStatusByOne(int i) {
     var data = Hive.box('data');
 
-    data.put(todo[i].barcode, {
-      'barcode': todo[i].barcode,
-      'callNo': todo[i].callNo,
-      'title': todo[i].title,
-      'author': todo[i].author,
-      'collectionName': todo[i].collectionName,
-      'itemStatusName': todo[i].itemStatusName,
-      'collectionId': todo[i].collectionId,
-      'found': todo[i].found,
-      'recorder': todo[i].recorder,
-      'recorderemail': todo[i].recorderemail,
-      'note': todo[i].note,
-      'checktime': todo[i].checktime,
-      'count': todo[i].count,
+    data.put(checkedbook[i].barcode, {
+      'barcode': checkedbook[i].barcode,
+      'callNo': checkedbook[i].callNo,
+      'title': checkedbook[i].title,
+      'author': checkedbook[i].author,
+      'collectionName': checkedbook[i].collectionName,
+      'itemStatusName': checkedbook[i].itemStatusName,
+      'collectionId': checkedbook[i].collectionId,
+      'found': checkedbook[i].found,
+      'recorder': checkedbook[i].recorder,
+      'recorderemail': checkedbook[i].recorderemail,
+      'note': checkedbook[i].note,
+      'checktime': checkedbook[i].checktime,
+      'count': checkedbook[i].count,
       'exportstatus': true
     });
-    print("Updating ${todo[i].title}");
+    print("Updating ${checkedbook[i].title}");
 
     fetchAllBooks();
   }
@@ -333,7 +333,7 @@ class scanDBhelper extends GetxController {
       sink.writeln(
           'Barcode,CallNo,Title,Author,CollectionName,ItemStatusName,CollectionId,Found,Count,Recorder,Recorder-Email,Note,CheckTime');
 
-      for (Checkedbook item in todo) {
+      for (Checkedbook item in checkedbook) {
         String formattedDate =
             DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
         String escapedTitle = item.title?.replaceAll('"', '""') ?? '';
@@ -391,7 +391,7 @@ class scanDBhelper extends GetxController {
 
   int checkunexportQty() {
     allunexportedQty.value = 0;
-    for (Checkedbook item in todo) {
+    for (Checkedbook item in checkedbook) {
       if (!item.exportstatus) {
         allunexportedQty.value++;
       }
@@ -462,7 +462,7 @@ class scanDBhelper extends GetxController {
     indexCount.value = 0;
     exportProgress.value = 0;
 
-    for (Checkedbook item in todo) {
+    for (Checkedbook item in checkedbook) {
       String formattedDate =
           DateFormat('yyyy-MM-dd HH:mm:ss').format(item.checktime);
       if (!item.exportstatus) {
@@ -538,8 +538,8 @@ class scanDBhelper extends GetxController {
 
   int countDuplicate(String inputbarcode) {
     try {
-      var foundCheckedbook =
-          todo.firstWhere((checkedBook) => checkedBook.barcode == inputbarcode);
+      var foundCheckedbook = checkedbook
+          .firstWhere((checkedBook) => checkedBook.barcode == inputbarcode);
       return foundCheckedbook.count;
     } catch (e) {
       return 0;
@@ -547,7 +547,7 @@ class scanDBhelper extends GetxController {
   }
 
   bool checkDuplicateBook(String barcode) {
-    for (Checkedbook checkedBook in todo) {
+    for (Checkedbook checkedBook in checkedbook) {
       print("1");
       if (checkedBook.barcode == barcode) {
         print(checkedBook.title);

@@ -216,7 +216,7 @@ class Scanview extends StatelessWidget {
           Expanded(
             child: GetX<scanDBhelper>(
               builder: (controller) {
-                if (controller.todo.isEmpty) {
+                if (controller.checkedbook.isEmpty) {
                   return const Center(
                     child: Text(
                       'No books checked.',
@@ -225,7 +225,7 @@ class Scanview extends StatelessWidget {
                   );
                 } else {
                   return ListView.builder(
-                    itemCount: min(5, controller.todo.length),
+                    itemCount: min(5, controller.checkedbook.length),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onDoubleTap: () {
@@ -233,23 +233,23 @@ class Scanview extends StatelessWidget {
                         },
                         child: ListTile(
                           title: Text(
-                            controller.todo[index].title.length <= 50
-                                ? controller.todo[index].title
-                                : '${controller.todo[index].title.substring(0, 50)}...',
+                            controller.checkedbook[index].title.length <= 50
+                                ? controller.checkedbook[index].title
+                                : '${controller.checkedbook[index].title.substring(0, 50)}...',
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(controller.todo[index].barcode),
+                              Text(controller.checkedbook[index].barcode),
                               Text(
-                                "บันทึกเมื่อ ${DateFormat('dd/MM/yyyy HH:mm:ss').format(controller.todo[index].checktime)}",
+                                "บันทึกเมื่อ ${DateFormat('dd/MM/yyyy HH:mm:ss').format(controller.checkedbook[index].checktime)}",
                               ),
                             ],
                           ),
                           trailing: FittedBox(
                             child: Row(
                               children: [
-                                controller.todo[index].found == "Y"
+                                controller.checkedbook[index].found == "Y"
                                     ? Image.asset(
                                         'assets/icon/foundbooks.png',
                                         width: 40,
@@ -263,7 +263,8 @@ class Scanview extends StatelessWidget {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                controller.todo[index].exportstatus == false
+                                controller.checkedbook[index].exportstatus ==
+                                        false
                                     ? Image.asset(
                                         'assets/icon/didntexported.png',
                                         width: 40,

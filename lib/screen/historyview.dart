@@ -58,8 +58,8 @@ class _HistoryViewState extends State<HistoryView> {
       body: Obx(
         () {
           final filteredList = selectedDate.value == null
-              ? checkedbookcontroller.todo
-              : checkedbookcontroller.todo
+              ? checkedbookcontroller.checkedbook
+              : checkedbookcontroller.checkedbook
                   .where((element) =>
                       element.checktime.day == selectedDate.value!.day &&
                       element.checktime.month == selectedDate.value!.month &&

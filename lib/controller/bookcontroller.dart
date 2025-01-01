@@ -81,7 +81,8 @@ class BookController extends GetxController {
         }
         // บันทึกปกติ
         savefoundbook(firstValue, firstResult['TITLE'], firstResult);
-        scandbhelper.fetchAllBooks();
+        // scandbhelper.fetchAllBooks();
+        // เปลี่ยนจาก Fetch ทั้งหมดเป็น Add เข้าไป
       } else {
         resultSearch.value = "No result";
         showDialogNotFound(barcode);
@@ -151,6 +152,8 @@ class BookController extends GetxController {
     // scandbhelper.fetchToDo();
 
     scandbhelper.latestcheckedbook.add(checkedbook);
+    scandbhelper.checkedbook.add(checkedbook);
+
     print("Add to temp length is ");
     print(scandbhelper.latestcheckedbook.length);
   }
@@ -659,7 +662,7 @@ class BookController extends GetxController {
               ),
               TextButton(
                 onPressed: () {
-                  // Add your action here
+                  checkPasswordAndDownload(passwordTextController.text);
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
